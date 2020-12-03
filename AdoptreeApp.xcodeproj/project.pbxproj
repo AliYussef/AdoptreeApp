@@ -79,6 +79,8 @@
 		898E39F8257704B700A17A00 /* ChangeEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39F7257704B700A17A00 /* ChangeEmailView.swift */; };
 		898E39FB257704C600A17A00 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39FA257704C600A17A00 /* ChangePasswordView.swift */; };
 		898E39FE257704D400A17A00 /* DeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39FD257704D400A17A00 /* DeleteAccountView.swift */; };
+		899AA9C32579906E006293E1 /* GuestTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AA9C22579906E006293E1 /* GuestTimelineView.swift */; };
+		899AA9C625799207006293E1 /* GuestProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AA9C525799207006293E1 /* GuestProfileView.swift */; };
 		89C354042577E342004C26FB /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C354032577E342004C26FB /* PrivacyPolicyView.swift */; };
 		89C354072577E351004C26FB /* OverTheAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C354062577E351004C26FB /* OverTheAppView.swift */; };
 		89DE87FF2575BCD4006B9011 /* AdoptreeAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DE87FE2575BCD4006B9011 /* AdoptreeAppApp.swift */; };
@@ -163,6 +165,8 @@
 		898E39F7257704B700A17A00 /* ChangeEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEmailView.swift; sourceTree = "<group>"; };
 		898E39FA257704C600A17A00 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		898E39FD257704D400A17A00 /* DeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountView.swift; sourceTree = "<group>"; };
+		899AA9C22579906E006293E1 /* GuestTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestTimelineView.swift; sourceTree = "<group>"; };
+		899AA9C525799207006293E1 /* GuestProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestProfileView.swift; sourceTree = "<group>"; };
 		89C354032577E342004C26FB /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		89C354062577E351004C26FB /* OverTheAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverTheAppView.swift; sourceTree = "<group>"; };
 		89DE87FB2575BCD4006B9011 /* AdoptreeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AdoptreeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -216,7 +220,6 @@
 				898E396B2576668900A17A00 /* TreeInfoView.swift */,
 				898E396E2576669C00A17A00 /* TreePersonalizationView.swift */,
 				898E3971257666A900A17A00 /* PersonalSignView.swift */,
-				898E39B925766F1C00A17A00 /* GuestHomeView.swift */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -238,6 +241,9 @@
 		898E39502576658600A17A00 /* Guest */ = {
 			isa = PBXGroup;
 			children = (
+				898E39B925766F1C00A17A00 /* GuestHomeView.swift */,
+				899AA9C22579906E006293E1 /* GuestTimelineView.swift */,
+				899AA9C525799207006293E1 /* GuestProfileView.swift */,
 			);
 			path = Guest;
 			sourceTree = "<group>";
@@ -497,6 +503,7 @@
 				898E396F2576669C00A17A00 /* TreePersonalizationView.swift in Sources */,
 				898E39122576620D00A17A00 /* Telemetry.swift in Sources */,
 				898E398D257667DC00A17A00 /* ForgotPasswordView.swift in Sources */,
+				899AA9C32579906E006293E1 /* GuestTimelineView.swift in Sources */,
 				898E39962576697500A17A00 /* TreeTypesView.swift in Sources */,
 				89C354072577E351004C26FB /* OverTheAppView.swift in Sources */,
 				898E39D32576892B00A17A00 /* TelemetryRepository.swift in Sources */,
@@ -538,6 +545,7 @@
 				898E399C2576699600A17A00 /* TreeTypeView.swift in Sources */,
 				898E3990257667ED00A17A00 /* ProfileView.swift in Sources */,
 				89DE881C2575BF91006B9011 /* Localization.swift in Sources */,
+				899AA9C625799207006293E1 /* GuestProfileView.swift in Sources */,
 				898E39812576679000A17A00 /* BookedTourOverviewView.swift in Sources */,
 				898E39212576629800A17A00 /* NotificationDevice.swift in Sources */,
 				898E39C1257688E700A17A00 /* OrderRepository.swift in Sources */,
