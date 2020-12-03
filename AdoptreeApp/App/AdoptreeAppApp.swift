@@ -33,14 +33,14 @@ struct AdoptreeAppApp: App {
                 //StartingView()
                 //TimelineView()
                 //first to start
-                TreePersonalizationView()
+                PersonalSignView()
                 //OnboardingView(treeViewModel: treeViewModel)
                 //LoginView()
                 //TreeSelectionView()
                 // ContentView(userViewModel: userViewModel)
             }.onAppear {
                 treeViewModel.getAdoptedTrees() {_ in}
-                
+                treeViewModel.getContents() {_ in}
                 
             }
             // }

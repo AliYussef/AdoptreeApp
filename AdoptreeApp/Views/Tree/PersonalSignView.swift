@@ -6,28 +6,89 @@
 //
 
 import SwiftUI
+import PencilKit
 
 struct PersonalSignView: View {
-    //@Binding var shown: Bool
+    // let tree: Tree
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State private var treeSign = ""
+    
+    @State var canvas = PKCanvasView()
     
     var body: some View {
-        VStack {
-            Text("How to further reduce CO2 footprint?")
-                .font(.title2)
-                .foregroundColor(.init("color_font_primary"))
-                .padding(10)
+        ZStack {
+            Color.init("color_background")
+                .edgesIgnoringSafeArea(.all)
             
-            Text("1. Eat less red meat. Traditional red meat comes from ruminant livestock such as cattle and sheep. These animals produce large amounts of methane, which is a greenhouse gas that packs 72 times the punch of CO2 over a 20 year period. Other types of meat, such as chicken, pork or kangaroo, produce far less emissions. At average levels of consumption, a family’s emissions from beef would easily outweigh the construction and running costs of a large 4WD vehicle, in less than 5 years. There is no need to cut out red meat entirely, but fewer steaks and snags mean far less CO2.")
-                .font(.body)
-                .foregroundColor(.init("color_font_secondary"))
-            
+            VStack{
+                Text("Add personal sign")
+                    .font(.title)
+                    .foregroundColor(.init("color_font_primary"))
+                    .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .leading)
+  
+                Spacer(minLength: 50)
+                
+                VStack {
+                    Text("Personal sign")
+                        .font(.title3)
+                        .foregroundColor(.init("color_font_primary"))
+                        .padding(.bottom, 2)
+                    
+                    Text("This sign will be placed next to your tree")
+                        .font(.subheadline)
+                        .foregroundColor(.init("color_font_primary"))
+                }
+                .padding()
+                
+                Form {
+                    Section(header: Text("Tree sign"), content: {
+                        TextField("Personal sign", text: $treeSign)
+                        
+                    })
+                }
+                
+                
+                //DrawingView(canvas: $canvas)
+                
+                Button(action: {
+                    //call api and save changes
+                    presentationMode.wrappedValue.dismiss()
+                }, label: {
+                    Text("Confirm & pay")
+                        .bold()
+                        .foregroundColor(.white)
+                })
+                .frame(width: 180, height: 50, alignment: .center)
+                .background(Color.init("color_primary_accent"))
+                .cornerRadius(10.0)
+                .padding()
+                
+            }
+            .padding()
         }
-        .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .center)
+        .onAppear {
+
+        }
     }
 }
 
-//struct PersonalSignView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PersonalSignView()
+//struct DrawingView: UIViewRepresentable {
+//
+//    // to capture drawing for saving into album...
+//    @Binding var canvas: PKCanvasView
+//
+//    func makeUIView(context: Context) -> PKCanvasView {
+//        canvas.drawingPolicy = .anyInput
+//        return canvas
+//    }
+//
+//    func updateUIView(_ uiView: PKCanvasView, context: Context) {
+//
 //    }
 //}
+
+struct PersonalSignView_Previews: PreviewProvider {
+    static var previews: some View {
+        PersonalSignView()
+    }
+}

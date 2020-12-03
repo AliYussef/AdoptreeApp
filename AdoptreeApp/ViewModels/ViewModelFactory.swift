@@ -13,6 +13,7 @@ class ViewModelFactory {
     private let treeRepository = TreeRepository()
     private let telemetryRepository = TelemetryRepository()
     private let forestRepository = ForestRepository()
+    private let contentRepository = ContentRepository()
 }
 
 extension ViewModelFactory {
@@ -22,7 +23,7 @@ extension ViewModelFactory {
     }
     
     func makeTreeViewModel() -> TreeViewModel {
-        return TreeViewModel(treeRepository: treeRepository, userRepository: userRepository)
+        return TreeViewModel(treeRepository: treeRepository, userRepository: userRepository, contentRepository: contentRepository)
     }
     
     func makeTimelineViewModel() -> TimelineViewModel {

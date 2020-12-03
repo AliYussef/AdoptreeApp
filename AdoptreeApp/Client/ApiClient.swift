@@ -26,7 +26,14 @@ extension ApiClient {
         decoder.dateDecodingStrategy = .formatted(formatter)
         
         return URLSession.shared.dataTaskPublisher(for: request)
-            .map({$0.data})
+            .tryMap { data, response -> Data in
+                guard let httpResponse = response as? HTTPURLResponse,
+                      httpResponse.statusCode == 200 else {
+                    throw URLError(.badServerResponse)
+                }
+                return data
+            }
+            //.map({$0.data})
             .decode(type: ResponseType.self, decoder: decoder)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
