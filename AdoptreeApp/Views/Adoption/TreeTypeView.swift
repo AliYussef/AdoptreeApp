@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct TreeTypeView: View {
+    
     var body: some View {
         RoundedRectangle(cornerRadius: 12.0)
             .fill(Color.white)
-            .frame(width: .none, height: 180, alignment: .leading)
+            .frame(width: UIScreen.main.bounds.width * 0.9, height: 160, alignment: .leading)
             .overlay(
                 HStack {
                     Image("tree2")
                         .resizable()
-                        .frame(width: 125, height: 150, alignment: .leading)
+                        .frame(width: 100, height: 125, alignment: .leading)
                     
                     VStack (alignment: .leading) {
                         Text("WHITE OAK")
@@ -24,10 +25,14 @@ struct TreeTypeView: View {
                             .bold()
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 2)
-                        Text("CO2: -1500Kg")
-                            .font(.body)
-                            .foregroundColor(.init("color_font_secondary"))
-                        Text("Age: 3 weeks")
+                        //                        Text("CO2: -1500Kg")
+                        //                            .font(.body)
+                        //                            .foregroundColor(.init("color_font_secondary"))
+                        //                        Text("Age: 3 weeks")
+                        //                            .font(.body)
+                        //                            .foregroundColor(.init("color_font_secondary"))
+                        
+                        Text("Planted")
                             .font(.body)
                             .foregroundColor(.init("color_font_secondary"))
                         Text("Price: € 35 EUR")
@@ -38,7 +43,7 @@ struct TreeTypeView: View {
                             Button(action: {
                                 
                             }, label: {
-                                Text("Add")
+                                Label("Add", systemImage: "cart.fill.badge.plus")
                                     .foregroundColor(.white)
                             })
                             .frame(width: 100, height: 30, alignment: .center)
@@ -47,7 +52,7 @@ struct TreeTypeView: View {
                             
                             NavigationLink(destination: TreeInfoView())
                             {
-                                Text("Tree info")
+                                Label("Tree info", systemImage: "info")
                                     .foregroundColor(.white)
                             }
                             .frame(width: 100, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
@@ -57,11 +62,10 @@ struct TreeTypeView: View {
                         .padding(.top, 10)
                         
                     }
-                })
-            .padding()
-            .frame(width: UIScreen.main.bounds.width - 20, height: .none)
-            .background(Color.white)
-            .cornerRadius(12.0)
+                    
+                    Spacer()
+                }.padding()
+            )
             .padding(.bottom, 10)
         //.padding(.bottom, 5)
     }

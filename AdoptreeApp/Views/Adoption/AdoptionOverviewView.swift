@@ -18,7 +18,6 @@ struct AdoptionOverviewView: View {
             
             
             VStack {
-                
                 Text("Overview")
                     .font(.title2)
                     .bold()

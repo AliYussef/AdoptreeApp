@@ -15,16 +15,29 @@ struct TreeSelectionView: View {
             
             // ScrollView {
             VStack {
+                
                 HStack {
-                    Spacer()
+                   
                     NavigationLink(destination: TreeFiltersView())
                     {
-                        Text("Filters")
-                        Image(systemName: "line.horizontal.3.decrease")
+                       
+                        Label("Filters", systemImage: "line.horizontal.3.decrease")
+                            .foregroundColor(.black)
                     }
                     .foregroundColor(.black)
+                   
+                    Spacer()
+                    
+                    NavigationLink(destination: AdoptionOverviewView())
+                    {
+                        Label("Cart", systemImage: "cart")
+                            .foregroundColor(.black)
+                    }
+                  
                 }
-                .padding()
+                .frame(width: UIScreen.main.bounds.width * 0.9, height: .none)
+                .padding(.bottom)
+                
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack {
                         TreeTypeView()
@@ -34,16 +47,8 @@ struct TreeSelectionView: View {
                 }
                 Spacer()
                 
-                NavigationLink(destination: AdoptionOverviewView())
-                {
-                    Text("Proceed")
-                        .bold()
-                        .foregroundColor(.white)
-                }
-                .frame(width: 180, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                .background(Color.init("color_primary_accent"))
-                .cornerRadius(10.0)
-                .padding()
+               
+                //.padding()
             }
             //}
         }
