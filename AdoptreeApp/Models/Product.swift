@@ -7,14 +7,25 @@
 
 import Foundation
 
-struct Product: Codable {
+struct Product: Codable, Identifiable {
     let id: Int64
-    let categoryId: Int64 //required
+    let categoryId: Int8 //required
     let name: String //required
     let description: String
-    let price: Float16
-    let vatRateId: Float16
+    let price: Double
+    let vatRateId: Int8
     let isUpForAdoption: Bool
     let stock: Int64
-    let createdAt: String
+    let createdAt: Date
+}
+
+struct OrderProduct: Identifiable {
+    let id = UUID()
+    let product: Product
+    var quantity: Int = 1
+    var isSignActivated: Bool = false
+    
+//    var total: Double {
+//        product.price * Double(quantity)
+//    }
 }

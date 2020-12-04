@@ -38,25 +38,13 @@ struct OnboardingView: View {
 }
 
 struct Fancy3DotsIndexView: View {
-    
-    // MARK: - Public Properties
-    
     let numberOfPages: Int
     let currentIndex: Int
-    
-    
-    // MARK: - Drawing Constants
-    
     private let circleSize: CGFloat = 14
     private let circleSpacing: CGFloat = 10
-    
     private let primaryColor = Color.init("color_primary_accent")
     private let secondaryColor = Color.init("color_gray_light")
-    
     private let smallScale: CGFloat = 0.6
-    
-    
-    // MARK: - Body
     
     var body: some View {
         HStack(spacing: circleSpacing) {
@@ -75,9 +63,6 @@ struct Fancy3DotsIndexView: View {
             }
         }
     }
-    
-    
-    // MARK: - Private Methods
     
     func shouldShowIndex(_ index: Int) -> Bool {
         ((currentIndex - 1)...(currentIndex + 1)).contains(index)

@@ -14,6 +14,9 @@ class ViewModelFactory {
     private let telemetryRepository = TelemetryRepository()
     private let forestRepository = ForestRepository()
     private let contentRepository = ContentRepository()
+    private let orderRepository = OrderRepository()
+    private let productRepository = ProductRepository()
+    private let categoryRepository = CategoryRepository()
 }
 
 extension ViewModelFactory {
@@ -32,5 +35,9 @@ extension ViewModelFactory {
     
     func makeForestViewModel() -> ForestViewModel {
         return ForestViewModel(forestRepository: forestRepository)
+    }
+    
+    func makeOrderViewModel() -> OrderViewModel {
+        return OrderViewModel(orderRepository: orderRepository, productRepository: productRepository, categoryRepository: categoryRepository)
     }
 }
