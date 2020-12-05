@@ -7,22 +7,22 @@
 
 import Foundation
 
-struct Order: Codable {
-    let id: Int64
-    let paymentStatus: Int8
-    let orderStatus: Int8
+struct Order: Codable, Identifiable {
+    let id: Int64?
+    let paymentStatus: Int8?
+    let orderStatus: Int8?
     let userId: Int64 //required
-    let createdAt: String
+    let createdAt: String?
     let orderLines: [OrderLine] //required
 }
 
-struct OrderLine: Codable{
-    let id: Int64
-    let orderId: Int64
+struct OrderLine: Codable, Identifiable{
+    let id: Int64?
+    let orderId: Int64?
     let productId: Int64 //required
-    let price: Float16
-    let vat: Float16
-    let quantity: Int64 //required
+    let price: Float16?
+    let vat: Float16?
+    let quantity: Int //required
 }
 
 struct OrderResponse: Decodable {

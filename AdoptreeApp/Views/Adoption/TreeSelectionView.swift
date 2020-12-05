@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct TreeSelectionView: View {
-    @ObservedObject var orderViewModel = ViewModelFactory().makeOrderViewModel()
+    //@ObservedObject var orderViewModel = ViewModelFactory().makeOrderViewModel()
+    @EnvironmentObject var orderViewModel: OrderViewModel
     @State private var badgeCount: Int = 1
     
     func gettt(a: Product) -> EmptyView {
@@ -37,7 +38,7 @@ struct TreeSelectionView: View {
                     Spacer()
                     //GeometryReader { geometry in
                         ZStack {
-                            NavigationLink(destination: AdoptionOverviewView(orderViewModel: orderViewModel))
+                            NavigationLink(destination: AdoptionOverviewView())
                             {
                                 Label("Cart", systemImage: "cart")
                                     .foregroundColor(.black)
@@ -63,7 +64,7 @@ struct TreeSelectionView: View {
                           
                             if orderViewModel.categoriesDic[treeProduct.categoryId] == "Tree" || orderViewModel.categoriesDic[treeProduct.categoryId] == "Sapling"{
                                 
-                                TreeTypeView(orderViewModel: orderViewModel, treeProduct: treeProduct)
+                                TreeTypeView(treeProduct: treeProduct)
                                 
                             }
                         }

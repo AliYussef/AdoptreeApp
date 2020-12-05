@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct TreeTypeView: View {
-    @StateObject var orderViewModel: OrderViewModel
+    //@StateObject var orderViewModel: OrderViewModel
+    @EnvironmentObject var orderViewModel: OrderViewModel
     let treeProduct: Product
 //    let product = Product(id: 4, categoryId: 3, name: "White oak", description: "", price: 35, vatRateId: 1, isUpForAdoption: true, stock: 100, createdAt: Date(timeIntervalSince1970: 1111795200))
     

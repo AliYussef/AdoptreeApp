@@ -8,17 +8,30 @@
 import Foundation
 
 struct User: Codable {
-    let id: Int64
-    let firstname: String //required
-    let lastname: String //required
-    let username: String //required
-    let email: String //required
-    let password: String //required
-    let forgetToken: String
+    let id: Int64?
+    let firstname: String
+    let lastname: String
+    let username: String
+    let email: String
+    let password: String
+    let forgetToken: String?
+    let role: String?
+    let createdAt: Date?
     
-    //    enum CodingKeys: String, CodingKey {
-    //        case username = "username"
-    //    }
+}
+
+struct ForgetPasswordBody: Codable {
+    let username: String
+    let email: String
+}
+
+struct ResetPasswordBody: Codable {
+    let user_id: Int64?
+    let token: String
+    let created_at: Date?
+    let valid_until: Date?
+    let password: String
+    let validate_password: String
 }
 
 struct LoginResponse: Decodable {

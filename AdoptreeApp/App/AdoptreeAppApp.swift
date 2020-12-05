@@ -11,6 +11,7 @@ import UIKit
 @main
 struct AdoptreeAppApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    let viewModelFactory = ViewModelFactory()
     @ObservedObject var treeViewModel = ViewModelFactory().makeTreeViewModel()
     
     init() {
@@ -34,7 +35,8 @@ struct AdoptreeAppApp: App {
                 //TimelineView()
                 //first to start
                 //GuestHomeView()
-                OnboardingView(treeViewModel: treeViewModel)
+                OnboardingView(treeViewModel: treeViewModel).environmentObject(viewModelFactory.makeOrderViewModel())
+                    .environmentObject(viewModelFactory.makeUserViewModel())
                 //LoginView()
                 //TreeSelectionView()
                 // ContentView(userViewModel: userViewModel)

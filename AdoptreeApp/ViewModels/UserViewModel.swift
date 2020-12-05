@@ -11,6 +11,7 @@ import KeychainAccess
 
 class UserViewModel: ObservableObject {
     @Published var isAuthenticated: Bool = false
+    @Published var forgetPasswordToken: String = ""
     private let keyChain = Keychain()
     private var accessTokenKey = "accessToken"
     private var cancellables = Set<AnyCancellable>()
@@ -46,11 +47,44 @@ extension UserViewModel {
 
 extension UserViewModel {
     
+    func registerUser(user: User, completion: @escaping (Result<LoginResponse, RequestError>) -> Void) {
+        
+        do {
+            
+            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .user, using: .post, withParams: user)
+            
+            userRepository.login(using: urlRequest)
+                .sink(receiveCompletion: {result in
+                    switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            switch error {
+                                case let urlError as URLError:
+                                    completion(.failure(.urlError(urlError)))
+                                case let decodingError as DecodingError:
+                                    completion(.failure(.decodingError(decodingError)))
+                                default:
+                                    completion(.failure(.genericError(error)))
+                            }
+                    }
+                }, receiveValue: {result in
+                    completion(.success(result))
+                })
+                .store(in: &cancellables)
+            
+        }catch let encodingError as EncodingError{
+            completion(.failure(.encodingError(encodingError)))
+        }catch let error{
+            completion(.failure(.genericError(error)))
+        }
+    }
+    
     func login(user: User, completion: @escaping (Result<LoginResponse, RequestError>) -> Void) {
         
         do {
             
-            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .content, using: .post, withParams: user)
+            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .user, using: .post, withParams: user)
             
             userRepository.login(using: urlRequest)
                 .sink(receiveCompletion: {result in
@@ -84,3 +118,73 @@ extension UserViewModel {
     }
 }
 
+extension UserViewModel {
+    
+    func forgetPassword(forgetPasswordBody: ForgetPasswordBody, completion: @escaping (Result<String, RequestError>) -> Void) {
+        
+        do {
+            
+            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .forgetpassword, using: .post, withParams: forgetPasswordBody)
+            
+            userRepository.forgetPassword(using: urlRequest)
+                .sink(receiveCompletion: {result in
+                    switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            switch error {
+                                case let urlError as URLError:
+                                    completion(.failure(.urlError(urlError)))
+                                case let decodingError as DecodingError:
+                                    completion(.failure(.decodingError(decodingError)))
+                                default:
+                                    completion(.failure(.genericError(error)))
+                            }
+                    }
+                }, receiveValue: {result in
+                    completion(.success(result))
+                    self.forgetPasswordToken = result
+                })
+                .store(in: &cancellables)
+            
+        }catch let encodingError as EncodingError{
+            completion(.failure(.encodingError(encodingError)))
+        }catch let error{
+            completion(.failure(.genericError(error)))
+        }
+    }
+    
+    func resetPassword(resetPasswordBody: ResetPasswordBody, completion: @escaping (Result<User, RequestError>) -> Void) {
+        
+        do {
+            
+            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .resetpassword, using: .post, withParams: resetPasswordBody)
+            
+            userRepository.resetPassword(using: urlRequest)
+                .sink(receiveCompletion: {result in
+                    switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            switch error {
+                                case let urlError as URLError:
+                                    completion(.failure(.urlError(urlError)))
+                                case let decodingError as DecodingError:
+                                    completion(.failure(.decodingError(decodingError)))
+                                default:
+                                    completion(.failure(.genericError(error)))
+                            }
+                    }
+                }, receiveValue: {result in
+                    completion(.success(result))
+                })
+                .store(in: &cancellables)
+            
+        }catch let encodingError as EncodingError{
+            completion(.failure(.encodingError(encodingError)))
+        }catch let error{
+            completion(.failure(.genericError(error)))
+        }
+    }
+    
+}

@@ -52,6 +52,8 @@ enum ApiEndPoint: CustomStringConvertible {
     case user
     case wildlifeById(Int64)
     case wildlife
+    case forgetpassword
+    case resetpassword
     
     var description: String {
         switch self {
@@ -143,6 +145,10 @@ enum ApiEndPoint: CustomStringConvertible {
                 return "treesign/tree/\(id)"
             case .trees(let id):
                 return "user/\(id)/tree"
+            case .forgetpassword:
+                return "user/forgetpassword"
+            case .resetpassword:
+                return "user/resetpassword"
         }
     }
 }

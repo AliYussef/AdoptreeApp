@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct AdoptionOverviewView: View {
-    @ObservedObject var orderViewModel: OrderViewModel
+    //@ObservedObject var orderViewModel: OrderViewModel
+    @EnvironmentObject var orderViewModel: OrderViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     //@State private var isChecked: Bool = false
     //@State private var quantity = 1.0
@@ -32,7 +33,7 @@ struct AdoptionOverviewView: View {
                         
                         ForEach(orderViewModel.products) { product in
                             // OverviewCellView(orderProduct: product, total: $total)
-                            OverviewCellView(orderViewModel: orderViewModel, orderProduct: product)
+                            OverviewCellView(orderProduct: product)
                         }
                         
                         if orderViewModel.products.count > 0 {
@@ -93,6 +94,7 @@ struct AdoptionOverviewView: View {
                     .background(Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
                     .padding()
+                    .disabled(orderViewModel.products.count == 0)
                 }
                 
             }
@@ -102,7 +104,8 @@ struct AdoptionOverviewView: View {
 }
 
 struct OverviewCellView: View {
-    @ObservedObject var orderViewModel: OrderViewModel
+    //@ObservedObject var orderViewModel: OrderViewModel
+    @EnvironmentObject var orderViewModel: OrderViewModel
     @State var orderProduct: OrderProduct
     @State private var isChecked:Bool = false
     @State private var personalSign = ""
@@ -158,7 +161,7 @@ struct OverviewCellView: View {
                             //Stepper("", value: self.$orderProduct.quantity.animation(), in: 1...100)
                             //                        CustomStepper(orderViewModel: orderViewModel,value: self.$orderProduct.quantity.animation())
                             //VStack {
-                            CustomStepper(orderViewModel: orderViewModel, orderProduct: orderProduct, value: self.$orderProduct.quantity.animation(), isChecked: $isChecked)
+                            CustomStepper(orderProduct: orderProduct, value: self.$orderProduct.quantity.animation(), isChecked: $isChecked)
                                 .padding(.trailing)
                            
                             
@@ -246,7 +249,8 @@ struct OverviewCellView: View {
 }
 
 struct CustomStepper : View {
-    @ObservedObject var orderViewModel: OrderViewModel
+    //@ObservedObject var orderViewModel: OrderViewModel
+    @EnvironmentObject var orderViewModel: OrderViewModel
     let orderProduct: OrderProduct
     @Binding var value: Int
     @Binding var isChecked: Bool
