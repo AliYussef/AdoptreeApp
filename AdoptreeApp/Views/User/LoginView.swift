@@ -50,10 +50,10 @@ struct LoginView: View {
                         
                     }, label: {
                         Text("Log in")
-                            .bold()
+                            .font(.subheadline)
                             .foregroundColor(.white)
                     })
-                    .frame(width: 180, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    .frame(width: 180, height: 40, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                     .background(Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
                     .padding()

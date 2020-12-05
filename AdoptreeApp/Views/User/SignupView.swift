@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct SignupView: View {
+    @Environment(\.openURL) var openURL
+    @EnvironmentObject var orderViewModel: OrderViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
     @State private var firstName = ""
     @State private var lastName = ""
     @State private var email = ""
@@ -41,16 +44,30 @@ struct SignupView: View {
                 }.background(Color.init("color_background"))
                 .padding(.top, 50)
                 
-                //                NavigationLink(destination: HomeView())
-                //                {
-                //                    Text("Check out")
-                //                        .bold()
-                //                        .foregroundColor(.white)
-                //                }
-                //                .frame(width: 180, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                //                .background(Color.init("color_primary_accesnt"))
-                //                .cornerRadius(10.0)
-                //                .padding()
+                Button(action: {
+                    //login here first
+                    // self.userViewModel.login(user: T##User, completion: T##(Result<LoginResponse, RequestError>) -> Void))
+                    var orderLines: [OrderLine] = []
+                    self.orderViewModel.products.forEach({ orderProduct in
+                        orderLines.append(OrderLine(id: nil, orderId: nil, productId: orderProduct.product.id, price: nil, vat: nil, quantity: orderProduct.quantity))
+                    })
+                    let order = Order(id: nil, paymentStatus: nil, orderStatus: nil, userId: 1, createdAt: nil, orderLines: orderLines)
+                    
+                    self.orderViewModel.createOrder(order: order) {_ in}
+                    
+                    if let paymentLink = self.orderViewModel.order?.paymentLink {
+                        self.openURL(URL(string:  paymentLink)!)
+                    }
+                    
+                }, label: {
+                    Text("Log in & pay")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                })
+                .frame(width: 160, height: 40, alignment: .center)
+                .background(Color.init("color_primary_accent"))
+                .cornerRadius(10.0)
+                .padding()
                 
             }
         }

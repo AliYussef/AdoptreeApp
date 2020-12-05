@@ -32,25 +32,25 @@ struct ProfileView: View {
                 
                 List {
                     NavigationLink(
-                        destination: Text("Destination"),
+                        destination: ContractView(),
                         label: {
                             Text("Your contract")
                         })
                     
                     NavigationLink(
-                        destination: Text("Destination"),
+                        destination: ChangeEmailView(),
                         label: {
                             Text("Change email address")
                         })
                     
                     NavigationLink(
-                        destination: Text("Destination"),
+                        destination: ChangePasswordView(),
                         label: {
                             Text("Chnage password")
                         })
                     
                     NavigationLink(
-                        destination: Text("Destination"),
+                        destination: DeleteAccountView(),
                         label: {
                             Text("Delete your account")
                                 .foregroundColor(.red)

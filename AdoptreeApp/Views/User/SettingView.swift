@@ -78,12 +78,12 @@ struct SettingView: View {
                             Text("1.0")
                         }
                         NavigationLink(
-                            destination: Text("Destination"),
+                            destination: PrivacyPolicyView(),
                             label: {
                                 Text("Privacy policy")
                             })
                         NavigationLink(
-                            destination: Text("Destination"),
+                            destination: OverTheAppView(),
                             label: {
                                 Text("Over this app")
                             })

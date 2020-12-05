@@ -20,16 +20,16 @@ struct ThirdInfoView: View {
                 
                 VStack(alignment: .leading) {
                     Text("Stichting")
-                        .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                        .font(.title)
                         .foregroundColor(.init("color_logo"))
                     Text("Adoptiebos")
-                        .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                        .font(.title)
                         .bold()
                         .foregroundColor(.init("color_logo"))
                 }
             }
             .padding(.leading)
-            .frame(width: 354, height: 134, alignment: .leading)
+            .frame(width: 354, height: 134, alignment: .leading) //change it to dynamically stretch//
             .background(Color.init(.white))
             .cornerRadius(12.0)
             .padding()
@@ -157,7 +157,7 @@ struct ThirdInfoView: View {
                 
             }, label: {
                 Text("Start now")
-                    .bold()
+                    .font(.subheadline)
                     .foregroundColor(.white)
                 
                 Image(systemName: "arrow.right.circle.fill")
@@ -167,7 +167,7 @@ struct ThirdInfoView: View {
                 
                 
             })
-            .frame(width: 180, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            .frame(width: 180, height: 40, alignment: .center)
             .background(Color.init("color_primary_accent"))
             .cornerRadius(10.0)
             .padding()
@@ -202,7 +202,7 @@ struct CellView: View {
             }
             
             Text(info)
-                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                .font(.title)
                 .bold()
                 .foregroundColor(.init("color_font_primary"))
             

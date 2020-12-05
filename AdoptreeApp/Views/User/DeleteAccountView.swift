@@ -60,10 +60,10 @@ struct DeleteAccountView: View {
                     
                 }, label: {
                     Text("Confirm")
-                        .bold()
+                        .font(.subheadline)
                         .foregroundColor(.white)
                 })
-                .frame(width: 180, height: 50, alignment: .center)
+                .frame(width: 180, height: 40, alignment: .center)
                 .background(Color.red)
                 .cornerRadius(10.0)
                 .padding()

@@ -76,10 +76,10 @@ struct AdoptionOverviewView: View {
                 HStack {
                     Button(action: {presentationMode.wrappedValue.dismiss()}, label: {
                         Text("Adopt more")
-                            .bold()
+                            .font(.subheadline)
                             .foregroundColor(.white)
                     })
-                    .frame(width: UIScreen.main.bounds.width * 0.4, height: 50, alignment: .center)
+                    .frame(width: UIScreen.main.bounds.width * 0.4, height: 40, alignment: .center)
                     .background(Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
                     .padding()
@@ -87,10 +87,10 @@ struct AdoptionOverviewView: View {
                     NavigationLink(destination: AdoptionLoginView())
                     {
                         Text("Proceed")
-                            .bold()
+                            .font(.subheadline)
                             .foregroundColor(.white)
                     }
-                    .frame(width: UIScreen.main.bounds.width * 0.4, height: 50, alignment: .center)
+                    .frame(width: UIScreen.main.bounds.width * 0.4, height: 40, alignment: .center)
                     .background(Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
                     .padding()
