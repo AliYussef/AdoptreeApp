@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8918D3C4257C06AF00141DD9 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8918D3C3257C06AF00141DD9 /* ViewRouter.swift */; };
+		8918D3C7257C113400141DD9 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8918D3C6257C113400141DD9 /* RootView.swift */; };
 		898E39002576617500A17A00 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E38FF2576617500A17A00 /* User.swift */; };
 		898E39032576619100A17A00 /* Tree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39022576619100A17A00 /* Tree.swift */; };
 		898E3906257661B200A17A00 /* TreeSign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E3905257661B200A17A00 /* TreeSign.swift */; };
@@ -95,6 +97,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8918D3C3257C06AF00141DD9 /* ViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRouter.swift; sourceTree = "<group>"; };
+		8918D3C6257C113400141DD9 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		898E38FF2576617500A17A00 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		898E39022576619100A17A00 /* Tree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tree.swift; sourceTree = "<group>"; };
 		898E3905257661B200A17A00 /* TreeSign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeSign.swift; sourceTree = "<group>"; };
@@ -396,6 +400,8 @@
 				898E39502576658600A17A00 /* Guest */,
 				89DE88002575BCD4006B9011 /* ContentView.swift */,
 				898E39AA25766A2600A17A00 /* StartingView.swift */,
+				8918D3C3257C06AF00141DD9 /* ViewRouter.swift */,
+				8918D3C6257C113400141DD9 /* RootView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -510,6 +516,7 @@
 				898E39A8257669D600A17A00 /* FailedAdoptionView.swift in Sources */,
 				898E39AB25766A2600A17A00 /* StartingView.swift in Sources */,
 				89C354042577E342004C26FB /* PrivacyPolicyView.swift in Sources */,
+				8918D3C4257C06AF00141DD9 /* ViewRouter.swift in Sources */,
 				898E39D62576893600A17A00 /* ProductRepository.swift in Sources */,
 				898E391E2576627B00A17A00 /* Forest.swift in Sources */,
 				898E39BA25766F1C00A17A00 /* GuestHomeView.swift in Sources */,
@@ -521,6 +528,7 @@
 				898E393C2576643000A17A00 /* TreeViewModel.swift in Sources */,
 				898E39602576665900A17A00 /* HomeView.swift in Sources */,
 				898E3978257666F000A17A00 /* GreenIdeaDetailView.swift in Sources */,
+				8918D3C7257C113400141DD9 /* RootView.swift in Sources */,
 				898E392A257662D600A17A00 /* Category.swift in Sources */,
 				898E390C257661DB00A17A00 /* Content.swift in Sources */,
 				898E39452576645400A17A00 /* ProductViewModel.swift in Sources */,

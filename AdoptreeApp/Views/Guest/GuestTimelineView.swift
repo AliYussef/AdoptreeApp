@@ -9,9 +9,9 @@ import SwiftUI
 
 struct GuestTimelineView: View {
     var body: some View {
-        ZStack {
-            Color.init("color_background")
-                .edgesIgnoringSafeArea(.all)
+//        ZStack {
+//            Color.init("color_background")
+//                .edgesIgnoringSafeArea(.all)
             
             VStack {
                 Image("timeline_tree")
@@ -27,7 +27,9 @@ struct GuestTimelineView: View {
                     .padding()
             }
             .padding()
-        }
+//        }
+//        .navigationBarTitle("TIMELINE", displayMode: .inline)
+//        .navigationBarBackButtonHidden(true)
     }
 }
 

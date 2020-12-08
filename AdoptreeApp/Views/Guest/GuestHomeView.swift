@@ -9,9 +9,9 @@ import SwiftUI
 
 struct GuestHomeView: View {
     var body: some View {
-        ZStack {
-            Color.init("color_background")
-                .edgesIgnoringSafeArea(.all)
+//        ZStack {
+//            Color.init("color_background")
+//                .edgesIgnoringSafeArea(.all)
             
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
@@ -199,7 +199,9 @@ struct GuestHomeView: View {
             }
             
             
-        }
+//        }
+//        .navigationBarTitle("HOME", displayMode: .inline)
+//        .navigationBarBackButtonHidden(true)
     }
 }
 

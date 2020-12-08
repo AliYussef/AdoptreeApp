@@ -13,7 +13,7 @@ struct FirstInfoView: View {
             Spacer()
             
             Text("Let us green the planet")
-                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                .font(.title)
                 .bold()
                 .foregroundColor(.init("color_font_primary"))
                 .padding()

@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 
 struct HomeView: View {
+    @EnvironmentObject var userViewModel: UserViewModel
     @ObservedObject var treeViewModel: TreeViewModel
     @State private var isExpanded: [Bool] = [true]
     
@@ -18,7 +19,8 @@ struct HomeView: View {
     
     var telemetry = [
         Telemetry(id: 1, treeId: 1, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1111795200), temperature: -3, humidity: 90, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1113004800), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
-        Telemetry(id: 2, treeId: 2, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
+        Telemetry(id: 2, treeId: 2, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)]),
+        Telemetry(id: 3, treeId: 3, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
     ]
     
     var body: some View {
@@ -27,55 +29,59 @@ struct HomeView: View {
             Color.init("color_background")
                 .edgesIgnoringSafeArea(.bottom)
             
-            ScrollView {
-                
-                VStack {
-                    if treeViewModel.trees.isEmpty {
-                        ProgressView("Loading your trees...")
-                        //                            .onAppear {
-                        //                                userViewModel.getAdoptedTrees() {_ in}
-                        //                            }
-                        
-                    } else {
-                        //initializeExpandedList()
-                        // ForEach(isExpanded.indices) { position in
-                        ForEach(Array(zip(treeViewModel.trees.indices, treeViewModel.trees)), id: \.0) { index, tree in
+            if userViewModel.isAuthenticated {
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack {
+                        if treeViewModel.trees.isEmpty {
+                            ProgressView("Loading your trees...")
+                            //                            .onAppear {
+                            //                                userViewModel.getAdoptedTrees() {_ in}
+                            //                            }
                             
-                            DisclosureGroup(
-                                isExpanded: $treeViewModel.isExpanded[index],
-                                content: {
-                                    if let treeId = tree.assignedTree?.tree_id {
-                                        TreeView(tree: tree, telemetry: telemetry.filter({$0.treeId == treeId}).first?.reports.first ?? nil, sequestration: sequestrations, treeImage: images, wildlife: wildlife)
-                                    }
-                                },
-                                label: {
-                                    
-                                    TreeHeader(tree: tree)
-                                        .frame(width: .none, height: .none)
-                                })
-                                .padding()
-                                .frame(width: UIScreen.main.bounds.width - 20, height: .none)
-                                .background(Color.white)
-                                .cornerRadius(12.0)
-                                .padding(.bottom, 10)
-                            
+                        } else {
+                            //initializeExpandedList()
+                            // ForEach(isExpanded.indices) { position in
+                            ForEach(Array(zip(treeViewModel.trees.indices, treeViewModel.trees)), id: \.0) { index, tree in
+                                
+                                DisclosureGroup(
+                                    isExpanded: $treeViewModel.isExpanded[index],
+                                    content: {
+                                        if let treeId = tree.assignedTree?.tree_id {
+                                            TreeView(tree: tree, telemetry: telemetry.filter({$0.treeId == treeId}).first?.reports.first ?? nil, sequestration: sequestrations, treeImage: images, wildlife: wildlife)
+                                        }
+                                    },
+                                    label: {
+                                        
+                                        TreeHeader(tree: tree)
+                                            .frame(width: .none, height: .none)
+                                    })
+                                    .padding()
+                                    .frame(width: UIScreen.main.bounds.width - 20, height: .none)
+                                    .background(Color.white)
+                                    .cornerRadius(12.0)
+                                    .padding(.bottom, 10)
+                                
+                            }
                         }
+                        
+                        
+                        NavigationLink(destination: TreeSelectionView())
+                        {
+                            Text("Adopt more trees")
+                                .bold()
+                                .foregroundColor(.white)
+                        }
+                        .frame(width: UIScreen.main.bounds.width - 20, height: 50, alignment: .center)
+                        .background(Color.init("color_primary_accent"))
+                        .cornerRadius(10.0)
+                        .padding()
                     }
-                    
-                    
-                    NavigationLink(destination: TreeSelectionView())
-                    {
-                        Text("Adopt more trees")
-                            .bold()
-                            .foregroundColor(.white)
-                    }
-                    .frame(width: UIScreen.main.bounds.width - 20, height: 50, alignment: .center)
-                    .background(Color.init("color_primary_accent"))
-                    .cornerRadius(10.0)
                     .padding()
                 }
-                .padding()
+            } else {
+                GuestHomeView()
             }
+            
             
         }
     }

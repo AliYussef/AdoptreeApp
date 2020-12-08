@@ -85,7 +85,7 @@ extension TreeViewModel {
                 
             }, receiveValue: {result in
                 completion(.success(result))
-                print(result)
+                //print(result)
                 self.trees = result
                 for _ in self.trees.indices {
                     self.isExpanded.append(false)

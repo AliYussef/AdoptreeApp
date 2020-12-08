@@ -10,8 +10,8 @@ import SwiftUI
 struct LoginView: View {
     @State private var username = ""
     @State private var password = ""
-    //@State var isNavigationBarHidden: Bool = true
-    @Binding  var isAuthenticated: Bool
+    @Binding var isAuthenticated: Bool
+    @Binding var isGuest: Bool
     
     var body: some View {
         NavigationView {
@@ -39,7 +39,7 @@ struct LoginView: View {
                         .padding()
                         .background(Color.init("color_textfield"))
                         .cornerRadius(8.0)
-                        .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
+                        .keyboardType(.default)
                         .autocapitalization(.none)
                         .padding()
                     
@@ -53,7 +53,7 @@ struct LoginView: View {
                             .font(.subheadline)
                             .foregroundColor(.white)
                     })
-                    .frame(width: 180, height: 40, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    .frame(width: 180, height: 40, alignment: .center)
                     .background(Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
                     .padding()
@@ -102,19 +102,28 @@ struct LoginView: View {
                     //                .padding()
                  
                     Spacer()
-                    NavigationLink(destination: GuestHomeView())
-                    {
+//                    NavigationLink(destination: GuestHomeView())
+//                    {
+//                        Text("Not now, maybe later")
+//                            .bold()
+//                            .foregroundColor(.init("color_font_primary"))
+//                    }
+//                    .padding()
+                    
+                    Button(action: {
+                        withAnimation {
+                            self.isGuest.toggle()
+                        }
+                        
+                    }, label: {
                         Text("Not now, maybe later")
                             .bold()
                             .foregroundColor(.init("color_font_primary"))
-                    }
+                    })
+//                    .frame(width: 180, height: 40, alignment: .center)
+//                    .background(Color.init("color_primary_accent"))
+//                    .cornerRadius(10.0)
                     .padding()
-                    //                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                    //                    Text("Not now, maybe later")
-                    //                        .bold()
-                    //                        .foregroundColor(Color.init("font_primary"))
-                    //                })
-                    //                .padding()
                     
                 }
                 .navigationBarBackButtonHidden(true)

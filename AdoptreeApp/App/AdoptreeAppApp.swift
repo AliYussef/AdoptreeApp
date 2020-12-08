@@ -13,6 +13,7 @@ struct AdoptreeAppApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     let viewModelFactory = ViewModelFactory()
     @ObservedObject var treeViewModel = ViewModelFactory().makeTreeViewModel()
+  
     
     init() {
         UITableView.appearance().backgroundColor = .clear
@@ -27,6 +28,18 @@ struct AdoptreeAppApp: App {
             ZStack{
                 Color.init("color_background")
                     .edgesIgnoringSafeArea(.all)
+                
+                
+//                if viewRouter.currentPage == "onboardingView" {
+//                    OnboardingView(treeViewModel: treeViewModel)
+//                } else if viewRouter.currentPage == "contentView" {
+//                    ContentView(treeViewModel: treeViewModel)
+//                } else if viewRouter.currentPage == "loginView" {
+//                    LoginView()
+//                }
+                
+                RootView(treeViewModel: treeViewModel)
+                
 //                NavigationView {
 //                    SettingView()
 //                }
@@ -35,13 +48,15 @@ struct AdoptreeAppApp: App {
                 //TimelineView()
                 //first to start
                 //GuestHomeView()
-                OnboardingView(treeViewModel: treeViewModel).environmentObject(viewModelFactory.makeOrderViewModel())
-                    .environmentObject(viewModelFactory.makeUserViewModel())
+                //OnboardingView(treeViewModel: treeViewModel).environmentObject(viewModelFactory.makeOrderViewModel())
+                   // .environmentObject(viewModelFactory.makeUserViewModel())
                 //LoginView()
                 //TreeSelectionView()
                 // ContentView(userViewModel: userViewModel)
-            }.onAppear {
-                //treeViewModel.getAdoptedTrees() {_ in}
+            }.environmentObject(ViewRouter()).environmentObject(viewModelFactory.makeOrderViewModel())
+            .environmentObject(viewModelFactory.makeUserViewModel())
+            .onAppear {
+                treeViewModel.getAdoptedTrees() {_ in}
                 //treeViewModel.getContents() {_ in}
                 
             }

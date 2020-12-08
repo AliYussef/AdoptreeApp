@@ -93,12 +93,12 @@ struct ThirdInfoView: View {
                 //                VStack {
                 //                    Image("icon_tree")
                 //                        .resizable()
-                //                        .frame(width: 23, height: 28, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                //                        .frame(width: 23, height: 28, alignment: .center)
                 //                        .foregroundColor(.init("color_primary_accesnt"))
                 //                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
                 //
                 //                    Text("2K")
-                //                        .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                //                        .font(.title)
                 //                        .bold()
                 //                        .foregroundColor(.init("color_font_primary"))
                 //
@@ -113,7 +113,7 @@ struct ThirdInfoView: View {
                 //                VStack {
                 //                    Image("icon_tree")
                 //                        .resizable()
-                //                        .frame(width: 23, height: 28, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                //                        .frame(width: 23, height: 28, alignment: .center)
                 //                        .foregroundColor(.init("color_primary_accesnt"))
                 //                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
                 //

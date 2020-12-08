@@ -46,8 +46,8 @@ class OrderViewModel: ObservableObject {
 //            Category(id: 3, name: "Tree Sign", description: "A personal sign placed next to your tree")
 //        ]
         
-        self.getEc(){_ in}
-      
+        //self.getEc(){_ in}
+        // any calling here will call it each time you manipulate the view
         
   
     }
@@ -56,7 +56,7 @@ class OrderViewModel: ObservableObject {
 extension OrderViewModel {
     
     func getEc(completion: @escaping (Result<OrderResponse, RequestError>) -> Void) {
-        print("Started")
+        print("Started order")
         let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .product, using: .get)
         let urlRequest1 = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .category, using: .get)
         

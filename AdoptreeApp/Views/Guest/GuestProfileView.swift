@@ -9,9 +9,9 @@ import SwiftUI
 
 struct GuestProfileView: View {
     var body: some View {
-        ZStack {
-            Color.init("color_background")
-                .edgesIgnoringSafeArea(.all)
+//        ZStack {
+//            Color.init("color_background")
+//                .edgesIgnoringSafeArea(.all)
             
             VStack {
                 Circle()
@@ -46,7 +46,9 @@ struct GuestProfileView: View {
                 .listStyle(PlainListStyle())
                 
             }
-        }
+//        }
+//        .navigationBarTitle("PROFILE", displayMode: .inline)
+//        .navigationBarBackButtonHidden(true)
     }
 }
 
