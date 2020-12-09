@@ -11,9 +11,8 @@ import UIKit
 @main
 struct AdoptreeAppApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    let viewModelFactory = ViewModelFactory()
     @ObservedObject var treeViewModel = ViewModelFactory().makeTreeViewModel()
-  
+    private let viewModelFactory = ViewModelFactory()
     
     init() {
         UITableView.appearance().backgroundColor = .clear
@@ -38,7 +37,8 @@ struct AdoptreeAppApp: App {
 //                    LoginView()
 //                }
                 
-                RootView(treeViewModel: treeViewModel)
+                RootView(treeViewModel: treeViewModel).environmentObject(ViewRouter()).environmentObject(viewModelFactory.makeOrderViewModel())
+                    .environmentObject(viewModelFactory.makeUserViewModel()).environmentObject(viewModelFactory.makeNotificationViewModel())
                 
 //                NavigationView {
 //                    SettingView()
@@ -53,8 +53,7 @@ struct AdoptreeAppApp: App {
                 //LoginView()
                 //TreeSelectionView()
                 // ContentView(userViewModel: userViewModel)
-            }.environmentObject(ViewRouter()).environmentObject(viewModelFactory.makeOrderViewModel())
-            .environmentObject(viewModelFactory.makeUserViewModel())
+            }
             .onAppear {
                 treeViewModel.getAdoptedTrees() {_ in}
                 //treeViewModel.getContents() {_ in}

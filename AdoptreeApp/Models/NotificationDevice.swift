@@ -8,9 +8,9 @@
 import Foundation
 
 struct NotificationDevice: Codable {
-    let id: Int64
-    let userId: Int64 //required
-    let deviceToken: String //required
-    let createdAt: String
-    let deletedAt: String
+    let id: Int64?
+    let userId: Int64
+    let deviceToken: String
+    let createdAt: String?
+    let deletedAt: String?
 }

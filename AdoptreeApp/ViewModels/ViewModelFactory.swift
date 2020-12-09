@@ -17,6 +17,7 @@ class ViewModelFactory {
     private let orderRepository = OrderRepository()
     private let productRepository = ProductRepository()
     private let categoryRepository = CategoryRepository()
+    private let notificationRepository = NotificationRepository()
 }
 
 extension ViewModelFactory {
@@ -39,5 +40,9 @@ extension ViewModelFactory {
     
     func makeOrderViewModel() -> OrderViewModel {
         return OrderViewModel(orderRepository: orderRepository, productRepository: productRepository, categoryRepository: categoryRepository)
+    }
+    
+    func makeNotificationViewModel() -> NotificationViewModel {
+        return NotificationViewModel(notificationRepository: notificationRepository)
     }
 }

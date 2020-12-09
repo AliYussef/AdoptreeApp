@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct SettingView: View {
+    @EnvironmentObject var notificationViewModel: NotificationViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
     @State private var languagesIndex = 0
     var languages = ["English", "Dutch"]
-    @State var isGrowthOn = true
+    @State var isGrowthOn = true 
     @State var isHumidityOn = true
     @State var isTemperatureOn = true
     @State var isCO2ReductionOn = true
     @State var isCO2RedutionTipsOn = true
     @State var isEventsOn = false
+    
+//    {
+//        didSet {
+//            notificationViewModel.notificationObject?.growth.toggle()
+//            notificationViewModel.saveNotificationObject()
+//        }
+//    }
     
     init(){
         UITableView.appearance().backgroundColor = .clear
@@ -33,26 +42,28 @@ struct SettingView: View {
                         Text("notifications")
                             .foregroundColor(.init("color_font_secondary"))
                     }, content: {
-                        
-                        Toggle(isOn: $isGrowthOn) {
-                            Text("Growth")
-                        }
-                        Toggle(isOn: $isHumidityOn) {
-                            Text("Humidity")
-                        }
-                        Toggle(isOn: $isTemperatureOn) {
-                            Text("Temperature")
-                        }
-                        Toggle(isOn: $isCO2ReductionOn) {
-                            Text("CO2 reduction")
-                        }
-                        Toggle(isOn: $isCO2RedutionTipsOn) {
-                            Text("CO2 redution tips")
-                        }
-                        Toggle(isOn: $isEventsOn) {
-                            Text("Events")
-                        }
-                    })
+                        //if notificationViewModel.notificationObject != nil {
+                        Toggle(isOn: $notificationViewModel.notificationObject.growth.animation()) {
+                                Text("Growth")
+                            }
+                            Toggle(isOn: $notificationViewModel.notificationObject.humidity.animation()) {
+                                Text("Humidity")
+                            }
+                            Toggle(isOn: $notificationViewModel.notificationObject.temperature.animation()) {
+                                Text("Temperature")
+                            }
+                            Toggle(isOn: $notificationViewModel.notificationObject.co2Reduction.animation()) {
+                                Text("CO2 reduction")
+                            }
+                            Toggle(isOn: $notificationViewModel.notificationObject.co2ReductionTip.animation()) {
+                                Text("CO2 redution tips")
+                            }
+                            Toggle(isOn: $notificationViewModel.notificationObject.event.animation()) {
+                                Text("Events")
+                            }
+                       // }
+                       
+                    })//.disabled(!userViewModel.isAuthenticated)
                     
                     //general
                     Section(header: HStack {
@@ -124,7 +135,18 @@ struct SettingView: View {
                 }.background(Color.init("color_background"))
                 .padding(.top, 10)
             }
+        }.onAppear {
+//            if let notificatioObject = notificationViewModel.notificationObject {
+//                isGrowthOn = notificatioObject.growth
+//                isHumidityOn = notificatioObject.humidity
+//                isTemperatureOn = notificatioObject.temperature
+//                isCO2ReductionOn = notificatioObject.co2Reduction
+//                isCO2RedutionTipsOn = notificatioObject.co2ReductionTip
+//                isEventsOn = notificatioObject.event
+//            }
+
         }
+        
     }
 }
 

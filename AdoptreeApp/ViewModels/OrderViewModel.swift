@@ -55,7 +55,7 @@ class OrderViewModel: ObservableObject {
 
 extension OrderViewModel {
     
-    func getEc(completion: @escaping (Result<OrderResponse, RequestError>) -> Void) {
+    func getProductsAndCategories(completion: @escaping (Result<OrderResponse, RequestError>) -> Void) {
         print("Started order")
         let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .product, using: .get)
         let urlRequest1 = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .category, using: .get)

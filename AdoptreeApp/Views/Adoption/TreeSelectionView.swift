@@ -12,10 +12,10 @@ struct TreeSelectionView: View {
     @EnvironmentObject var orderViewModel: OrderViewModel
     @State private var badgeCount: Int = 1
     
-    func gettt(a: Product) -> EmptyView {
-        print(a)
-        return EmptyView()
-    }
+//    func gettt(a: Product) -> EmptyView {
+//        print(a)
+//        return EmptyView()
+//    }
     
     var body: some View {
         ZStack{
@@ -60,14 +60,21 @@ struct TreeSelectionView: View {
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack {
-                        ForEach(orderViewModel.availableProducts) { treeProduct in
-                          
-                            if orderViewModel.categoriesDic[treeProduct.categoryId] == "Tree" || orderViewModel.categoriesDic[treeProduct.categoryId] == "Sapling"{
+                        
+                        if orderViewModel.availableProducts.isEmpty {
+                            ProgressView("Loading trees...")
+                        } else {
+                            ForEach(orderViewModel.availableProducts) { treeProduct in
                                 
-                                TreeTypeView(treeProduct: treeProduct)
-                                
+                                if orderViewModel.categoriesDic[treeProduct.categoryId] == "Tree" || orderViewModel.categoriesDic[treeProduct.categoryId] == "Sapling"{
+                                    
+                                    TreeTypeView(treeProduct: treeProduct)
+                                    
+                                }
                             }
                         }
+                        
+                     
                        
                         //TreeTypeView(orderViewModel: orderViewModel)
                        // TreeTypeView(orderViewModel: orderViewModel)
@@ -81,6 +88,11 @@ struct TreeSelectionView: View {
             //}
         }
         .navigationBarTitle("ADOPTION", displayMode: .inline)
+        .onAppear {
+            if orderViewModel.availableProducts.isEmpty {
+                orderViewModel.getProductsAndCategories {_ in}
+            }
+        }
     }
 }
 

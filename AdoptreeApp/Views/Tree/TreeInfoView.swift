@@ -58,6 +58,7 @@ Another noted white oak was the Great White Oak in Basking Ridge, New Jersey, es
                 .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .leading)
                 .background(Color.white)
                 .cornerRadius(12.0)
+                .padding()
             }
         }
     }

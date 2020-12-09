@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6FCCB7B3A4D039F4A151E485 /* Pods_AdoptreeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A54C660EE5A0A57986562F /* Pods_AdoptreeApp.framework */; };
 		8918D3C4257C06AF00141DD9 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8918D3C3257C06AF00141DD9 /* ViewRouter.swift */; };
 		8918D3C7257C113400141DD9 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8918D3C6257C113400141DD9 /* RootView.swift */; };
+		895D7A17257FCFA8009FF641 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */; };
+		8985E3FB257FF4C8006C2DA4 /* NotificationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8985E3FA257FF4C8006C2DA4 /* NotificationRepository.swift */; };
+		8985E3FE257FF627006C2DA4 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */; };
+		8985E406257FF9C1006C2DA4 /* NotificationObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8985E405257FF9C1006C2DA4 /* NotificationObject.swift */; };
 		898E39002576617500A17A00 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E38FF2576617500A17A00 /* User.swift */; };
 		898E39032576619100A17A00 /* Tree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39022576619100A17A00 /* Tree.swift */; };
 		898E3906257661B200A17A00 /* TreeSign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E3905257661B200A17A00 /* TreeSign.swift */; };
@@ -97,8 +102,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		02A54C660EE5A0A57986562F /* Pods_AdoptreeApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdoptreeApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8918D3C3257C06AF00141DD9 /* ViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRouter.swift; sourceTree = "<group>"; };
 		8918D3C6257C113400141DD9 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8985E3FA257FF4C8006C2DA4 /* NotificationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRepository.swift; sourceTree = "<group>"; };
+		8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
+		8985E405257FF9C1006C2DA4 /* NotificationObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationObject.swift; sourceTree = "<group>"; };
 		898E38FF2576617500A17A00 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		898E39022576619100A17A00 /* Tree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tree.swift; sourceTree = "<group>"; };
 		898E3905257661B200A17A00 /* TreeSign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeSign.swift; sourceTree = "<group>"; };
@@ -184,6 +194,8 @@
 		89DE881E2575BFAB006B9011 /* ViewModelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHelper.swift; sourceTree = "<group>"; };
 		89DE88212575BFCC006B9011 /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
 		89DE88242575BFE5006B9011 /* ApiEndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiEndPoint.swift; sourceTree = "<group>"; };
+		A04D19A334AEFED58E6DE6E8 /* Pods-AdoptreeApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdoptreeApp.debug.xcconfig"; path = "Target Support Files/Pods-AdoptreeApp/Pods-AdoptreeApp.debug.xcconfig"; sourceTree = "<group>"; };
+		E762C8BC63776FA036B97BAE /* Pods-AdoptreeApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdoptreeApp.release.xcconfig"; path = "Target Support Files/Pods-AdoptreeApp/Pods-AdoptreeApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,12 +205,21 @@
 			files = (
 				898E39B225766DFB00A17A00 /* KeychainAccess in Frameworks */,
 				898E39B625766E4F00A17A00 /* MultiSlider in Frameworks */,
+				6FCCB7B3A4D039F4A151E485 /* Pods_AdoptreeApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		47129C8FC6E865F55B183C2E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				02A54C660EE5A0A57986562F /* Pods_AdoptreeApp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		898E394D2576657000A17A00 /* News */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +315,7 @@
 				898E39CF2576891E00A17A00 /* ForestRepository.swift */,
 				898E39D22576892B00A17A00 /* TelemetryRepository.swift */,
 				898E39D52576893600A17A00 /* ProductRepository.swift */,
+				8985E3FA257FF4C8006C2DA4 /* NotificationRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -303,6 +325,8 @@
 			children = (
 				89DE87FD2575BCD4006B9011 /* AdoptreeApp */,
 				89DE87FC2575BCD4006B9011 /* Products */,
+				C97371C6907F0C3583B3C9D0 /* Pods */,
+				47129C8FC6E865F55B183C2E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -340,6 +364,7 @@
 		89DE880E2575BD0F006B9011 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */,
 				89DE88072575BCD5006B9011 /* Info.plist */,
 				89DE88022575BCD5006B9011 /* Assets.xcassets */,
 				89DE87FE2575BCD4006B9011 /* AdoptreeAppApp.swift */,
@@ -385,6 +410,7 @@
 				898E3923257662AC00A17A00 /* Wildlife.swift */,
 				898E3926257662C000A17A00 /* VatRate.swift */,
 				898E3929257662D600A17A00 /* Category.swift */,
+				8985E405257FF9C1006C2DA4 /* NotificationObject.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -415,9 +441,19 @@
 				898E39412576644800A17A00 /* OrderViewModel.swift */,
 				898E39442576645400A17A00 /* ProductViewModel.swift */,
 				898E394A2576649200A17A00 /* ForestViewModel.swift */,
+				8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */,
 				898E39472576646200A17A00 /* ViewModelFactory.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C97371C6907F0C3583B3C9D0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A04D19A334AEFED58E6DE6E8 /* Pods-AdoptreeApp.debug.xcconfig */,
+				E762C8BC63776FA036B97BAE /* Pods-AdoptreeApp.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -427,9 +463,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 89DE880A2575BCD5006B9011 /* Build configuration list for PBXNativeTarget "AdoptreeApp" */;
 			buildPhases = (
+				122F1933DDF8748E536AA945 /* [CP] Check Pods Manifest.lock */,
 				89DE87F72575BCD4006B9011 /* Sources */,
 				89DE87F82575BCD4006B9011 /* Frameworks */,
 				89DE87F92575BCD4006B9011 /* Resources */,
+				C5947EACD2597727CDABAE18 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -486,12 +524,55 @@
 			buildActionMask = 2147483647;
 			files = (
 				89DE88192575BF45006B9011 /* Launch Screen.storyboard in Resources */,
+				895D7A17257FCFA8009FF641 /* GoogleService-Info.plist in Resources */,
 				89DE88062575BCD5006B9011 /* Preview Assets.xcassets in Resources */,
 				89DE88032575BCD5006B9011 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		122F1933DDF8748E536AA945 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AdoptreeApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C5947EACD2597727CDABAE18 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AdoptreeApp/Pods-AdoptreeApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AdoptreeApp/Pods-AdoptreeApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AdoptreeApp/Pods-AdoptreeApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		89DE87F72575BCD4006B9011 /* Sources */ = {
@@ -514,7 +595,9 @@
 				89C354072577E351004C26FB /* OverTheAppView.swift in Sources */,
 				898E39D32576892B00A17A00 /* TelemetryRepository.swift in Sources */,
 				898E39A8257669D600A17A00 /* FailedAdoptionView.swift in Sources */,
+				8985E406257FF9C1006C2DA4 /* NotificationObject.swift in Sources */,
 				898E39AB25766A2600A17A00 /* StartingView.swift in Sources */,
+				8985E3FE257FF627006C2DA4 /* NotificationViewModel.swift in Sources */,
 				89C354042577E342004C26FB /* PrivacyPolicyView.swift in Sources */,
 				8918D3C4257C06AF00141DD9 /* ViewRouter.swift in Sources */,
 				898E39D62576893600A17A00 /* ProductRepository.swift in Sources */,
@@ -579,6 +662,7 @@
 				898E39422576644800A17A00 /* OrderViewModel.swift in Sources */,
 				898E39F12576A17C00A17A00 /* NewsCellView.swift in Sources */,
 				898E39692576667C00A17A00 /* TimelineView.swift in Sources */,
+				8985E3FB257FF4C8006C2DA4 /* NotificationRepository.swift in Sources */,
 				898E394B2576649200A17A00 /* ForestViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -704,6 +788,7 @@
 		};
 		89DE880B2575BCD5006B9011 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A04D19A334AEFED58E6DE6E8 /* Pods-AdoptreeApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -711,6 +796,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"AdoptreeApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 4C6RUQ855H;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = AdoptreeApp/App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -726,6 +813,7 @@
 		};
 		89DE880C2575BCD5006B9011 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E762C8BC63776FA036B97BAE /* Pods-AdoptreeApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -733,6 +821,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"AdoptreeApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 4C6RUQ855H;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = AdoptreeApp/App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
