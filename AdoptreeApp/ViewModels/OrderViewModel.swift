@@ -55,7 +55,7 @@ class OrderViewModel: ObservableObject {
 
 extension OrderViewModel {
     
-    func getProductsAndCategories(completion: @escaping (Result<OrderResponse, RequestError>) -> Void) {
+    func getProductsAndCategories() {
         print("Started order")
         let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .product, using: .get)
         let urlRequest1 = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .category, using: .get)
@@ -70,13 +70,13 @@ extension OrderViewModel {
                         switch error {
                             case let urlError as URLError:
                                 print(urlError)
-                                completion(.failure(.urlError(urlError)))
+                                //completion(.failure(.urlError(urlError)))
                             case let decodingError as DecodingError:
                                 print(decodingError)
-                                completion(.failure(.decodingError(decodingError)))
+                                //completion(.failure(.decodingError(decodingError)))
                             default:
                                 print(error)
-                                completion(.failure(.genericError(error)))
+                                //completion(.failure(.genericError(error)))
                         }
                 }
                 
@@ -85,6 +85,7 @@ extension OrderViewModel {
                 self.categories = categories
                 self.createCategoriesDictionary()
                 self.getTreeSignProduct()
+                
             })
             .store(in: &cancellables)
     }

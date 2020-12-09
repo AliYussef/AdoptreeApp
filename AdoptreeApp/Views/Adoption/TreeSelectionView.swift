@@ -90,7 +90,7 @@ struct TreeSelectionView: View {
         .navigationBarTitle("ADOPTION", displayMode: .inline)
         .onAppear {
             if orderViewModel.availableProducts.isEmpty {
-                orderViewModel.getProductsAndCategories {_ in}
+                orderViewModel.getProductsAndCategories()
             }
         }
     }

@@ -20,6 +20,38 @@ class TimelineViewModel: ObservableObject {
         self.treeRepository = treeRepository
     }
 }
+extension TimelineViewModel {
+
+    func getTimeLineData(using treeId:Int64) {
+        let telemetryUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .telemetryById(treeId), using: .get)
+        let sequestrationUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .sequestration(treeId), using: .get)
+        
+        Publishers.CombineLatest(telemetryRepository.getTelemetryByTree(using: telemetryUrlRequest), treeRepository.getTreeSequestraion(using: sequestrationUrlRequest))
+            .sink(receiveCompletion: {result in
+                switch result {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        switch error {
+                            case let urlError as URLError:
+                                print(urlError)
+                            //completion(.failure(.urlError(urlError)))
+                            case let decodingError as DecodingError:
+                                print(decodingError)
+                            //completion(.failure(.decodingError(decodingError)))
+                            default:
+                                print(error)
+                            //completion(.failure(.genericError(error)))
+                        }
+                }
+                
+            }, receiveValue: { telemetries, sequestrations in
+                self.telemetries.append(contentsOf: telemetries)
+                self.sequestrations.append(contentsOf: sequestrations)
+            })
+            .store(in: &cancellables)
+    }
+}
 
 extension TimelineViewModel {
     

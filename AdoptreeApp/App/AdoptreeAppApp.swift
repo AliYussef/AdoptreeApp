@@ -55,7 +55,7 @@ struct AdoptreeAppApp: App {
                 // ContentView(userViewModel: userViewModel)
             }
             .onAppear {
-                treeViewModel.getAdoptedTrees() {_ in}
+                treeViewModel.getAdoptedTrees(of: 1) {_ in}
                 //treeViewModel.getContents() {_ in}
                 
             }

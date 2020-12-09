@@ -32,9 +32,7 @@
 		898E39392576642600A17A00 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39382576642600A17A00 /* UserViewModel.swift */; };
 		898E393C2576643000A17A00 /* TreeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E393B2576643000A17A00 /* TreeViewModel.swift */; };
 		898E39422576644800A17A00 /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39412576644800A17A00 /* OrderViewModel.swift */; };
-		898E39452576645400A17A00 /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39442576645400A17A00 /* ProductViewModel.swift */; };
 		898E39482576646200A17A00 /* ViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39472576646200A17A00 /* ViewModelFactory.swift */; };
-		898E394B2576649200A17A00 /* ForestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E394A2576649200A17A00 /* ForestViewModel.swift */; };
 		898E39542576661A00A17A00 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39532576661A00A17A00 /* OnboardingView.swift */; };
 		898E39572576662900A17A00 /* FirstInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39562576662900A17A00 /* FirstInfoView.swift */; };
 		898E395A2576663B00A17A00 /* SecondInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39592576663B00A17A00 /* SecondInfoView.swift */; };
@@ -127,9 +125,7 @@
 		898E39382576642600A17A00 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		898E393B2576643000A17A00 /* TreeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeViewModel.swift; sourceTree = "<group>"; };
 		898E39412576644800A17A00 /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
-		898E39442576645400A17A00 /* ProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewModel.swift; sourceTree = "<group>"; };
 		898E39472576646200A17A00 /* ViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelFactory.swift; sourceTree = "<group>"; };
-		898E394A2576649200A17A00 /* ForestViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForestViewModel.swift; sourceTree = "<group>"; };
 		898E39532576661A00A17A00 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		898E39562576662900A17A00 /* FirstInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstInfoView.swift; sourceTree = "<group>"; };
 		898E39592576663B00A17A00 /* SecondInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondInfoView.swift; sourceTree = "<group>"; };
@@ -439,8 +435,6 @@
 				898E393B2576643000A17A00 /* TreeViewModel.swift */,
 				898E39E125768EA800A17A00 /* TimelineViewModel.swift */,
 				898E39412576644800A17A00 /* OrderViewModel.swift */,
-				898E39442576645400A17A00 /* ProductViewModel.swift */,
-				898E394A2576649200A17A00 /* ForestViewModel.swift */,
 				8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */,
 				898E39472576646200A17A00 /* ViewModelFactory.swift */,
 			);
@@ -614,7 +608,6 @@
 				8918D3C7257C113400141DD9 /* RootView.swift in Sources */,
 				898E392A257662D600A17A00 /* Category.swift in Sources */,
 				898E390C257661DB00A17A00 /* Content.swift in Sources */,
-				898E39452576645400A17A00 /* ProductViewModel.swift in Sources */,
 				898E3909257661C600A17A00 /* Tour.swift in Sources */,
 				898E39C4257688F200A17A00 /* TreeRepository.swift in Sources */,
 				898E39AE25766D7700A17A00 /* AppDelegate.swift in Sources */,
@@ -663,7 +656,6 @@
 				898E39F12576A17C00A17A00 /* NewsCellView.swift in Sources */,
 				898E39692576667C00A17A00 /* TimelineView.swift in Sources */,
 				8985E3FB257FF4C8006C2DA4 /* NotificationRepository.swift in Sources */,
-				898E394B2576649200A17A00 /* ForestViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
