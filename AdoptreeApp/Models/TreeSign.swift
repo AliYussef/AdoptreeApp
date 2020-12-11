@@ -8,11 +8,11 @@
 import Foundation
 
 struct TreeSign: Codable {
-    let id: Int64
+    let id: Int64?
     let tree_id: Int64
-    let order_id: Int64
     let product_id: Int64
     let sign_text: String
-    let createdAt: String
-    let deletedAt: String
+    let order_id: Int64?
+    let createdAt: Date?
+    let deletedAt: Date?
 }

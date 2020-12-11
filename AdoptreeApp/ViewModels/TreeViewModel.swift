@@ -12,18 +12,21 @@ class TreeViewModel: ObservableObject {
     @Published var trees:[Tree] = []
     @Published var treeImages: [TreeImage] = []
     @Published var wildlifes: [WildlifeOutput] = []
+    @Published var treeSign: TreeSign?
     @Published var isExpanded: [Bool] = [true]
     private let treeRepository: TreeRepositoryProtocol
     private let userRepository: UserRepositoryProtocol
     private let contentRepository: ContentRepositoryProtocol
     private let forestRepository: ForestRepositoryProtocol
+    private let treeSignRepository: TreeSignRepositoryProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    init(treeRepository: TreeRepositoryProtocol, userRepository: UserRepositoryProtocol, contentRepository: ContentRepositoryProtocol, forestRepository: ForestRepositoryProtocol) {
+    init(treeRepository: TreeRepositoryProtocol, userRepository: UserRepositoryProtocol, contentRepository: ContentRepositoryProtocol, forestRepository: ForestRepositoryProtocol, treeSignRepository: TreeSignRepositoryProtocol) {
         self.treeRepository = treeRepository
         self.userRepository = userRepository
         self.contentRepository = contentRepository
         self.forestRepository = forestRepository
+        self.treeSignRepository = treeSignRepository
         getAdoptedTrees(of: 1) {_ in}
     }
 }
@@ -67,26 +70,26 @@ extension TreeViewModel {
                 }
             })
             .store(in: &cancellables)
-//            .sink(receiveCompletion: {result in
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                print(urlError)
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                            default:
-//                                print(error)
-//                        }
-//                }
-//
-//            }, receiveValue: { treeImages, wildlifes in
-//                self.treeImages.append(treeImages)
-//                self.wildlifes.append(WildlifeOutput(forestId: forestId, wildlife: wildlifes))
-//            })
-//            .store(in: &cancellables)
+        //            .sink(receiveCompletion: {result in
+        //                switch result {
+        //                    case .finished:
+        //                        break
+        //                    case .failure(let error):
+        //                        switch error {
+        //                            case let urlError as URLError:
+        //                                print(urlError)
+        //                            case let decodingError as DecodingError:
+        //                                print(decodingError)
+        //                            default:
+        //                                print(error)
+        //                        }
+        //                }
+        //
+        //            }, receiveValue: { treeImages, wildlifes in
+        //                self.treeImages.append(treeImages)
+        //                self.wildlifes.append(WildlifeOutput(forestId: forestId, wildlife: wildlifes))
+        //            })
+        //            .store(in: &cancellables)
         
     }
     
@@ -136,69 +139,69 @@ extension TreeViewModel {
 
 extension TreeViewModel {
     
-//    func getTreeImages(for treeId:Int64 ,completion: @escaping (Result<TreeImage, RequestError>) -> Void) {
-//
-//        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .treeImages(1), using: .get)
-//
-//        treeRepository.getTreeImages(using: urlRequest)
-//            .sink(receiveCompletion: {result in
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                print(urlError)
-//                                completion(.failure(.urlError(urlError)))
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                                completion(.failure(.decodingError(decodingError)))
-//                            default:
-//                                print(error)
-//                                completion(.failure(.genericError(error)))
-//                        }
-//                }
-//
-//            }, receiveValue: {result in
-//                completion(.success(result))
-//                self.treeImages.append(result)
-//            })
-//            .store(in: &cancellables)
-//    }
+    //    func getTreeImages(for treeId:Int64 ,completion: @escaping (Result<TreeImage, RequestError>) -> Void) {
+    //
+    //        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .treeImages(1), using: .get)
+    //
+    //        treeRepository.getTreeImages(using: urlRequest)
+    //            .sink(receiveCompletion: {result in
+    //                switch result {
+    //                    case .finished:
+    //                        break
+    //                    case .failure(let error):
+    //                        switch error {
+    //                            case let urlError as URLError:
+    //                                print(urlError)
+    //                                completion(.failure(.urlError(urlError)))
+    //                            case let decodingError as DecodingError:
+    //                                print(decodingError)
+    //                                completion(.failure(.decodingError(decodingError)))
+    //                            default:
+    //                                print(error)
+    //                                completion(.failure(.genericError(error)))
+    //                        }
+    //                }
+    //
+    //            }, receiveValue: {result in
+    //                completion(.success(result))
+    //                self.treeImages.append(result)
+    //            })
+    //            .store(in: &cancellables)
+    //    }
     
 }
 
 extension TreeViewModel {
     
-//    func getWildlife(from forestId: Int64, completion: @escaping(Result<[Wildlife], RequestError>) -> Void) {
-//
-//        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .wildlifeByForest(forestId), using: .get)
-//
-//        forestRepository.getWildlife(using: urlRequest)
-//            .sink(receiveCompletion: {result in
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                print(urlError)
-//                                completion(.failure(.urlError(urlError)))
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                                completion(.failure(.decodingError(decodingError)))
-//                            default:
-//                                print(error)
-//                                completion(.failure(.genericError(error)))
-//                        }
-//                }
-//
-//            }, receiveValue: {result in
-//                self.wildlifes.append(WildlifeOutput(forestId: forestId, wildlife: result))
-//                completion(.success(result))
-//            })
-//            .store(in: &cancellables)
-//    }
+    //    func getWildlife(from forestId: Int64, completion: @escaping(Result<[Wildlife], RequestError>) -> Void) {
+    //
+    //        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .wildlifeByForest(forestId), using: .get)
+    //
+    //        forestRepository.getWildlife(using: urlRequest)
+    //            .sink(receiveCompletion: {result in
+    //                switch result {
+    //                    case .finished:
+    //                        break
+    //                    case .failure(let error):
+    //                        switch error {
+    //                            case let urlError as URLError:
+    //                                print(urlError)
+    //                                completion(.failure(.urlError(urlError)))
+    //                            case let decodingError as DecodingError:
+    //                                print(decodingError)
+    //                                completion(.failure(.decodingError(decodingError)))
+    //                            default:
+    //                                print(error)
+    //                                completion(.failure(.genericError(error)))
+    //                        }
+    //                }
+    //
+    //            }, receiveValue: {result in
+    //                self.wildlifes.append(WildlifeOutput(forestId: forestId, wildlife: result))
+    //                completion(.success(result))
+    //            })
+    //            .store(in: &cancellables)
+    //    }
 }
 
 extension TreeViewModel {
@@ -246,4 +249,83 @@ extension TreeViewModel {
             self.trees[index].assignedTree = assignedTree
         }
     }
+}
+
+extension TreeViewModel {
+    
+    func createTreeSign(treeSign: TreeSign, completion: @escaping (Result<TreeSign, RequestError>) -> Void) {
+        do {
+            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .treesign, using: .post, withParams: treeSign)
+            
+            treeSignRepository.createTreeSign(using: urlRequest)
+                .sink(receiveCompletion: {result in
+                    switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            switch error {
+                                case let urlError as URLError:
+                                    print(urlError)
+                                    completion(.failure(.urlError(urlError)))
+                                case let decodingError as DecodingError:
+                                    print(decodingError)
+                                    completion(.failure(.decodingError(decodingError)))
+                                default:
+                                    print(error)
+                                    completion(.failure(.genericError(error)))
+                            }
+                    }
+                    
+                }, receiveValue: {result in
+                    self.treeSign = result
+                    completion(.success(result))
+                })
+                .store(in: &cancellables)
+            
+        }catch let encodingError as EncodingError{
+            completion(.failure(.encodingError(encodingError)))
+        }catch let error{
+            completion(.failure(.genericError(error)))
+        }
+    }
+    
+    func getTreeSignByTree(for treeId: Int64, completion: @escaping (Result<TreeSign, RequestError>) -> Void) {
+        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .treesignByTree(treeId), using: .get)
+        
+        treeSignRepository.createTreeSign(using: urlRequest)
+            .sink(receiveCompletion: {result in
+                switch result {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        switch error {
+                            case let urlError as URLError:
+                                print(urlError)
+                                completion(.failure(.urlError(urlError)))
+                            case let decodingError as DecodingError:
+                                print(decodingError)
+                                completion(.failure(.decodingError(decodingError)))
+                            default:
+                                print(error)
+                                completion(.failure(.genericError(error)))
+                        }
+                }
+                
+            }, receiveValue: {result in
+                self.treeSign = result
+                completion(.success(result))
+            })
+            .store(in: &cancellables)
+    }
+    
+    func createTreeSignObject(tree: Tree, treeSignProduct: Product, signText: String, orderId: Int64) -> TreeSign? {
+        var treeSign: TreeSign?
+        if let treeId = tree.assignedTree?.tree_id {
+            //if let productId = treeSign?.id {
+            treeSign = TreeSign(id: nil, tree_id: treeId, product_id: treeSignProduct.id, sign_text: signText, order_id: orderId, createdAt: nil, deletedAt: nil)
+            //}
+        }
+        return treeSign
+    }
+    
 }

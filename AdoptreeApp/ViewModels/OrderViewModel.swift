@@ -282,6 +282,16 @@ extension OrderViewModel {
         return Order(id: nil, paymentRedirectLink: "mollie-app://payment-return", paymentStatus: nil, orderStatus: nil, userId: userID, createdAt: nil, orderLines: orderLines)
     }
     
+    func createTreeSignOrder(for userID: Int64) -> Order {
+        var orderLines: [OrderLine] = []
+        
+        if let treeSign = treeSign {
+            orderLines.append(OrderLine(id: nil, orderId: nil, productId: treeSign.id, price: nil, vat: nil, quantity: 1))
+        }
+        
+        return Order(id: nil, paymentRedirectLink: "mollie-app://payment-return", paymentStatus: nil, orderStatus: nil, userId: userID, createdAt: nil, orderLines: orderLines)
+    }
+    
     func calculateTotal() {
         var total: Double = 0.0
         

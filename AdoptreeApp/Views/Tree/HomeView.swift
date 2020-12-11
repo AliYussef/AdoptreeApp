@@ -90,11 +90,11 @@ struct HomeView: View {
 
 struct TreeHeader: View {
     @ObservedObject var treeViewModel: TreeViewModel
-    let tree: Tree
     @State private var isActive = false
     @State private var navigateTo: AnyView = AnyView(EmptyView())
-    @State var showingDetail = false
-    @State var showingDetaill = false
+    let tree: Tree
+   // @State var showingDetail = false
+   // @State var showingDetaill = false
     
     var body: some View {
         //tree header
@@ -145,7 +145,7 @@ struct TreeHeader: View {
                 
                 
                 Button(action: {
-                    self.navigateTo = AnyView(PersonalSignView())
+                    self.navigateTo = AnyView(PersonalSignView(treeViewModel: treeViewModel, tree: tree))
                     self.isActive = true
                     //self.showingDetaill.toggle()
                 }, label: {

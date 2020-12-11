@@ -84,6 +84,7 @@
 		898E39F8257704B700A17A00 /* ChangeEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39F7257704B700A17A00 /* ChangeEmailView.swift */; };
 		898E39FB257704C600A17A00 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39FA257704C600A17A00 /* ChangePasswordView.swift */; };
 		898E39FE257704D400A17A00 /* DeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39FD257704D400A17A00 /* DeleteAccountView.swift */; };
+		8995C6402583E7EA00ED5C03 /* TreeSignRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8995C63F2583E7EA00ED5C03 /* TreeSignRepository.swift */; };
 		899AA9C32579906E006293E1 /* GuestTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AA9C22579906E006293E1 /* GuestTimelineView.swift */; };
 		899AA9C625799207006293E1 /* GuestProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AA9C525799207006293E1 /* GuestProfileView.swift */; };
 		89A65CE72582A55600A77407 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A65CE62582A55600A77407 /* NewsViewModel.swift */; };
@@ -176,6 +177,7 @@
 		898E39F7257704B700A17A00 /* ChangeEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEmailView.swift; sourceTree = "<group>"; };
 		898E39FA257704C600A17A00 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		898E39FD257704D400A17A00 /* DeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountView.swift; sourceTree = "<group>"; };
+		8995C63F2583E7EA00ED5C03 /* TreeSignRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeSignRepository.swift; sourceTree = "<group>"; };
 		899AA9C22579906E006293E1 /* GuestTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestTimelineView.swift; sourceTree = "<group>"; };
 		899AA9C525799207006293E1 /* GuestProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestProfileView.swift; sourceTree = "<group>"; };
 		89A65CE62582A55600A77407 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
@@ -314,6 +316,7 @@
 				898E39D22576892B00A17A00 /* TelemetryRepository.swift */,
 				898E39D52576893600A17A00 /* ProductRepository.swift */,
 				8985E3FA257FF4C8006C2DA4 /* NotificationRepository.swift */,
+				8995C63F2583E7EA00ED5C03 /* TreeSignRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -578,6 +581,7 @@
 			files = (
 				898E39152576623500A17A00 /* Product.swift in Sources */,
 				898E3972257666A900A17A00 /* PersonalSignView.swift in Sources */,
+				8995C6402583E7EA00ED5C03 /* TreeSignRepository.swift in Sources */,
 				898E390F257661F700A17A00 /* TreeImage.swift in Sources */,
 				898E397B2576670400A17A00 /* AvailableToursView.swift in Sources */,
 				898E395A2576663B00A17A00 /* SecondInfoView.swift in Sources */,

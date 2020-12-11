@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject var userViewModel: UserViewModel
+    
     var body: some View {
         ZStack {
             Color.init("color_background")
@@ -56,11 +58,12 @@ struct ProfileView: View {
                                 .foregroundColor(.red)
                         })
                     
-                    NavigationLink(
-                        destination: Text("Destination"),
-                        label: {
-                            Text("Log out")
-                        })
+                    Button(action: {
+                       // self.userViewModel.logout()
+                        self.userViewModel.isAuthenticated = false
+                    }, label: {
+                        Text("Log out")
+                    })
                 }
                 .listStyle(PlainListStyle())
                 

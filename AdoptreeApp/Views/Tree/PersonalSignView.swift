@@ -9,9 +9,13 @@ import SwiftUI
 import PencilKit
 
 struct PersonalSignView: View {
-    // let tree: Tree
+    @ObservedObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var orderViewModel: OrderViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var treeSign = ""
+    @State private var showingAlert = false
+    @State private var message = ""
+    let tree: Tree
     
     //@State var canvas = PKCanvasView()
     
@@ -25,7 +29,7 @@ struct PersonalSignView: View {
                     .font(.title)
                     .foregroundColor(.init("color_font_primary"))
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .leading)
-  
+                
                 Spacer(minLength: 50)
                 
                 VStack {
@@ -51,8 +55,40 @@ struct PersonalSignView: View {
                 //DrawingView(canvas: $canvas)
                 
                 Button(action: {
-                    //call api and save changes
-                    presentationMode.wrappedValue.dismiss()
+                    
+                    let order = self.orderViewModel.createTreeSignOrder(for: 1)
+                    self.orderViewModel.createOrder(order: order) { result in
+                        switch (result) {
+                            case .failure(let error):
+                                print(error)
+                            case .success(let success):
+                                if let url = URL(string: success.paymentLink) {
+                                    if UIApplication.shared.canOpenURL(url) {
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    }
+                                }
+                        }
+                    }
+                    
+                    if let treeSignProduct = orderViewModel.treeSign {
+                        if let orderId = orderViewModel.orderResponse?.id {
+                            let treeSign = treeViewModel.createTreeSignObject(tree: tree, treeSignProduct: treeSignProduct, signText: self.treeSign, orderId: orderId)
+                            
+                            if let treeSign = treeSign {
+                                treeViewModel.createTreeSign(treeSign: treeSign) {  result in
+                                    switch (result) {
+                                        case .failure(_):
+                                            self.message = "An error occurred. Please try again!"
+                                            self.showingAlert.toggle()
+                                        case .success(_):
+                                            self.message = "Successfully purchased a sign"
+                                            self.showingAlert.toggle()
+                                            presentationMode.wrappedValue.dismiss()
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }, label: {
                     Text("Confirm & pay")
                         .font(.subheadline)
@@ -62,12 +98,29 @@ struct PersonalSignView: View {
                 .background(Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text("Personal sign"), message: Text("\(message)"), dismissButton: .default(Text("Ok")))
+                }
+                .disabled(treeViewModel.treeSign != nil)
                 
             }
             .padding()
         }
         .onAppear {
-
+            
+            if treeViewModel.treeSign == nil {
+                if let treeId = tree.assignedTree?.tree_id {
+                    treeViewModel.getTreeSignByTree(for: treeId) {_ in}
+                }
+                
+                if let signText = treeViewModel.treeSign?.sign_text {
+                    treeSign = signText
+                }
+            }
+            
+            if orderViewModel.availableProducts.isEmpty {
+                orderViewModel.getProductsAndCategories()
+            }
         }
     }
 }
@@ -87,8 +140,8 @@ struct PersonalSignView: View {
 //    }
 //}
 
-struct PersonalSignView_Previews: PreviewProvider {
-    static var previews: some View {
-        PersonalSignView()
-    }
-}
+//struct PersonalSignView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PersonalSignView()
+//    }
+//}

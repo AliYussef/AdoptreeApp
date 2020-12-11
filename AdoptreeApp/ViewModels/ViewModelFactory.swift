@@ -19,6 +19,7 @@ class ViewModelFactory {
     private let categoryRepository = CategoryRepository()
     private let notificationRepository = NotificationRepository()
     private let tourRepository = TourRepository()
+    private let treeSignRepository = TreeSignRepository()
 }
 
 extension ViewModelFactory {
@@ -28,7 +29,7 @@ extension ViewModelFactory {
 //    }
     
     func makeTreeViewModel() -> TreeViewModel {
-        return TreeViewModel(treeRepository: treeRepository, userRepository: userRepository, contentRepository: contentRepository, forestRepository: forestRepository)
+        return TreeViewModel(treeRepository: treeRepository, userRepository: userRepository, contentRepository: contentRepository, forestRepository: forestRepository, treeSignRepository: treeSignRepository)
     }
     
     func makeTimelineViewModel() -> TimelineViewModel {
