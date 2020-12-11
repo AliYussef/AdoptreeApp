@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 class NotificationViewModel: ObservableObject {
+    static let shared = NotificationViewModel(notificationRepository: NotificationRepository())
     @Published var notificationDevice: NotificationDevice?
     private let userDefaults: UserDefaults
     @Published var notificationObject: NotificationObject {
@@ -20,11 +21,11 @@ class NotificationViewModel: ObservableObject {
     private let notificationRepository: NotificationRepositoryProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    init(notificationRepository: NotificationRepositoryProtocol) {
+    private init(notificationRepository: NotificationRepositoryProtocol) {
         self.notificationRepository = notificationRepository
         userDefaults = UserDefaults.standard
         notificationObject = NotificationObject()
-        
+        print("notification view model")
         if !isNotificationObjectPresent() {
             saveNotificationObject()
         }

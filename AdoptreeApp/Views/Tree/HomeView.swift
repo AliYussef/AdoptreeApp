@@ -11,11 +11,8 @@ import MapKit
 struct HomeView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @ObservedObject var treeViewModel: TreeViewModel
-    @State private var isExpanded: [Bool] = [true]
-    
-    var sequestrations = [0.989273, 0.7126873, 0.827817, 0.2812727]
-    var wildlife = [Wildlife(id: 1, name: "Eurasian red squirrel", description: "Eurasian red squirrel"), Wildlife(id: 2, name: "Red squirrel", description: "Eurasian red squirrel"), Wildlife(id: 3, name: "Eurasian", description: "Eurasian red squirrel")]
-    var images = TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: ""), ImageDetail(id: 2, tree_id: 1, image_blobname: "", alt: "", createdAt: "")])
+    @ObservedObject var timelineViewModel: TimelineViewModel
+    //@State private var isExpanded: [Bool] = [true]
     
     var telemetry = [
         Telemetry(id: 1, treeId: 1, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1111795200), temperature: -3, humidity: 90, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1113004800), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
@@ -23,11 +20,15 @@ struct HomeView: View {
         Telemetry(id: 3, treeId: 3, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
     ]
     
+//    func asfas()  {
+//        timelineViewModel.sequestrations.filter({$0.treeId == 1}).first?.sequestration
+//    }
+    
     var body: some View {
         
         ZStack{
             Color.init("color_background")
-                .edgesIgnoringSafeArea(.bottom)
+                .edgesIgnoringSafeArea(.all)
             
             if userViewModel.isAuthenticated {
                 ScrollView(.vertical, showsIndicators: false) {
@@ -47,12 +48,12 @@ struct HomeView: View {
                                     isExpanded: $treeViewModel.isExpanded[index],
                                     content: {
                                         if let treeId = tree.assignedTree?.tree_id {
-                                            TreeView(tree: tree, telemetry: telemetry.filter({$0.treeId == treeId}).first?.reports.first ?? nil, sequestration: sequestrations, treeImage: images, wildlife: wildlife)
+                                            TreeView(tree: tree, telemetry: telemetry.filter({$0.treeId == treeId}).first?.reports.first ?? nil, sequestration: timelineViewModel.sequestrations.filter({$0.treeId == treeId}).first?.sequestration, treeImage: treeViewModel.treeImages.filter({$0.tree_id == treeId}).first, wildlife: treeViewModel.wildlifes.filter({$0.forestId == tree.forestId}).first?.wildlife)
                                         }
                                     },
                                     label: {
                                         
-                                        TreeHeader(tree: tree)
+                                        TreeHeader(treeViewModel: treeViewModel, tree: tree)
                                             .frame(width: .none, height: .none)
                                     })
                                     .padding()
@@ -88,6 +89,7 @@ struct HomeView: View {
 }
 
 struct TreeHeader: View {
+    @ObservedObject var treeViewModel: TreeViewModel
     let tree: Tree
     @State private var isActive = false
     @State private var navigateTo: AnyView = AnyView(EmptyView())
@@ -129,7 +131,7 @@ struct TreeHeader: View {
             
             Menu {
                 Button(action: {
-                   self.navigateTo = AnyView(TreePersonalizationView())
+                   self.navigateTo = AnyView(TreePersonalizationView(treeViewModel: treeViewModel, tree: tree))
                     self.isActive = true
                    // self.showingDetail.toggle()
                 }, label: {

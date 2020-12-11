@@ -9,13 +9,13 @@ import Foundation
 import Combine
 
 protocol ProductRepositoryProtocol {
-    func getProducts(using urlRequest: URLRequest) -> AnyPublisher<[Product], Error>
+    func getProducts(using urlRequest: URLRequest) -> AnyPublisher<Result<[Product], RequestError>, Never>
 }
 
 class ProductRepository: ProductRepositoryProtocol {
     
-    func getProducts(using urlRequest: URLRequest) -> AnyPublisher<[Product], Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+    func getProducts(using urlRequest: URLRequest) -> AnyPublisher<Result<[Product], RequestError>, Never> {
+        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
     }
     
 }

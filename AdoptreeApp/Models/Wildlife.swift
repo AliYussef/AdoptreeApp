@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct WildlifeOutput: Codable {
+    let forestId: Int64
+    let wildlife: [Wildlife]
+}
+
 struct Wildlife: Codable, Identifiable {
     let id: Int64
     let name: String

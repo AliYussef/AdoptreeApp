@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct FailedAdoptionView: View {
+    @Binding var isAdoptionFailed: Bool
+    
     var body: some View {
         ZStack {
             Color.init("color_background")
@@ -34,24 +36,28 @@ struct FailedAdoptionView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: AdoptionLoginView())
-                {
+                Button(action: {
+                    withAnimation {
+                        self.isAdoptionFailed.toggle()
+                    }
+                }, label: {
                     Text("Go back")
                         .font(.subheadline)
                         .foregroundColor(.white)
-                }
+                })
                 .frame(width: UIScreen.main.bounds.width * 0.5, height: 40, alignment: .center)
                 .background(Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
-                
             }
         }
+        .navigationBarHidden(true)
+        
     }
 }
 
-struct FailedAdoptionView_Previews: PreviewProvider {
-    static var previews: some View {
-        FailedAdoptionView()
-    }
-}
+//struct FailedAdoptionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FailedAdoptionView()
+//    }
+//}

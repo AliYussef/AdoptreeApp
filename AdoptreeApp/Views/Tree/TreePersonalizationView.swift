@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct TreePersonalizationView: View {
-    // let tree: Tree
+    @ObservedObject var treeViewModel: TreeViewModel
+    @State var tree: Tree
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var treeName = ""
     @State private var treeColor = Color.init("color_primary_accent")
-  
+    @State private var showingAlert = false
+    @State private var message = ""
+    
     var body: some View {
         ZStack {
             Color.init("color_background")
@@ -34,8 +37,21 @@ struct TreePersonalizationView: View {
                 }
                 
                 Button(action: {
-                    //call api and save changes
-                    presentationMode.wrappedValue.dismiss()
+                    tree.assignedTree?.tree_name = treeName
+                    tree.assignedTree?.tree_color = UIColor(treeColor).toHex()
+                    if let tree = tree.assignedTree {
+                        treeViewModel.personalizeTree(tree: tree) { result in
+                            switch (result) {
+                                case .failure(_):
+                                    self.message = "An error occurred. Please try again!"
+                                    self.showingAlert.toggle()
+                                case .success(_):
+                                    self.message = "Successfully edited"
+                                    self.showingAlert.toggle()
+                                    presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+                    }
                 }, label: {
                     Text("Confirm")
                         .font(.subheadline)
@@ -45,18 +61,27 @@ struct TreePersonalizationView: View {
                 .background(Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text("Presonalisation"), message: Text("\(message)"), dismissButton: .default(Text("Ok")))
+                }
                 
             }
             .padding()
         }
         .onAppear {
-           // self.treeColor = Color(UIColor(hex: (tree.assignedTree?.tree_color)!)!)
+            if let treeColor = tree.assignedTree?.tree_color {
+                self.treeColor = Color(UIColor(hex: treeColor) ?? UIColor(Color.init("color_primary_accent")))
+            }
+            
+            if let treeName = tree.assignedTree?.tree_name {
+                self.treeName = treeName
+            }
         }
     }
 }
 
-struct TreePersonalizationView_Previews: PreviewProvider {
-    static var previews: some View {
-        TreePersonalizationView()
-    }
-}
+//struct TreePersonalizationView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TreePersonalizationView()
+//    }
+//}

@@ -15,3 +15,7 @@ struct Content: Codable, Identifiable{
     let title: String
     let text: String
 }
+
+enum ContentType: Int {
+    case about = 0, announcement, event, informative
+}

@@ -9,7 +9,17 @@ import SwiftUI
 
 struct ContentView: View {
     // @Binding var isNavigationBarHidden: Bool
+    private let viewModelFactory: ViewModelFactory
     @ObservedObject var treeViewModel: TreeViewModel
+    @ObservedObject var timelineViewModel: TimelineViewModel
+    @ObservedObject var newsViewModel: NewsViewModel
+    
+    init() {
+        viewModelFactory = ViewModelFactory()
+        treeViewModel = viewModelFactory.makeTreeViewModel()
+        timelineViewModel = viewModelFactory.makeTimelineViewModel()
+        newsViewModel = viewModelFactory.makeNewsViewModel()
+    }
     
     var body: some View {
         
@@ -19,7 +29,7 @@ struct ContentView: View {
             
             TabView {
                 NavigationView {
-                    HomeView(treeViewModel: treeViewModel)
+                    HomeView(treeViewModel: treeViewModel, timelineViewModel: timelineViewModel)
                         .navigationBarTitle("HOME", displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                 }
@@ -40,7 +50,7 @@ struct ContentView: View {
                 }
                 
                 NavigationView {
-                    NewsView()
+                    NewsView(newsViewModel: newsViewModel)
                         .navigationBarTitle("NEWS", displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     

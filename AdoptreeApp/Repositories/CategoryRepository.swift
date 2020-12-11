@@ -9,13 +9,13 @@ import Foundation
 import Combine
 
 protocol CategoryRepositoryProtocol {
-    func getCategories(using urlRequest: URLRequest) -> AnyPublisher<[Category], Error>
+    func getCategories(using urlRequest: URLRequest) -> AnyPublisher<Result<[Category], RequestError>, Never>
 }
 
 class CategoryRepository: CategoryRepositoryProtocol {
     
-    func getCategories(using urlRequest: URLRequest) -> AnyPublisher<[Category], Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+    func getCategories(using urlRequest: URLRequest) -> AnyPublisher<Result<[Category], RequestError>, Never> {
+        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
     }
     
 }

@@ -9,15 +9,16 @@ import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-    @ObservedObject var treeViewModel: TreeViewModel
+   // @ObservedObject var treeViewModel: TreeViewModel
     
     var body: some View {
+        
         if viewRouter.currentPage == "onboardingView" {
-            OnboardingView(treeViewModel: treeViewModel)
+            OnboardingView()
         } else if viewRouter.currentPage == "contentView" {
-            ContentView(treeViewModel: treeViewModel)
+            ContentView()
         } else if viewRouter.currentPage == "startingView" {
-            StartingView(treeViewModel: treeViewModel)
+            StartingView()
         }
     }
 }

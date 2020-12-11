@@ -9,23 +9,28 @@ import Foundation
 
 struct Order: Codable, Identifiable {
     let id: Int64?
-    let paymentStatus: Int8?
-    let orderStatus: Int8?
-    let userId: Int64 //required
-    let createdAt: String?
-    let orderLines: [OrderLine] //required
+    let paymentRedirectLink: String?
+    let paymentStatus: String?
+    let orderStatus: String?
+    let userId: Int64
+    let createdAt: Date?
+    let orderLines: [OrderLine]
 }
 
 struct OrderLine: Codable, Identifiable{
     let id: Int64?
     let orderId: Int64?
-    let productId: Int64 //required
+    let productId: Int64
     let price: Float16?
     let vat: Float16?
-    let quantity: Int //required
+    let quantity: Int
 }
 
 struct OrderResponse: Decodable {
     let id: Int64
     let paymentLink: String
+}
+
+enum PaymentStatus: String {
+    case paid, refund, open, expired, canceled, failed, payout, chargeback
 }

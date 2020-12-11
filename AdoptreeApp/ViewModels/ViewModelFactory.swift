@@ -18,13 +18,14 @@ class ViewModelFactory {
     private let productRepository = ProductRepository()
     private let categoryRepository = CategoryRepository()
     private let notificationRepository = NotificationRepository()
+    private let tourRepository = TourRepository()
 }
 
 extension ViewModelFactory {
     
-    func makeUserViewModel() -> UserViewModel {
-        return UserViewModel(userRepository: userRepository)
-    }
+//    func makeUserViewModel() -> UserViewModel {
+//        return UserViewModel(userRepository: userRepository)
+//    }
     
     func makeTreeViewModel() -> TreeViewModel {
         return TreeViewModel(treeRepository: treeRepository, userRepository: userRepository, contentRepository: contentRepository, forestRepository: forestRepository)
@@ -38,7 +39,10 @@ extension ViewModelFactory {
         return OrderViewModel(orderRepository: orderRepository, productRepository: productRepository, categoryRepository: categoryRepository)
     }
     
-    func makeNotificationViewModel() -> NotificationViewModel {
-        return NotificationViewModel(notificationRepository: notificationRepository)
+    func makeNewsViewModel() -> NewsViewModel {
+        return NewsViewModel(contentRepository: contentRepository, tourRepository: tourRepository, userRepository: userRepository)
     }
+//    func makeNotificationViewModel() -> NotificationViewModel {
+//        return NotificationViewModel(notificationRepository: notificationRepository)
+//    }
 }

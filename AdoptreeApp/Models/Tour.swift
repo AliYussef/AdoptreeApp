@@ -19,10 +19,10 @@ struct Tour: Codable, Identifiable {
 }
 
 struct BookedTour: Codable, Identifiable {
-    let id: Int64
-    let tourId: Int64 //required
-    let userId: Int64 //required
-    let userName: String //required
-    let userEmail: String //required
-    let bookedDateTime: String
+    let id: Int64?
+    let tourId: Int64
+    let userId: Int64
+    let userName: String
+    let userEmail: String
+    let bookedDateTime: String?
 }

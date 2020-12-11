@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct LoginView: View {
+    @EnvironmentObject var userViewModel: UserViewModel
     @State private var username = ""
     @State private var password = ""
-    @Binding var isAuthenticated: Bool
+   // @Binding var isAuthenticated: Bool
     @Binding var isGuest: Bool
     
     var body: some View {
@@ -45,7 +46,8 @@ struct LoginView: View {
                     
                     Button(action: {
                         withAnimation {
-                            self.isAuthenticated.toggle()
+                            //self.isAuthenticated.toggle()
+                            self.userViewModel.isAuthenticated.toggle()
                         }
                         
                     }, label: {

@@ -58,7 +58,7 @@ enum ApiEndPoint: CustomStringConvertible {
     var description: String {
         switch self {
             case .bookedtourById(let id):
-                return "bookedtour/\(id)"
+                return "user/\(id)/bookedtours"
             case .bookedtour:
                 return "bookedtour"
             case .categoryById(let id):

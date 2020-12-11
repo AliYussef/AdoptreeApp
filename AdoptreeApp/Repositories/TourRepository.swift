@@ -9,10 +9,10 @@ import Foundation
 import Combine
 
 protocol TourRepositoryProtocol {
-    func getTours(using urlRequest: URLRequest) -> AnyPublisher<[Tour], Error> //get
+    func getTours(using urlRequest: URLRequest) -> AnyPublisher<Result<[Tour], RequestError>, Never>
     func bookTour(using urlRequest: URLRequest) -> AnyPublisher<BookedTour, Error> //post
     func updateBookedTour(using urlRequest: URLRequest) -> AnyPublisher<BookedTour, Error> //put
-    func getBookedToursByUser(using urlRequest: URLRequest) -> AnyPublisher<BookedTour, Error> //get
+    func getBookedToursByUser(using urlRequest: URLRequest) -> AnyPublisher<Result<[BookedTour], RequestError>, Never> //get
     func cancelBookedTour(using urlRequest: URLRequest) -> AnyPublisher<HTTPURLResponse, URLError> //delete
     
 }
@@ -23,8 +23,8 @@ class TourRepository: TourRepositoryProtocol {
         return ApiClient.sharedApiClient.executeRequestWithoutResponseBody(using: urlRequest)
     }
     
-    func getTours(using urlRequest: URLRequest) -> AnyPublisher<[Tour], Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+    func getTours(using urlRequest: URLRequest) -> AnyPublisher<Result<[Tour], RequestError>, Never> {
+        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
     }
     
     func bookTour(using urlRequest: URLRequest) -> AnyPublisher<BookedTour, Error> {
@@ -35,8 +35,8 @@ class TourRepository: TourRepositoryProtocol {
         return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
     }
     
-    func getBookedToursByUser(using urlRequest: URLRequest) -> AnyPublisher<BookedTour, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+    func getBookedToursByUser(using urlRequest: URLRequest) -> AnyPublisher<Result<[BookedTour], RequestError>, Never> {
+        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
     }
     
 }

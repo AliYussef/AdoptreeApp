@@ -11,14 +11,14 @@ struct OnboardingView: View {
     @State var showStartingView = false
 //    @State var isAuthenticated = false
     @State private var currentIndex = 0
-    @ObservedObject var treeViewModel: TreeViewModel
+    //@ObservedObject var treeViewModel: TreeViewModel
     
     var body: some View {
         //NavigationView {
         if showStartingView {
 //            LoginView(isAuthenticated: $isAuthenticated)
 //                .transition(.move(edge: .trailing))
-            StartingView(treeViewModel: treeViewModel)
+            StartingView()
                 .transition(.move(edge: .trailing))
 //                            .animation(.linear)
 //                            .transition(.slide)

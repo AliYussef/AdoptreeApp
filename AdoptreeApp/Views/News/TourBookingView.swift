@@ -8,16 +8,13 @@
 import SwiftUI
 
 struct TourBookingView: View {
+    @ObservedObject var newsViewModel: NewsViewModel
+    let tour: Tour
     @State private var firstName = ""
     @State private var lastName = ""
     @State private var email = ""
     @State private var availableSlotsIndex = 0
-    
     var availableSlots = 100
-    
-    init(){
-        UITableView.appearance().backgroundColor = .clear
-    }
     
     var body: some View {
         ZStack {
@@ -68,14 +65,22 @@ struct TourBookingView: View {
                     .padding(.top, 50)
                 }
                 
-                
-                NavigationLink(destination: BookedTourOverviewView())
-                {
+                // should lead to BookedTourOverviewView()
+                Button(action: {
+//                    self.newsViewModel.bookTour(using: tour) { result in
+//                        switch (result) {
+//                            case .failure(_):
+//                                print("")
+//                            case .success(_):
+//                                print("")
+//                        }
+//                    }
+                }, label: {
                     Text("Confirm")
                         .font(.subheadline)
                         .foregroundColor(.white)
-                }
-                .frame(width: 180, height: 40, alignment: .center)
+                })
+                .frame(width: UIScreen.main.bounds.width * 0.5, height: 40, alignment: .center)
                 .background(Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
@@ -84,8 +89,8 @@ struct TourBookingView: View {
     }
 }
 
-struct TourBookingView_Previews: PreviewProvider {
-    static var previews: some View {
-        TourBookingView()
-    }
-}
+//struct TourBookingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TourBookingView()
+//    }
+//}

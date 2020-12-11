@@ -10,6 +10,7 @@ import Combine
 import KeychainAccess
 
 class UserViewModel: ObservableObject {
+    static let shared = UserViewModel(userRepository: UserRepository())
     @Published var isAuthenticated: Bool = false
     @Published var forgetPasswordToken: String = ""
     private let keyChain = Keychain()
@@ -17,7 +18,7 @@ class UserViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private let userRepository: UserRepositoryProtocol
     
-    init(userRepository: UserRepositoryProtocol) {
+    private init(userRepository: UserRepositoryProtocol) {
         self.userRepository = userRepository
         // when starting the app to check if accessToken not equal to nil then set authenticated to true
         isAuthenticated = accessToken != nil
@@ -142,8 +143,8 @@ extension UserViewModel {
                             }
                     }
                 }, receiveValue: {result in
-                    completion(.success(result))
                     self.forgetPasswordToken = result
+                    completion(.success(result))
                 })
                 .store(in: &cancellables)
             

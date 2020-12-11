@@ -9,13 +9,13 @@ import Foundation
 import Combine
 
 protocol ForestRepositoryProtocol {
-    func getWildlife(using urlRequest: URLRequest) -> AnyPublisher<[Wildlife], Error>
+    func getWildlife(using urlRequest: URLRequest) -> AnyPublisher<Result<[Wildlife], RequestError>, Never>
 }
 
 class ForestRepository: ForestRepositoryProtocol {
     
-    func getWildlife(using urlRequest: URLRequest) -> AnyPublisher<[Wildlife], Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+    func getWildlife(using urlRequest: URLRequest) -> AnyPublisher<Result<[Wildlife], RequestError>, Never> {
+        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
     }
     
 }

@@ -20,7 +20,12 @@ struct ViewModelHelper {
         
         if params != nil {
             do {
-                let body = try JSONEncoder().encode(params)
+                let encoder = JSONEncoder()
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+                encoder.dateEncodingStrategy = .formatted(formatter)
+                
+                let body = try encoder.encode(params)
                 urlRequest.httpBody = body
                 
             } catch let error {

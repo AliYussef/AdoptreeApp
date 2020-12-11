@@ -31,5 +31,11 @@ struct Reportt: Codable {
 }
 
 struct Sequestration: Codable {
-    let sequestration: [Float]
+    let treeId: Int64
+    let sequestration: [Double]
+}
+
+struct SequestrationOutput: Codable {
+    let treeId: Int64
+    let sequestration: [Sequestration]
 }

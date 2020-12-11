@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AvailableToursView: View {
+    @ObservedObject var newsViewModel: NewsViewModel
     
     var body: some View {
         ZStack {
@@ -23,13 +24,19 @@ struct AvailableToursView: View {
                         .foregroundColor(.init("color_font_primary"))
                         .padding()
                     
-                    //ForEach() { tour in
-                    NavigationLink(
-                        destination: TourBookingView(),
-                        label: {
-                            TourCellView()
-                        })
-                    // }
+                    if !newsViewModel.tours.isEmpty {
+                        
+                        ForEach(newsViewModel.tours) { tour in
+                            NavigationLink(
+                                destination: TourBookingView(newsViewModel: newsViewModel, tour: tour),
+                                //                            destination: TourBookingView(newsViewModel: newsViewModel),
+                                label: {
+                                    //                                TourCellView()
+                                    TourCellView(tour: tour)
+                                })
+                        }
+                    }
+                   
                 }
             }
         }
@@ -37,7 +44,7 @@ struct AvailableToursView: View {
 }
 
 struct TourCellView: View {
-    //let content: Content
+    let tour: Tour
     
     var body: some View {
         VStack {
@@ -73,8 +80,8 @@ struct TourCellView: View {
 }
 
 
-struct AvailableToursView_Previews: PreviewProvider {
-    static var previews: some View {
-        AvailableToursView()
-    }
-}
+//struct AvailableToursView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AvailableToursView()
+//    }
+//}

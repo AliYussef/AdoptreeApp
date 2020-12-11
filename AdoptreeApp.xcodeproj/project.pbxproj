@@ -86,6 +86,7 @@
 		898E39FE257704D400A17A00 /* DeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39FD257704D400A17A00 /* DeleteAccountView.swift */; };
 		899AA9C32579906E006293E1 /* GuestTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AA9C22579906E006293E1 /* GuestTimelineView.swift */; };
 		899AA9C625799207006293E1 /* GuestProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AA9C525799207006293E1 /* GuestProfileView.swift */; };
+		89A65CE72582A55600A77407 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A65CE62582A55600A77407 /* NewsViewModel.swift */; };
 		89C354042577E342004C26FB /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C354032577E342004C26FB /* PrivacyPolicyView.swift */; };
 		89C354072577E351004C26FB /* OverTheAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C354062577E351004C26FB /* OverTheAppView.swift */; };
 		89DE87FF2575BCD4006B9011 /* AdoptreeAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DE87FE2575BCD4006B9011 /* AdoptreeAppApp.swift */; };
@@ -177,6 +178,7 @@
 		898E39FD257704D400A17A00 /* DeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountView.swift; sourceTree = "<group>"; };
 		899AA9C22579906E006293E1 /* GuestTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestTimelineView.swift; sourceTree = "<group>"; };
 		899AA9C525799207006293E1 /* GuestProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestProfileView.swift; sourceTree = "<group>"; };
+		89A65CE62582A55600A77407 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
 		89C354032577E342004C26FB /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		89C354062577E351004C26FB /* OverTheAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverTheAppView.swift; sourceTree = "<group>"; };
 		89DE87FB2575BCD4006B9011 /* AdoptreeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AdoptreeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -436,6 +438,7 @@
 				898E39E125768EA800A17A00 /* TimelineViewModel.swift */,
 				898E39412576644800A17A00 /* OrderViewModel.swift */,
 				8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */,
+				89A65CE62582A55600A77407 /* NewsViewModel.swift */,
 				898E39472576646200A17A00 /* ViewModelFactory.swift */,
 			);
 			path = ViewModels;
@@ -640,6 +643,7 @@
 				898E39C7257688FC00A17A00 /* TourRepository.swift in Sources */,
 				898E39E625769DB400A17A00 /* GreenIdeaView.swift in Sources */,
 				898E39EA2576A12A00A17A00 /* AnnouncmentDetailView.swift in Sources */,
+				89A65CE72582A55600A77407 /* NewsViewModel.swift in Sources */,
 				898E39632576666200A17A00 /* TreeView.swift in Sources */,
 				898E39A2257669B800A17A00 /* TreeFiltersView.swift in Sources */,
 				898E39032576619100A17A00 /* Tree.swift in Sources */,

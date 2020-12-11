@@ -13,6 +13,7 @@ protocol UserRepositoryProtocol {
     func registerUser(using urlRequest: URLRequest) -> AnyPublisher<User, Error>
     func forgetPassword(using urlRequest: URLRequest) -> AnyPublisher<String, Error>
     func resetPassword(using urlRequest: URLRequest) -> AnyPublisher<User, Error>
+    func getBookedToursByUser(using urlRequest: URLRequest) -> AnyPublisher<Result<[BookedTour], RequestError>, Never>
 }
 
 class UserRepository : UserRepositoryProtocol {
@@ -37,5 +38,8 @@ class UserRepository : UserRepositoryProtocol {
         return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
     }
     
+    func getBookedToursByUser(using urlRequest: URLRequest) -> AnyPublisher<Result<[BookedTour], RequestError>, Never> {
+        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+    }
 }
 

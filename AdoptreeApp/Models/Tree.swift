@@ -15,7 +15,7 @@ struct Tree: Codable, Identifiable {
     let productId: Int64
     let health: Int8
     let dateSeeded: Date?
-    let assignedTree: AssignedTree?
+    var assignedTree: AssignedTree?
     let latitude: String
     let longitude: String
 }
@@ -26,8 +26,16 @@ struct AssignedTree: Codable {
     let order_id: Int64
     let created_at: Date
     let expire_date: Date
-    let tree_name: String?
-    let tree_color: String?
+    var tree_name: String?
+    var tree_color: String?
+}
+
+struct AssignedTree2: Codable {
+    let user_id: Int64
+    let tree_id: Int64
+    let order_id: Int64
+    var tree_name: String?
+    var tree_color: String?
 }
 
 struct TimelineTree {

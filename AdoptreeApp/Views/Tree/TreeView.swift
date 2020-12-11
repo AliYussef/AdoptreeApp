@@ -17,7 +17,7 @@ struct TreeView: View {
     
     var body: some View {
         VStack (alignment: .leading) {
-            TreeHealthSection(healthBar: .constant(7.0))
+            TreeHealthSection(healthBar: CGFloat(tree.health))
                 .padding(.top)
             TreeDataSection(telemetry: telemetry, sequestration: sequestration)
             TreeGallerySection(treeImage: treeImage)
@@ -30,13 +30,12 @@ struct TreeView: View {
 
 struct TreeHealthSection: View {
     @State var isShowing = false
-    @Binding var healthBar: CGFloat
-    //@State var color: Color = Color.red
+    var healthBar: CGFloat
     
     var color: Color {
-        if self.healthBar < 3 {
+        if self.healthBar < 30 {
             return Color.red
-        } else if self.healthBar > 3 && self.healthBar < 6 {
+        } else if self.healthBar > 30 && self.healthBar < 60 {
             return Color.yellow
         } else {
             return Color.init("color_primary_accent")
@@ -62,9 +61,7 @@ struct TreeHealthSection: View {
                         .foregroundColor(.init("color_font_primary"))
                     
                     GeometryReader { geo in
-                        //                        self.setHealthBarColor()
                         ZStack(alignment: .leading) {
-                            
                             Rectangle()
                                 .foregroundColor(Color.gray)
                                 .opacity(0.3)
@@ -72,7 +69,7 @@ struct TreeHealthSection: View {
                             
                             Rectangle()
                                 .foregroundColor(self.color)
-                                .frame(width: self.isShowing ? (geo.size.width * 0.9) * (self.healthBar / 10.0) : 0.0, height: 15.0)
+                                .frame(width: self.isShowing ? (geo.size.width * 0.9) * (self.healthBar / 100.0) : 0.0, height: 15.0)
                                 .animation(.linear(duration: 0.6))
                         }
                         .onAppear {
@@ -84,22 +81,12 @@ struct TreeHealthSection: View {
                 }.padding(10))
             .padding(.bottom, 5)
     }
-    
-    //    private func setHealthBarColor() -> EmptyView{
-    //        if self.healthBar < 3 {
-    //            self.color = Color.red
-    //        } else if self.healthBar > 3 && self.healthBar < 6 {
-    //            self.color = Color.yellow
-    //        } else {
-    //            self.color = Color.green
-    //        }
-    //        return EmptyView()
-    //    }
 }
 
 struct TreeDataSection: View {
     let telemetry: Report?
     let sequestration: [Double]?
+    var sequestrationsMock: [Double]? = [0.989273, 0.7126873, 0.827817, 0.2812727]
     
     var temperatureColor : Color {
         if let telemetry = telemetry {
@@ -117,7 +104,7 @@ struct TreeDataSection: View {
     }
     
     func getSequestration() -> Double {
-        if let sequestration = sequestration {
+        if let sequestration = sequestrationsMock {
             let result = sequestration.reduce(0, +)
             let resultInGrams = Measurement(value: result, unit: UnitMass.grams)
             return resultInGrams.converted(to: .kilograms).value
@@ -211,7 +198,7 @@ struct TreeDataSection: View {
 
 struct TreeGallerySection: View {
     let treeImage: TreeImage?
-    // var numberOfImages = 100
+    var images = TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: ""), ImageDetail(id: 2, tree_id: 1, image_blobname: "", alt: "", createdAt: "")])
     
     func getImage(using name: String) -> UIImage {
         if let data = Data(base64Encoded: name) {
@@ -249,6 +236,7 @@ struct TreeGallerySection: View {
                             Image(uiImage: UIImage(named: "happy_tree")!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
+                                .frame(width: 200, height: 200)
                         }
                     }.tabViewStyle(PageTabViewStyle())
                     .cornerRadius(12.0)
@@ -260,6 +248,7 @@ struct TreeGallerySection: View {
 
 struct TreeWildlifeSection: View {
     let wildlife: [Wildlife]?
+    var wildlifeMock = [Wildlife(id: 1, name: "Eurasian red squirrel", description: "Eurasian red squirrel"), Wildlife(id: 2, name: "Red squirrel", description: "Eurasian red squirrel"), Wildlife(id: 3, name: "Eurasian", description: "Eurasian red squirrel")]
     
     func generateRandomColor() -> Color {
         return Color(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1))
@@ -314,7 +303,7 @@ struct TreeWildlifeSection: View {
                 }
                 Spacer()
                 
-                if let wildlife = wildlife {
+                if let wildlife = wildlifeMock {
                     ForEach(wildlife){ wildlife in
                         HStack {
                             Circle()

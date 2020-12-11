@@ -13,7 +13,7 @@ struct PersonalSignView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var treeSign = ""
     
-    @State var canvas = PKCanvasView()
+    //@State var canvas = PKCanvasView()
     
     var body: some View {
         ZStack {

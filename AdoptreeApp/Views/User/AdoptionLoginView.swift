@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct AdoptionLoginView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.openURL) var openURL
     @EnvironmentObject var orderViewModel: OrderViewModel
     @EnvironmentObject var userViewModel: UserViewModel
     @State private var username = ""
     @State private var password = ""
+    @State private var actionState: Int? = 0
+    @Binding var isAdoptionFailed: Bool
     
     var body: some View {
         ZStack{
@@ -56,19 +59,28 @@ struct AdoptionLoginView: View {
                 
                 Button(action: {
                     //login here first
-                   // self.userViewModel.login(user: T##User, completion: T##(Result<LoginResponse, RequestError>) -> Void))
-                    var orderLines: [OrderLine] = []
-                    self.orderViewModel.products.forEach({ orderProduct in
-                        orderLines.append(OrderLine(id: nil, orderId: nil, productId: orderProduct.product.id, price: nil, vat: nil, quantity: orderProduct.quantity))
-                    })
-                    let order = Order(id: nil, paymentStatus: nil, orderStatus: nil, userId: 1, createdAt: nil, orderLines: orderLines)
-                    
-                    self.orderViewModel.createOrder(order: order) {_ in}
-                    
-                    if let paymentLink = self.orderViewModel.order?.paymentLink {
-                        self.openURL(URL(string:  paymentLink)!)
+                    // self.userViewModel.login(user: T##User, completion: T##(Result<LoginResponse, RequestError>) -> Void))
+                    let order = self.orderViewModel.createOrderObject(for: 1)
+                    self.orderViewModel.createOrder(order: order) { result in
+                        switch (result) {
+                            case .failure(let error):
+                                print(error)
+                            case .success(let success):
+                                print(success)
+                                //UIApplication.shared.open(NSURL(string: success.paymentLink)! as URL)
+                                
+                                if let url = URL(string: success.paymentLink) {
+                                    if UIApplication.shared.canOpenURL(url) {
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    }
+                                }
+                                
+                                //self.openURL(URL(string: success.paymentLink)!)
+//                                if let paymentLink = self.orderViewModel.order?.paymentLink {
+//                                    self.openURL(URL(string:  paymentLink)!)
+//                                }
+                        }
                     }
-                    
                 }, label: {
                     Text("Log in & pay")
                         .font(.subheadline)
@@ -79,16 +91,44 @@ struct AdoptionLoginView: View {
                 .cornerRadius(10.0)
                 .padding()
                 
+                NavigationLink(destination: SuccessfullAdoptionView(), tag: 1, selection: $actionState) {
+                    EmptyView()
+                }
                 
-                   
- 
+//                NavigationLink(destination: FailedAdoptionView(), tag: 2, selection: $actionState) {
+//                    EmptyView()
+//                }
+                
             }
-        }
+        } .onOpenURL(perform: { url in
+            if url.host == "payment-return" {
+                if let orderId = orderViewModel.orderResponse?.id {
+                    orderViewModel.getOrderById(using: orderId) { result in
+                        switch (result) {
+                            case .failure(let error):
+                                print(error)
+                            case .success(let success):
+                                print(success)
+                                if let paymentStatus = orderViewModel.order?.paymentStatus {
+                                    if paymentStatus == PaymentStatus.paid.rawValue || paymentStatus == PaymentStatus.open.rawValue {
+                                        print("payment successfull")
+                                        actionState = 1
+                                    } else {
+                                        print("payment unsuccessfull")
+                                        self.isAdoptionFailed.toggle()
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        })
+        
     }
 }
 
-struct AdoptionLoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        AdoptionLoginView()
-    }
-}
+//struct AdoptionLoginView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AdoptionLoginView()
+//    }
+//}

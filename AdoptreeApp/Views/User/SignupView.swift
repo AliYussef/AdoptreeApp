@@ -51,11 +51,11 @@ struct SignupView: View {
                     self.orderViewModel.products.forEach({ orderProduct in
                         orderLines.append(OrderLine(id: nil, orderId: nil, productId: orderProduct.product.id, price: nil, vat: nil, quantity: orderProduct.quantity))
                     })
-                    let order = Order(id: nil, paymentStatus: nil, orderStatus: nil, userId: 1, createdAt: nil, orderLines: orderLines)
+                    let order = Order(id: nil, paymentRedirectLink: "mollie-app://payment-return", paymentStatus: nil, orderStatus: nil, userId: 1, createdAt: nil, orderLines: orderLines)
                     
                     self.orderViewModel.createOrder(order: order) {_ in}
                     
-                    if let paymentLink = self.orderViewModel.order?.paymentLink {
+                    if let paymentLink = self.orderViewModel.orderResponse?.paymentLink {
                         self.openURL(URL(string:  paymentLink)!)
                     }
                     

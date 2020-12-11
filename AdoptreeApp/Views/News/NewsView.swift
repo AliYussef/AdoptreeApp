@@ -8,13 +8,7 @@
 import SwiftUI
 
 struct NewsView: View {
-    
-    func getCurrentMonth() -> String {
-        let date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "LLLL"
-        return dateFormatter.string(from: date)
-    }
+    @ObservedObject var newsViewModel: NewsViewModel
     
     var body: some View {
         ZStack {
@@ -41,7 +35,7 @@ struct NewsView: View {
                                     Spacer()
                                     
                                     NavigationLink(
-                                        destination: Text(""),
+                                        destination: AvailableToursView(newsViewModel: newsViewModel),
                                         label: {
                                             Image(systemName: "plus")
                                                 .foregroundColor(.init("color_primary_accent"))
@@ -80,28 +74,28 @@ struct NewsView: View {
                         
                         VStack {
                             
-                            NavigationLink(
-                                destination: Text(""),
-                                label: {
-                                    VStack(alignment: .leading) {
-                                        Text("10 December 2020")
-                                            .font(.body)
-                                            .foregroundColor(.init("color_font_primary"))
-                                            .padding(.bottom, 5)
-                                        
-                                        Text("14:00 - 15:00. English")
-                                            .font(.subheadline)
-                                            .foregroundColor(.init("color_font_secondary"))
-                                    }
-                                })
-                            
-                            
+                            ForEach(newsViewModel.bookedTours) { bookedTour in
+                                NavigationLink(
+                                    destination: BookedTourOverviewView(bookedTour: bookedTour),
+                                    label: {
+                                        VStack(alignment: .leading) {
+                                            Text("10 December 2020")
+                                                .font(.body)
+                                                .foregroundColor(.init("color_font_primary"))
+                                                .padding(.bottom, 5)
+                                            
+                                            Text("14:00 - 15:00. English")
+                                                .font(.subheadline)
+                                                .foregroundColor(.init("color_font_secondary"))
+                                        }
+                                        .padding()
+                                        .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
+                                        .background(Color.white)
+                                        .cornerRadius(12.0)
+                                        .padding(.bottom, 5)
+                                    })
+                            }
                         }
-                        .padding()
-                        .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
-                        .background(Color.white)
-                        .cornerRadius(12.0)
-                        .padding(.bottom, 5)
                     }
                     
                     
@@ -145,7 +139,7 @@ struct NewsView: View {
                             Spacer()
                             
                             NavigationLink(
-                                destination: Text("Destination"),
+                                destination: GreenIdeaView(),
                                 label: {
                                     Label("Explore more", systemImage: "arrow.right")
                                         .foregroundColor(.init("color_font_primary"))
@@ -166,7 +160,7 @@ struct NewsView: View {
                         
                         VStack {
                             NavigationLink(
-                                destination: Text(""),
+                                destination: AnnouncmentDetailView(),
                                 label: {
                                     HStack {
                                         Image(systemName: "newspaper")
@@ -200,7 +194,7 @@ struct NewsView: View {
                             Spacer()
                             
                             NavigationLink(
-                                destination: Text("Destination"),
+                                destination: AnnouncmentView(),
                                 label: {
                                     Label("Explore more", systemImage: "arrow.right")
                                         .foregroundColor(.init("color_font_primary"))
@@ -217,8 +211,18 @@ struct NewsView: View {
     }
 }
 
-struct NewsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewsView()
+extension NewsView {
+    
+    func getCurrentMonth() -> String {
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "LLLL"
+        return dateFormatter.string(from: date)
     }
 }
+
+//struct NewsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NewsView()
+//    }
+//}

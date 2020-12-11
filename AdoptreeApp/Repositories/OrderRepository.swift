@@ -10,11 +10,16 @@ import Combine
 
 protocol OrderRepositoryProtocol {
     func createOrder(using urlRequest: URLRequest) -> AnyPublisher<OrderResponse, Error>
+    func getOrderById(using urlRequest: URLRequest) -> AnyPublisher<Order, Error>
 }
 
 class OrderRepository: OrderRepositoryProtocol {
     
     func createOrder(using urlRequest: URLRequest) -> AnyPublisher<OrderResponse, Error> {
+        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+    }
+    
+    func getOrderById(using urlRequest: URLRequest) -> AnyPublisher<Order, Error> {
         return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
     }
 }

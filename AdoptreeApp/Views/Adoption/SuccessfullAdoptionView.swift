@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SuccessfullAdoptionView: View {
+    @EnvironmentObject var userViewModel: UserViewModel
+    
     var body: some View {
         ZStack {
             Color.init("color_background")
@@ -35,19 +37,31 @@ struct SuccessfullAdoptionView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: AdoptionLoginView())
-                {
+                Button(action: {
+                    self.userViewModel.isAuthenticated = true
+                }, label: {
                     Text("Follow your tree")
                         .font(.subheadline)
                         .foregroundColor(.white)
-                }
+                })
                 .frame(width: UIScreen.main.bounds.width * 0.5, height: 40, alignment: .center)
                 .background(Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
+//                NavigationLink(destination: ContentView())
+//                {
+//                    Text("Follow your tree")
+//                        .font(.subheadline)
+//                        .foregroundColor(.white)
+//                }
+//                .frame(width: UIScreen.main.bounds.width * 0.5, height: 40, alignment: .center)
+//                .background(Color.init("color_primary_accent"))
+//                .cornerRadius(10.0)
+//                .padding()
                 
             }
         }
+        .navigationBarHidden(true)
     }
 }
 

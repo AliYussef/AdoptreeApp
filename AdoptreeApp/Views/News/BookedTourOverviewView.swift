@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct BookedTourOverviewView: View {
+    let bookedTour: BookedTour
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     var body: some View {
         ZStack {
             Color.init("color_background")
@@ -85,26 +88,24 @@ struct BookedTourOverviewView: View {
                 
                 Spacer()
                 
-                NavigationLink(
-                    destination: NewsView(),
-                    label: {
-                        Text("Dismiss")
-                            .font(.subheadline)
-                            .foregroundColor(.white)
-                    })
-                    .frame(width: 180, height: 40, alignment: .center)
-                    .background(Color.init("color_primary_accent"))
-                    .cornerRadius(10.0)
-                    .padding()
-                
-                
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }, label: {
+                    Text("Dismiss")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                })
+                .frame(width: UIScreen.main.bounds.width * 0.5, height: 40, alignment: .center)
+                .background(Color.init("color_primary_accent"))
+                .cornerRadius(10.0)
+                .padding()
             }
         }
     }
 }
 
-struct BookedTourOverviewView_Previews: PreviewProvider {
-    static var previews: some View {
-        BookedTourOverviewView()
-    }
-}
+//struct BookedTourOverviewView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        BookedTourOverviewView()
+//    }
+//}

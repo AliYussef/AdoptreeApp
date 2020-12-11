@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct StartingView: View {
+    @EnvironmentObject var userViewModel: UserViewModel
     @State private var isAuthenticated = false
     @State private var isGuest = false
-    @ObservedObject var treeViewModel: TreeViewModel
+    //@ObservedObject var treeViewModel: TreeViewModel
+    //@ObservedObject var timelineViewModel: TimelineViewModel
     //@State private var isAuthenticated = false
     //@EnvironmentObject var viewRouter: ViewRouter
     
@@ -30,12 +32,12 @@ struct StartingView: View {
         
         
         
-        if isAuthenticated || isGuest {
-            ContentView(treeViewModel: treeViewModel)
+        if userViewModel.isAuthenticated || isGuest {
+            ContentView()
                 .transition(.move(edge: .trailing))
         }
         else {
-            LoginView(isAuthenticated: $isAuthenticated, isGuest: $isGuest)
+            LoginView(isGuest: $isGuest)
         }
         
     }
