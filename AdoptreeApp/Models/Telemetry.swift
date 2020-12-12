@@ -21,21 +21,13 @@ struct Report: Codable {
     let treeDiameter: Int8
 }
 
-struct Reportt: Codable {
-    let treeId: Int64
-    let reportedOn: Date
-    let temperature: Int8
-    let humidity: Int8
-    let treeLength: Int8
-    let treeDiameter: Int8
-}
 
 struct Sequestration: Codable {
     let treeId: Int64
     let sequestration: [Double]
 }
 
-struct SequestrationOutput: Codable {
-    let treeId: Int64
-    let sequestration: [Sequestration]
-}
+//struct SequestrationOutput: Codable {
+//    let treeId: Int64
+//    let sequestration: [Sequestration]
+//}

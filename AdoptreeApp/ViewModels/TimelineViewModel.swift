@@ -11,6 +11,8 @@ import Combine
 class TimelineViewModel: ObservableObject {
     @Published var telemetries: [Telemetry] = []
     @Published var sequestrations: [Sequestration] = []
+    @Published var timelineTreeDic: [Int64: TimelineTree] = [:]
+//    var timelineTreeDicShown: [Int64: Bool] = [:]
     private let telemetryRepository: TelemetryRepositoryProtocol
     private let treeRepository: TreeRepositoryProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -18,6 +20,8 @@ class TimelineViewModel: ObservableObject {
     init(telemetryRepository: TelemetryRepositoryProtocol, treeRepository: TreeRepositoryProtocol) {
         self.telemetryRepository = telemetryRepository
         self.treeRepository = treeRepository
+        
+        createTimelineTreeObject()
     }
 }
 extension TimelineViewModel {
@@ -62,98 +66,44 @@ extension TimelineViewModel {
                 }
             })
             .store(in: &cancellables)
-        
-        //            .sink(receiveCompletion: {result in
-        //                switch result {
-        //                    case .finished:
-        //                        break
-        //                    case .failure(let error):
-        //                        switch error {
-        //                            case let urlError as URLError:
-        //                                print(urlError)
-        //                            //completion(.failure(.urlError(urlError)))
-        //                            case let decodingError as DecodingError:
-        //                                print(decodingError)
-        //                            //completion(.failure(.decodingError(decodingError)))
-        //                            default:
-        //                                print(error)
-        //                            //completion(.failure(.genericError(error)))
-        //                        }
-        //                }
-        //
-        //            }, receiveValue: { telemetries, sequestrations in
-        //                if let telemetry = telemetries.first {
-        //                    self.telemetries.append(telemetry)
-        //                }
-        //                self.sequestrations.append(Sequestration(treeId: treeId, sequestration: sequestrations))
-        //            })
-        //            .store(in: &cancellables)
     }
 }
 
 extension TimelineViewModel {
+  
+    func createTimelineTreeObject() {
+        let trees = [
+            Tree(id: 1, forestId: 1, productId: 1, health: 13, dateSeeded: nil, assignedTree: AssignedTree(user_id: 1, tree_id: 1, order_id: 1, created_at: Date(timeIntervalSince1970: 1604236155), expire_date: Date(timeIntervalSince1970: 1112400000), tree_name: "White oak", tree_color: "#9DA536FF"), latitude: "", longitude: ""),
+            
+            Tree(id: 2, forestId: 2, productId: 2, health: 13, dateSeeded: nil, assignedTree: AssignedTree(user_id: 1, tree_id: 2, order_id: 2, created_at: Date(timeIntervalSince1970: 1601557755), expire_date: Date(timeIntervalSince1970: 1115424000), tree_name: "Tree", tree_color: "#3655a5"), latitude: "", longitude: "")
+            
+        ]
+        
+        trees.forEach({ tree in
+            if let treeId = tree.assignedTree?.tree_id {
+                if let treeName = tree.assignedTree?.tree_name {
+                    if let treeColor = tree.assignedTree?.tree_color {
+                        if let treeDate = tree.assignedTree?.created_at {
+                            
+                            timelineTreeDic[treeId] = TimelineTree(treeName: treeName, treeColor: treeColor, adoptedDate: treeDate)
+//                            timelineTreeDicShown[treeId] = false
+                        }
+                    }
+                }
+            }
+        })
+    }
     
-//    func getTelemetryByTree(using treeId:Int64 ,completion: @escaping (Result<[Telemetry], RequestError>) -> Void) {
+//    func showDateTree(treeId: Int64) -> Bool {
 //
-//        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .telemetryById(treeId), using: .get)
+//        if let treeshown = timelineTreeDicShown[treeId] {
+//            if treeshown {
+//                return false
+//            }
+//        }
 //
-//        telemetryRepository.getTelemetryByTree(using: urlRequest)
-//            .sink(receiveCompletion: {result in
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                print(urlError)
-//                                completion(.failure(.urlError(urlError)))
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                                completion(.failure(.decodingError(decodingError)))
-//                            default:
-//                                print(error)
-//                                completion(.failure(.genericError(error)))
-//                        }
-//                }
-//
-//            }, receiveValue: {result in
-//                completion(.success(result))
-//                self.telemetries.append(contentsOf: result)
-//            })
-//            .store(in: &cancellables)
-//    }
-}
-
-extension TimelineViewModel {
-    
-//    func getTreeSequestraion(using treeId:Int64, completion: @escaping (Result<[Double], RequestError>) -> Void) {
-//
-//        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .sequestration(treeId), using: .get)
-//
-//        treeRepository.getTreeSequestraion(using: urlRequest)
-//            .sink(receiveCompletion: {result in
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                print(urlError)
-//                                completion(.failure(.urlError(urlError)))
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                                completion(.failure(.decodingError(decodingError)))
-//                            default:
-//                                print(error)
-//                                completion(.failure(.genericError(error)))
-//                        }
-//                }
-//
-//            }, receiveValue: {result in
-//                completion(.success(result))
-//                self.sequestrations.append(Sequestration(treeId: treeId, sequestration: result))
-//            })
-//            .store(in: &cancellables)
+//        timelineTreeDicShown[treeId] = true
+//        return true
 //    }
     
 }

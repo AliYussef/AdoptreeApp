@@ -198,7 +198,7 @@ struct TreeDataSection: View {
 
 struct TreeGallerySection: View {
     let treeImage: TreeImage?
-    var images = TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: ""), ImageDetail(id: 2, tree_id: 1, image_blobname: "", alt: "", createdAt: "")])
+    var images = TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555)), ImageDetail(id: 2, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
     
     func getImage(using name: String) -> UIImage {
         if let data = Data(base64Encoded: name) {

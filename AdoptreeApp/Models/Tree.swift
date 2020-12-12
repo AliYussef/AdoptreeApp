@@ -38,10 +38,7 @@ struct AssignedTree2: Codable {
     var tree_color: String?
 }
 
-struct TimelineTree {
-    let treeColor: Color
-    let adoptedDate: Date
-}
+
 
 extension Tree {
     

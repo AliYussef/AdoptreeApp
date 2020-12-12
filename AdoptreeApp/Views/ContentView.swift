@@ -39,7 +39,7 @@ struct ContentView: View {
                 }
                 
                 NavigationView {
-                    TimelineView()
+                    TimelineView(timelineViewModel: timelineViewModel)
                         .navigationBarTitle("TIMELINE", displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     

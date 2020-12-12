@@ -17,5 +17,5 @@ struct ImageDetail: Codable, Identifiable {
     let tree_id: Int64
     let image_blobname: String
     let alt: String
-    let createdAt: String
+    let createdAt: Date
 }

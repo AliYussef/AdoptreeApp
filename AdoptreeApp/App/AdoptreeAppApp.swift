@@ -67,10 +67,10 @@ struct AdoptreeAppApp: App {
 //                    LoginView()
 //                }
                 
-                RootView().environmentObject(viewRouter).environmentObject(orderViewModel)
-                    .environmentObject(notificationViewModel).environmentObject(userViewModel)
+//                RootView().environmentObject(viewRouter).environmentObject(orderViewModel)
+//                    .environmentObject(notificationViewModel).environmentObject(userViewModel)
                    
-                    
+                TimelineView(timelineViewModel: viewModelFactory.makeTimelineViewModel())
                 
 //                NavigationView {
 //                    SettingView()

@@ -8,105 +8,82 @@
 import SwiftUI
 
 struct TimelineView: View {
-    //@State var respts: [Reportt] = []
-    //@State var dic: [(DateComponents, [Episode])] = []
+    @ObservedObject var timelineViewModel: TimelineViewModel
     
-    var dict: [Int64:TimelineTree] = [1:TimelineTree(treeColor: Color.green, adoptedDate: Date(timeIntervalSince1970: 1111795200)), 2:TimelineTree(treeColor: Color.black, adoptedDate: Date(timeIntervalSince1970: 1112400000))]
+    var sequestrationsMock: [Sequestration]? = [Sequestration(treeId: 1, sequestration: [0.989273]), Sequestration(treeId: 2, sequestration: [0.989273, 0.7126873])]
     
-    var episodes = [Episode(title: "Rose", airDate: Date(timeIntervalSince1970: 1111795200)),
-                    Episode(title: "The Unquiet Dead", airDate: Date(timeIntervalSince1970: 1113004800)),
-                    Episode(title: "The Long Game", airDate: Date(timeIntervalSince1970: 1115424000)),
-                    Episode(title: "The End of the World", airDate: Date(timeIntervalSince1970: 1112400000))
+    var telemetries = [
+        Telemetry(id: 1, treeId: 1, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1606828056), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1605186555), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
+        Telemetry(id: 2, treeId: 2, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1602508155), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1607778456), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
     ]
     
-    var telemetry = [
-        Telemetry(id: 1, treeId: 1, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1111795200), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1113004800), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
-        Telemetry(id: 2, treeId: 2, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
+    var images = [
+        TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1606828056))]),
+        TreeImage(tree_id: 2, images: [ImageDetail(id: 2, tree_id: 2, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
     ]
     
-    //    func item(val:) -> Date {
-    //
-    //    }
+    var body: some View {
+        ZStack {
+            Color.init("color_background")
+                .edgesIgnoringSafeArea(.all)
+            
+            ScrollView(.vertical, showsIndicators: false) {
+                LazyVStack {
+                    generateTimelineCellViews()
+                }
+            }
+        }
+    }
+}
+
+extension TimelineView {
     
-    func getsgg() -> AnyView {
+    func generateTimelineCellViews() -> AnyView {
         
-        //        let empty: [Date: [Episode]] = [:]
-        //        let groupedByDate = episodes.reduce(into: empty) { acc, cur in
-        //            let components = Calendar.current.dateComponents([.year, .month], from: cur.airDate)
-        //            let date = Calendar.current.date(from: components)!
-        //            let existing = acc[date] ?? []
-        //            acc[date] = existing + [cur]
-        //        }
-        //print(groupedByDate)
+        var resports:[Timeline] = []
+        telemetries.forEach({ telemetry in
+            var index = 0
+            telemetry.reports.forEach({ report in
+                if index < (sequestrationsMock?.filter({$0.treeId == telemetry.treeId}).first?.sequestration.count)! {
+                    
+                    resports.append(Timeline(treeId: telemetry.treeId, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: sequestrationsMock?.filter({$0.treeId == telemetry.treeId}).first?.sequestration[index], image_blobname: nil))
+                    
+                } else {
+                    resports.append(Timeline(treeId: telemetry.treeId, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: nil, image_blobname: nil))
+                }
+                
+                index += 1
+            })
+            if let adoptedDate = timelineViewModel.timelineTreeDic[telemetry.treeId]?.adoptedDate {
+                resports.append(Timeline(treeId: telemetry.treeId, type: "tree", reportedOn: adoptedDate, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: nil))
+            }
+        })
         
-        //        let sortedUsers = episodes.sorted {
-        //            $0.airDate < $1.airDate
-        //        }
-        //print(sortedUsers)
-        //        let groupedItems = Dictionary(grouping: telemetry, by: {Calendar.current.dateComponents([.year, .month], from: $0.reports[$1].reportedOn)}).sorted(by: {$0.key.month! > $1.key.month!})
-        
-        // let groupedItems = Dictionary(grouping: telemetry, by: {Calendar.current.dateComponents([.year, .month], from: )}) //.sorted(by: {$0.key.month! > $1.key.month!})
-        
-        //        let aas = telemetry
-        //            .flatMap({ te in
-        //                te.reports.map({ re in
-        //                    return Reportt(treeId: te.treeId, reportedOn: re.reportedOn, temperature: re.temperature, humidity: re.humidity, treeLength: re.treeLength, treeDiameter: re.treeDiameter)
-        //                })
-        //            })
-        
-        var resports:[Reportt] = []
-        telemetry.forEach({ te in
-            te.reports.forEach({ re in
-                resports.append(Reportt(treeId: te.treeId, reportedOn: re.reportedOn, temperature: re.temperature, humidity: re.humidity, treeLength: re.treeLength, treeDiameter: re.treeDiameter))
+        images.forEach({ image in
+            image.images.forEach({ imageDetail in
+                resports.append(Timeline(treeId: imageDetail.tree_id, type: "image", reportedOn: imageDetail.createdAt, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: imageDetail.image_blobname))
             })
         })
         
-        let grouping = Dictionary(grouping: resports, by: {Calendar.current.dateComponents([.year, .month], from: $0.reportedOn)}).sorted(by: {$0.key.month! > $1.key.month!})
-        print(grouping)
-        
-        //        let groupedItems = Dictionary(grouping: telemetry, by: {item -> DateComponents in
-        //            let add = DateComponents()
-        //            for i in item.reports {
-        //                //return i.reportedOn
-        //                return Calendar.current.dateComponents([.year, .month], from: i.reportedOn)
-        //            }
-        //            return add
-        //            //return DateComponents()
-        //        })
-        //        print(groupedItems)
-        //let groupedItems = Dictionary(grouping: telemetry, by: {$0.treeId}).sorted(by: {$0.key > $1.key})
-        //            .map { (arg: (key: Int, rawSections: [Telemetry])) -> Group<Any> in
-        //
-        //            }
-        
-        // self.dic = dic.sorted(by: {$0.key.month! > $1.key.month!})
-        //print(groupedItems[0])
-        
-        
-        //                for (key, value) in groupedItems.enumerated() {
-        //                    //print("Dictionary key \(key) - Dictionary value \(value.key.month)")
-        //
-        //                    //convert date to month name
-        //                    let now = Calendar.current.date(from: value.key)!
-        //                    let dateFormatter = DateFormatter()
-        //                    dateFormatter.dateFormat = "LLLL YYYY"
-        //                    let nameOfMonth = dateFormatter.string(from: now)
-        //                    print(nameOfMonth)
-        //
-        //                    //TimelineCell(date: "5th", title: "result", icon: Image(systemName: "eye.fill"))
-        //                }
+        let timelineGrouping = Dictionary(grouping: resports, by: {Calendar.current.dateComponents([.year, .month], from: $0.reportedOn)}).sorted(by: {$0.key.month! > $1.key.month!})
+        print(timelineGrouping)
         
         return AnyView(
             VStack {
-                ForEach(Array(zip(grouping.indices, grouping.enumerated())), id: \.0) { index, tree in
+                ForEach(Array(zip(timelineGrouping.indices, timelineGrouping.enumerated())), id: \.0) { index, tree in
                     
-                    //tree[index].
-                    Text("\(vasds(date: tree.element.key))")
+                    Text("\(getHumanReadableDate(date: tree.element.key))")
                     
-                    ForEach(Array(zip(tree.element.value.indices, tree.element.value)), id: \.0) { index, trss in
-                        // TimelineCell(date: "5th", title: "result", icon: Image(systemName: "eye.fill"))
+                    ForEach(Array(zip(tree.element.value.indices, tree.element.value)), id: \.0) { index, item in
                         
-                        TimelineCell(date: "\(getDay(date: trss.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getColor(color: trss.treeId))
+                        if item.type == "report" {
+                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getTreeColor(treeId: item.treeId))
+                        } else if item.type == "tree" {
+                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "Adopted \(timelineViewModel.timelineTreeDic[item.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: item.treeId))
+                        } else if item.type == "image" {
+                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "New tree image", icon: Image(systemName: "photo"), treeColor: getTreeColor(treeId: item.treeId))
+                        }
+                        
                     }
                     Divider()
                         .frame(width: UIScreen.main.bounds.width * 0.9, height: .none)
@@ -116,8 +93,12 @@ struct TimelineView: View {
         )
     }
     
-    func getColor(color:Int64) -> Color {
-        return dict[color]?.treeColor ?? Color.green
+    func getHumanReadableDate(date: DateComponents) -> String {
+        //convert date to month name
+        let now = Calendar.current.date(from: date)!
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "LLLL YYYY"
+        return dateFormatter.string(from: now)
     }
     
     func getDay(date: Date) -> String {
@@ -137,75 +118,35 @@ struct TimelineView: View {
         return day
     }
     
-    func vasds(date: DateComponents) -> String {
-        //convert date to month name
-        let now = Calendar.current.date(from: date)!
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "LLLL YYYY"
-        return dateFormatter.string(from: now)
-    }
-    
-    var body: some View {
-        ZStack {
-            Color.init("color_background")
-                .edgesIgnoringSafeArea(.all)
-            
-            
-            ScrollView(.vertical, showsIndicators: false) {
-                LazyVStack {
-                    getsgg()
-                    //                    ForEach(dic.indices) { index in
-                    //                        Text("\(self.dic[index])")
-                    //
-                    //                    }
-                    
-                    //                    ForEach(Array(dic.keys.enumerated()), id:\.element) { _, key in
-                    //                        Text("TBD \(self.dic[key])")
-                    //                        // Will be putting checkboxes here - i.e. so can chose which ones
-                    //                    }
-                    
-                    
-                    //                    TimelineCell(date: "5th", title: "result", icon: Image(systemName: "eye.fill"))
-                    //                    TimelineCell(date: "5th", title: "result", icon: Image(systemName: "eye.fill"))
-                    //                    TimelineCell(date: "5th", title: "result", icon: Image(systemName: "eye.fill"))
-                    
-                    
-                    
-                }
+    func getTreeColor(treeId: Int64) -> Color {
+        if let treeColor = timelineViewModel.timelineTreeDic[treeId]?.treeColor {
+            if let color = UIColor(hex: treeColor) {
+                return Color(color)
             }
         }
+        
+        return Color.init("color_primary_accent")
     }
-}
-struct Episode {
-    let title: String
-    let airDate: Date
+    
+    
 }
 
 struct TimelineCell: View {
+    let item: Timeline
     let date: String
     let title: String
     let icon: Image?
-    var treeColor: Color = Color.green
+    var treeColor: Color
+    @State var isPresented = false
     
     var body: some View {
         
-        //        RoundedRectangle(cornerRadius: 12.0)
-        //            .fill(Color.white)
-        //            .frame(width: UIScreen.main.bounds.width * 0.8, height: .nan, alignment: .leading)
-        //            .overlay(
         HStack{
             HStack {
-                //                Path { path in
-                //                    path.move(to: CGPoint(x: 20, y: 0))
-                //                    path.addLine(to: CGPoint(x: 10, y: 0))
-                //
-                //                }.stroke(Color.black, lineWidth: 2)
-                
                 Circle()
                     .fill(treeColor)
                     .frame(width: 15, height: 15)
             }
-            
             
             HStack(alignment: .center) {
                 Text(date)
@@ -216,14 +157,22 @@ struct TimelineCell: View {
                 Text(title)
                     .font(.title3)
                     .foregroundColor(.init("color_font_primary"))
+                
                 Spacer()
                 
                 if let icon = icon {
-                    icon
-                    //.resizable()
-                    //.frame(width: 30, height: 30)
+                    Button(action: {
+                        if item.type != "tree" {
+                            self.isPresented.toggle()
+                        }
+                    }, label: {
+                        icon
+                            .foregroundColor(.black)
+                    })
+                    .sheet(isPresented: $isPresented) {
+                        TimelineDetailView(isPresented: $isPresented, item: item)
+                    }
                 }
-                
             }
             .padding(10)
             .frame(width: UIScreen.main.bounds.width * 0.8, height: .none, alignment: .leading)
@@ -231,16 +180,143 @@ struct TimelineCell: View {
             .cornerRadius(12.0)
             
         }
-        
-        
-        //                .padding(10))
-        //            .padding(.bottom, 5)
     }
 }
 
-//struct TimelineView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TimelineView()
-//    }
-//}
+struct TimelineDetailView: View {
+    @Binding var isPresented: Bool
+    let item: Timeline
+    
+    var body: some View {
+        ZStack {
+            Color.init("color_background")
+                .edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                
+                if item.type == "report" {
+                    TreeDataSectionTimeline(item: item)
+                } else if item.type == "image" {
+                    Image("gree_idea_header")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: UIScreen.main.bounds.width, height: .none)
+                }
+            }
+        }
+    }
+}
 
+struct TreeDataSectionTimeline: View {
+    let item: Timeline
+    
+    var temperatureColor : Color {
+        if let temperature = item.temperature {
+            if temperature <= 0 {
+                return Color.init("color_blue")
+            }else if temperature > 0 && temperature <= 10 {
+                return Color.init("color_primary_accent")
+            }else if temperature > 10 && temperature <= 20 {
+                return Color.yellow
+            }else if temperature > 20 && temperature <= 30 {
+                return Color.orange
+            }
+        }
+        return Color.red
+    }
+    
+    func getSequestration() -> Double {
+        if let sequestration = item.sequestration {
+            let resultInGrams = Measurement(value: sequestration, unit: UnitMass.grams)
+            return resultInGrams.converted(to: .kilograms).value
+        }
+        return 0
+    }
+    
+    var body: some View {
+        HStack() {
+            RoundedRectangle(cornerRadius: 12.0)
+                .fill(Color.white)
+                .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
+                .overlay(
+                    VStack(alignment: .center)  {
+                        Text("CO2 Reduction")
+                            .font(.title3)
+                            .foregroundColor(Color.init("color_font_primary"))
+                            .padding(.bottom, 30)
+                        
+                        Text("\(String(format: "%.4f", getSequestration()))kg")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.init("color_font_primary"))
+                            .padding(.bottom, 50)})
+            
+            RoundedRectangle(cornerRadius: 12.0)
+                .fill(Color.init("color_primary_accent"))
+                .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
+                .overlay(
+                    VStack(alignment: .center)  {
+                        Text("Growth")
+                            .font(.title3)
+                            .foregroundColor(Color.white)
+                            .padding(.bottom, 30)
+                        
+                        if let treeLength = item.treeLength {
+                            Text("\(treeLength)cm")
+                                .font(.title)
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color.white)
+                                .padding(.bottom, 50)}
+                    })
+                
+                .offset(x: 0, y: 0)
+        }
+        HStack() {
+            RoundedRectangle(cornerRadius: 12.0)
+                .fill(Color.white)
+                .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
+                .overlay(
+                    VStack(alignment: .center)  {
+                        Text("Temperature")
+                            .font(.title3)
+                            .foregroundColor(Color.init("color_font_primary"))
+                        
+                        ZStack {
+                            Circle()
+                                .stroke(temperatureColor, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round, miterLimit: .infinity, dash: [20,0], dashPhase: 0))
+                                .frame(width: 100, height: 100, alignment: .center)
+                                .padding(.bottom, 20)
+                            
+                            if let temperature = item.temperature {
+                                Text("\(temperature) °")
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color.init("color_font_primary"))
+                                    .padding(.bottom, 20)
+                            }
+                            
+                        }
+                    })
+            
+            RoundedRectangle(cornerRadius: 12.0)
+                .fill(Color.init("color_blue"))
+                .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
+                .overlay(
+                    VStack(alignment: .center)  {
+                        Text("Humidity")
+                            .font(.title3)
+                            .foregroundColor(Color.white)
+                            .padding(.bottom, 30)
+                        
+                        if let humidity = item.humidity {
+                            Text("\(humidity)%")
+                                .font(.title)
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color.white)
+                                .padding(.bottom, 50)
+                        }
+                    })
+                .offset(x: 0, y: 0)
+        }
+    }
+}

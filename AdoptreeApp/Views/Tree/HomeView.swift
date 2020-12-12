@@ -187,7 +187,7 @@ struct TreeHeader: View {
 extension TreeHeader {
     
     func actionSheet() {
-        guard let data = URL(string: "Tree") else { return }
+        guard let data = URL(string: "https://www.apple.nl") else { return }
         let av = UIActivityViewController(activityItems: [data], applicationActivities: nil)
         UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
     }
