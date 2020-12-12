@@ -11,6 +11,6 @@ struct NotificationDevice: Codable {
     let id: Int64?
     let userId: Int64
     let deviceToken: String
-    let createdAt: String?
-    let deletedAt: String?
+    let createdAt: Date?
+    let deletedAt: Date?
 }

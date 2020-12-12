@@ -29,14 +29,12 @@ struct AvailableToursView: View {
                         ForEach(newsViewModel.tours) { tour in
                             NavigationLink(
                                 destination: TourBookingView(newsViewModel: newsViewModel, tour: tour),
-                                //                            destination: TourBookingView(newsViewModel: newsViewModel),
                                 label: {
-                                    //                                TourCellView()
                                     TourCellView(tour: tour)
                                 })
                         }
                     }
-                   
+                    
                 }
             }
         }
@@ -78,10 +76,3 @@ struct TourCellView: View {
         .padding(.bottom, 5)
     }
 }
-
-
-//struct AvailableToursView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AvailableToursView()
-//    }
-//}

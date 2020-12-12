@@ -80,7 +80,6 @@
 		898E39E625769DB400A17A00 /* GreenIdeaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39E525769DB400A17A00 /* GreenIdeaView.swift */; };
 		898E39EA2576A12A00A17A00 /* AnnouncmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39E92576A12A00A17A00 /* AnnouncmentDetailView.swift */; };
 		898E39ED2576A14200A17A00 /* AnnouncmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39EC2576A14200A17A00 /* AnnouncmentView.swift */; };
-		898E39F12576A17C00A17A00 /* NewsCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39F02576A17C00A17A00 /* NewsCellView.swift */; };
 		898E39F52577048B00A17A00 /* ContractView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39F42577048B00A17A00 /* ContractView.swift */; };
 		898E39F8257704B700A17A00 /* ChangeEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39F7257704B700A17A00 /* ChangeEmailView.swift */; };
 		898E39FB257704C600A17A00 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39FA257704C600A17A00 /* ChangePasswordView.swift */; };
@@ -174,7 +173,6 @@
 		898E39E525769DB400A17A00 /* GreenIdeaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreenIdeaView.swift; sourceTree = "<group>"; };
 		898E39E92576A12A00A17A00 /* AnnouncmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncmentDetailView.swift; sourceTree = "<group>"; };
 		898E39EC2576A14200A17A00 /* AnnouncmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncmentView.swift; sourceTree = "<group>"; };
-		898E39F02576A17C00A17A00 /* NewsCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCellView.swift; sourceTree = "<group>"; };
 		898E39F42577048B00A17A00 /* ContractView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractView.swift; sourceTree = "<group>"; };
 		898E39F7257704B700A17A00 /* ChangeEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEmailView.swift; sourceTree = "<group>"; };
 		898E39FA257704C600A17A00 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
@@ -233,7 +231,6 @@
 				898E397A2576670400A17A00 /* AvailableToursView.swift */,
 				898E397D2576677900A17A00 /* TourBookingView.swift */,
 				898E39802576679000A17A00 /* BookedTourOverviewView.swift */,
-				898E39F02576A17C00A17A00 /* NewsCellView.swift */,
 			);
 			path = News;
 			sourceTree = "<group>";
@@ -665,7 +662,6 @@
 				898E3984257667A600A17A00 /* LoginView.swift in Sources */,
 				898E39482576646200A17A00 /* ViewModelFactory.swift in Sources */,
 				898E39422576644800A17A00 /* OrderViewModel.swift in Sources */,
-				898E39F12576A17C00A17A00 /* NewsCellView.swift in Sources */,
 				898E39692576667C00A17A00 /* TimelineView.swift in Sources */,
 				8985E3FB257FF4C8006C2DA4 /* NotificationRepository.swift in Sources */,
 			);

@@ -11,7 +11,6 @@ struct LoginView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @State private var username = ""
     @State private var password = ""
-   // @Binding var isAuthenticated: Bool
     @Binding var isGuest: Bool
     
     var body: some View {
@@ -46,7 +45,6 @@ struct LoginView: View {
                     
                     Button(action: {
                         withAnimation {
-                            //self.isAuthenticated.toggle()
                             self.userViewModel.isAuthenticated.toggle()
                         }
                         
@@ -60,25 +58,10 @@ struct LoginView: View {
                     .cornerRadius(10.0)
                     .padding()
                     
-                    //                    NavigationLink(destination: ContentView())
-                    //                    {
-                    //                        Text("Log in")
-                    //                            .bold()
-                    //                            .foregroundColor(.white)
-                    //                    }
-                    //                    .frame(width: 180, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                    //                    .background(Color.init("primary_button"))
-                    //                    .cornerRadius(10.0)
-                    //                    .padding()
-                    
                     HStack {
                         Text("Haven’t adopted a tree yet?")
                             .foregroundColor(.init("color_font_primary"))
-                        //                    Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                        //                        Text("Adopt Now!")
-                        //                            .bold()
-                        //                            .foregroundColor(Color.init("font_primary"))
-                        //                    })
+                        
                         NavigationLink(destination: TreeSelectionView())
                         {
                             Text("Adopt Now!")
@@ -96,21 +79,8 @@ struct LoginView: View {
                             .foregroundColor(.init("color_font_primary"))
                     }
                     .padding()
-                    //                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                    //                    Text("Forgot password?")
-                    //                        .bold()
-                    //                        .foregroundColor(Color.init("font_primary"))
-                    //                })
-                    //                .padding()
-                 
+                    
                     Spacer()
-//                    NavigationLink(destination: GuestHomeView())
-//                    {
-//                        Text("Not now, maybe later")
-//                            .bold()
-//                            .foregroundColor(.init("color_font_primary"))
-//                    }
-//                    .padding()
                     
                     Button(action: {
                         withAnimation {
@@ -122,9 +92,6 @@ struct LoginView: View {
                             .bold()
                             .foregroundColor(.init("color_font_primary"))
                     })
-//                    .frame(width: 180, height: 40, alignment: .center)
-//                    .background(Color.init("color_primary_accent"))
-//                    .cornerRadius(10.0)
                     .padding()
                     
                 }
@@ -138,9 +105,3 @@ struct LoginView: View {
         
     }
 }
-
-//struct LoginView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        LoginView()
-//    }
-//}

@@ -24,9 +24,9 @@ class ViewModelFactory {
 
 extension ViewModelFactory {
     
-//    func makeUserViewModel() -> UserViewModel {
-//        return UserViewModel(userRepository: userRepository)
-//    }
+    //    func makeUserViewModel() -> UserViewModel {
+    //        return UserViewModel(userRepository: userRepository)
+    //    }
     
     func makeTreeViewModel() -> TreeViewModel {
         return TreeViewModel(treeRepository: treeRepository, userRepository: userRepository, contentRepository: contentRepository, forestRepository: forestRepository, treeSignRepository: treeSignRepository)
@@ -43,7 +43,7 @@ extension ViewModelFactory {
     func makeNewsViewModel() -> NewsViewModel {
         return NewsViewModel(contentRepository: contentRepository, tourRepository: tourRepository, userRepository: userRepository)
     }
-//    func makeNotificationViewModel() -> NotificationViewModel {
-//        return NotificationViewModel(notificationRepository: notificationRepository)
-//    }
+    //    func makeNotificationViewModel() -> NotificationViewModel {
+    //        return NotificationViewModel(notificationRepository: notificationRepository)
+    //    }
 }

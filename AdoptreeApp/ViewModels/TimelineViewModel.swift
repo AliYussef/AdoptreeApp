@@ -12,7 +12,6 @@ class TimelineViewModel: ObservableObject {
     @Published var telemetries: [Telemetry] = []
     @Published var sequestrations: [Sequestration] = []
     @Published var timelineTreeDic: [Int64: TimelineTree] = [:]
-//    var timelineTreeDicShown: [Int64: Bool] = [:]
     private let telemetryRepository: TelemetryRepositoryProtocol
     private let treeRepository: TreeRepositoryProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -70,7 +69,7 @@ extension TimelineViewModel {
 }
 
 extension TimelineViewModel {
-  
+    
     func createTimelineTreeObject() {
         let trees = [
             Tree(id: 1, forestId: 1, productId: 1, health: 13, dateSeeded: nil, assignedTree: AssignedTree(user_id: 1, tree_id: 1, order_id: 1, created_at: Date(timeIntervalSince1970: 1604236155), expire_date: Date(timeIntervalSince1970: 1112400000), tree_name: "White oak", tree_color: "#9DA536FF"), latitude: "", longitude: ""),
@@ -86,24 +85,12 @@ extension TimelineViewModel {
                         if let treeDate = tree.assignedTree?.created_at {
                             
                             timelineTreeDic[treeId] = TimelineTree(treeName: treeName, treeColor: treeColor, adoptedDate: treeDate)
-//                            timelineTreeDicShown[treeId] = false
+                            
                         }
                     }
                 }
             }
         })
     }
-    
-//    func showDateTree(treeId: Int64) -> Bool {
-//
-//        if let treeshown = timelineTreeDicShown[treeId] {
-//            if treeshown {
-//                return false
-//            }
-//        }
-//
-//        timelineTreeDicShown[treeId] = true
-//        return true
-//    }
     
 }

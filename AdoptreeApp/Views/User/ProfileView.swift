@@ -59,7 +59,7 @@ struct ProfileView: View {
                         })
                     
                     Button(action: {
-                       // self.userViewModel.logout()
+                        // self.userViewModel.logout()
                         self.userViewModel.isAuthenticated = false
                     }, label: {
                         Text("Log out")

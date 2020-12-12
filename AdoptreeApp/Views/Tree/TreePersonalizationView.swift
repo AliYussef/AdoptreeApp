@@ -80,8 +80,3 @@ struct TreePersonalizationView: View {
     }
 }
 
-//struct TreePersonalizationView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TreePersonalizationView()
-//    }
-//}

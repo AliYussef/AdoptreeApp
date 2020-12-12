@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    // @Binding var isNavigationBarHidden: Bool
     private let viewModelFactory: ViewModelFactory
     @ObservedObject var treeViewModel: TreeViewModel
     @ObservedObject var timelineViewModel: TimelineViewModel
@@ -85,18 +84,6 @@ struct ContentView: View {
             .accentColor(.init("color_primary_accent"))
             
         }
-        
-        
-        
-        
-        
     }
-    
-    
 }
 
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}

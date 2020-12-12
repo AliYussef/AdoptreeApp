@@ -103,9 +103,3 @@ struct BookedTourOverviewView: View {
         }
     }
 }
-
-//struct BookedTourOverviewView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        BookedTourOverviewView()
-//    }
-//}

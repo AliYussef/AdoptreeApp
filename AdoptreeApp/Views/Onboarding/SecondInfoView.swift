@@ -19,6 +19,7 @@ struct SecondInfoView: View {
                 .padding()
             
             Spacer()
+            
             Image("floating_ground_tree")
                 .resizable()
                 .aspectRatio(contentMode: .fit)

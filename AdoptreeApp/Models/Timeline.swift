@@ -19,7 +19,6 @@ struct Timeline: Codable {
     let image_blobname: String?
 }
 
-
 struct TimelineTree {
     let treeName: String
     let treeColor: String

@@ -12,17 +12,12 @@ struct HomeView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @ObservedObject var treeViewModel: TreeViewModel
     @ObservedObject var timelineViewModel: TimelineViewModel
-    //@State private var isExpanded: [Bool] = [true]
     
     var telemetry = [
         Telemetry(id: 1, treeId: 1, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1111795200), temperature: -3, humidity: 90, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1113004800), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
         Telemetry(id: 2, treeId: 2, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)]),
         Telemetry(id: 3, treeId: 3, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
     ]
-    
-//    func asfas()  {
-//        timelineViewModel.sequestrations.filter({$0.treeId == 1}).first?.sequestration
-//    }
     
     var body: some View {
         
@@ -40,8 +35,7 @@ struct HomeView: View {
                             //                            }
                             
                         } else {
-                            //initializeExpandedList()
-                            // ForEach(isExpanded.indices) { position in
+                            
                             ForEach(Array(zip(treeViewModel.trees.indices, treeViewModel.trees)), id: \.0) { index, tree in
                                 
                                 DisclosureGroup(
@@ -65,7 +59,6 @@ struct HomeView: View {
                             }
                         }
                         
-                        
                         NavigationLink(destination: TreeSelectionView())
                         {
                             Text("Adopt more trees")
@@ -82,8 +75,6 @@ struct HomeView: View {
             } else {
                 GuestHomeView()
             }
-            
-            
         }
     }
 }
@@ -93,19 +84,16 @@ struct TreeHeader: View {
     @State private var isActive = false
     @State private var navigateTo: AnyView = AnyView(EmptyView())
     let tree: Tree
-   // @State var showingDetail = false
-   // @State var showingDetaill = false
-    
+
     var body: some View {
         //tree header
         HStack {
-            //#87B62C
+      
             if let treeColor = tree.assignedTree?.tree_color {
                 Image("pine-tree")
                     .resizable()
                     .frame(width: 70, height: 70, alignment: .leading)
                     .foregroundColor(Color.init(UIColor.init(hex: treeColor) ?? UIColor.init(Color.init("color_primary_accent"))))
-                //Text("\(UIColor(Color.red).cgColor)")
             }
             
             VStack (alignment: .leading) {
@@ -116,8 +104,6 @@ struct TreeHeader: View {
                             .foregroundColor(.init("color_font_primary"))
                     }
                     Text(showAdoptedDate())
-                        //Text("Adopted\(DateFormatter().string(from: tree.created_at))ago")
-                        //Text(tree.assignedTree!.created_at)
                         .font(.caption)
                         .foregroundColor(.init("color_font_secondary"))
                     Text(showRemainingAdoptionPeriodDate())
@@ -131,33 +117,23 @@ struct TreeHeader: View {
             
             Menu {
                 Button(action: {
-                   self.navigateTo = AnyView(TreePersonalizationView(treeViewModel: treeViewModel, tree: tree))
+                    self.navigateTo = AnyView(TreePersonalizationView(treeViewModel: treeViewModel, tree: tree))
                     self.isActive = true
-                   // self.showingDetail.toggle()
                 }, label: {
                     Label(
                         title: { Text("Edit tree") },
                         icon: { Image(systemName: "square.and.pencil") })
                 })
-//                .sheet(isPresented: $showingDetail) {
-//                    TreePersonalizationView(shown: self.$showingDetail)
-//                }
-                
-                
+
                 Button(action: {
                     self.navigateTo = AnyView(PersonalSignView(treeViewModel: treeViewModel, tree: tree))
                     self.isActive = true
-                    //self.showingDetaill.toggle()
                 }, label: {
                     Label(
                         title: { Text("Add sign") },
                         icon: { Image(systemName: "plus") })
                 })
-//                .sheet(isPresented: $showingDetaill) {
-//                    PersonalSignView(shown: self.$showingDetaill)
-//                }
-                
-                
+
                 Button(action: {actionSheet()}, label: {
                     Label(
                         title: { Text("Share your tree") },
@@ -169,14 +145,10 @@ struct TreeHeader: View {
             }
             .frame(width: .none, height: 80, alignment: .topTrailing)
             .offset(x: 15, y: 0)
-//            .sheet(isPresented: $showingDetail) {
-//                self.navigateTo
-//            }
             .background(
                 NavigationLink(destination: self.navigateTo, isActive: $isActive) {
                     EmptyView()
                 })
-//
         }
         .padding(.bottom)
     }
@@ -193,25 +165,19 @@ extension TreeHeader {
     }
     
     func calculateTreeAge() -> DateComponents {
-        // let age: DateComponents
-        
+
         if let tree = tree.assignedTree {
             return Calendar.current.dateComponents([.year, .day], from: tree.created_at, to: Date())
-            //        let age = Calendar.current.dateComponents([.year, .day], from: Date(timeIntervalSince1970: 1115424000), to: Date())
         }
         return DateComponents()
-        // return age
     }
     
     func calculateRemainingAdoptionPeriod() -> DateComponents {
-        //let remainingTime: DateComponents
         
         if let tree = tree.assignedTree {
             return Calendar.current.dateComponents([.day], from: tree.created_at, to: tree.expire_date)
         }
-        
         return DateComponents()
-        //return remainingTime
     }
     
     func showAdoptedDate() -> String {
@@ -219,7 +185,6 @@ extension TreeHeader {
         
         if let year = calculateTreeAge().year {
             text = "Adopted \(year) \(year > 1 ? "years" : "year") and "
-            
             if year < 1 {
                 text = "Adopted "
             }
@@ -228,7 +193,6 @@ extension TreeHeader {
         if let day = calculateTreeAge().day {
             text += "\(day) \(day > 1 ? "days" : "day") ago"
         }
-        
         return text
     }
     
@@ -236,45 +200,11 @@ extension TreeHeader {
         var text = ""
         
         if let day = calculateRemainingAdoptionPeriod().day {
-            
             text = "Adoption period ends in \(day) \(day > 1 ? "days" : "day")"
         }
-        
         return text
     }
+    
 }
 
-//struct Collapsible<Content: View>: View {
-//    @State var label: () -> Text
-//    @State var content: () -> Content
-//
-//    @State private var collapsed: Bool = true
-//
-//    var body: some View {
-//        VStack {
-//            Button(
-//                action: { self.collapsed.toggle() },
-//                label: {
-//                    HStack {
-//                        self.label()
-//                        Spacer()
-//                        Image(systemName: self.collapsed ? "chevron.down" : "chevron.up")
-//                    }
-//                    .padding(.bottom, 1)
-//                    .background(Color.white.opacity(0.01))
-//                }
-//            )
-//            //.buttonStyle(PlainButtonStyle())
-//
-//
-//            VStack {
-//                self.content()
-//            }
-//            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: self.collapsed ? 0 : .none)
-//            .clipped()
-//            .animation(.easeOut)
-//            .transition(.slide)
-//        }
-//    }
-//}
 

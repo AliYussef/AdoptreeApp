@@ -32,16 +32,6 @@ struct TreeHealthSection: View {
     @State var isShowing = false
     var healthBar: CGFloat
     
-    var color: Color {
-        if self.healthBar < 30 {
-            return Color.red
-        } else if self.healthBar > 30 && self.healthBar < 60 {
-            return Color.yellow
-        } else {
-            return Color.init("color_primary_accent")
-        }
-    }
-    
     var body: some View {
         
         //overall health
@@ -83,35 +73,23 @@ struct TreeHealthSection: View {
     }
 }
 
+extension TreeHealthSection {
+    
+    var color: Color {
+        if self.healthBar < 30 {
+            return Color.red
+        } else if self.healthBar > 30 && self.healthBar < 60 {
+            return Color.yellow
+        } else {
+            return Color.init("color_primary_accent")
+        }
+    }
+}
+
 struct TreeDataSection: View {
     let telemetry: Report?
     let sequestration: [Double]?
     var sequestrationsMock: [Double]? = [0.989273, 0.7126873, 0.827817, 0.2812727]
-    
-    var temperatureColor : Color {
-        if let telemetry = telemetry {
-            if telemetry.temperature <= 0 {
-                return Color.init("color_blue")
-            }else if telemetry.temperature > 0 && telemetry.temperature <= 10 {
-                return Color.init("color_primary_accent")
-            }else if telemetry.temperature > 10 && telemetry.temperature <= 20 {
-                return Color.yellow
-            }else if telemetry.temperature > 20 && telemetry.temperature <= 30 {
-                return Color.orange
-            }
-        }
-        return Color.red
-    }
-    
-    func getSequestration() -> Double {
-        if let sequestration = sequestrationsMock {
-            let result = sequestration.reduce(0, +)
-            let resultInGrams = Measurement(value: result, unit: UnitMass.grams)
-            return resultInGrams.converted(to: .kilograms).value
-        }
-        
-        return 0
-    }
     
     var body: some View {
         // monitoring factors
@@ -159,7 +137,6 @@ struct TreeDataSection: View {
                             Text("Temperature")
                                 .font(.title3)
                                 .foregroundColor(Color.init("color_font_primary"))
-                            //.padding(.bottom, 10)
                             
                             ZStack {
                                 Circle()
@@ -196,16 +173,37 @@ struct TreeDataSection: View {
     }
 }
 
+extension TreeDataSection {
+    
+    var temperatureColor : Color {
+        if let telemetry = telemetry {
+            if telemetry.temperature <= 0 {
+                return Color.init("color_blue")
+            }else if telemetry.temperature > 0 && telemetry.temperature <= 10 {
+                return Color.init("color_primary_accent")
+            }else if telemetry.temperature > 10 && telemetry.temperature <= 20 {
+                return Color.yellow
+            }else if telemetry.temperature > 20 && telemetry.temperature <= 30 {
+                return Color.orange
+            }
+        }
+        return Color.red
+    }
+    
+    func getSequestration() -> Double {
+        if let sequestration = sequestrationsMock {
+            let result = sequestration.reduce(0, +)
+            let resultInGrams = Measurement(value: result, unit: UnitMass.grams)
+            return resultInGrams.converted(to: .kilograms).value
+        }
+        
+        return 0
+    }
+}
+
 struct TreeGallerySection: View {
     let treeImage: TreeImage?
     var images = TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555)), ImageDetail(id: 2, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
-    
-    func getImage(using name: String) -> UIImage {
-        if let data = Data(base64Encoded: name) {
-            return UIImage(data: data) ?? UIImage(named: "happy_tree")!
-        }
-        return UIImage(named: "happy_tree")!
-    }
     
     var body: some View {
         
@@ -246,51 +244,23 @@ struct TreeGallerySection: View {
     }
 }
 
+extension TreeGallerySection {
+    
+    func getImage(using name: String) -> UIImage {
+        if let data = Data(base64Encoded: name) {
+            return UIImage(data: data) ?? UIImage(named: "happy_tree")!
+        }
+        return UIImage(named: "happy_tree")!
+    }
+}
+
 struct TreeWildlifeSection: View {
     let wildlife: [Wildlife]?
     var wildlifeMock = [Wildlife(id: 1, name: "Eurasian red squirrel", description: "Eurasian red squirrel"), Wildlife(id: 2, name: "Red squirrel", description: "Eurasian red squirrel"), Wildlife(id: 3, name: "Eurasian", description: "Eurasian red squirrel")]
     
-    func generateRandomColor() -> Color {
-        return Color(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1))
-    }
-    
     var body: some View {
         //wildlife
         VStack {
-            //            GeometryReader { geo in
-            //                RoundedRectangle(cornerRadius: 12.0)
-            //                    .fill(Color.init("color_gray"))
-            //                    .frame(width: .none, height: geo.size.height, alignment: .leading)
-            //                    .overlay(
-            //                        VStack (alignment: .leading) {
-            //                            HStack {
-            //                                Image(systemName: "leaf.fill")
-            //                                    .foregroundColor(.init("color_primary_accesnt"))
-            //
-            //                                Text("Wildlife")
-            //                                    .foregroundColor(.init("color_font_primary"))
-            //                                    .font(.title3)
-            //
-            //                            }
-            //                            Spacer()
-            //
-            //                            if let wildlife = wildlife {
-            //                                ForEach(wildlife){ wildlife in
-            //                                    Text("\(wildlife.name)")
-            //                                        .foregroundColor(.init("color_font_secondary"))
-            //                                        .font(.body)
-            //                                        .padding(.bottom)
-            //                                }
-            //                            }else{
-            //                                Text("No wildlife has been detected yet")
-            //                                    .foregroundColor(.init("color_font_secondary"))
-            //                                    .font(.body)
-            //                                    .padding(.bottom)
-            //                            }
-            //
-            //                        }.frame(width: UIScreen.main.bounds.width * 0.8, height: .none, alignment: .topLeading))
-            //                    .padding(.bottom, 5)
-            //            }
             VStack (alignment: .leading) {
                 HStack {
                     Image(systemName: "leaf.fill")
@@ -299,8 +269,8 @@ struct TreeWildlifeSection: View {
                     Text("Wildlife")
                         .foregroundColor(.init("color_font_primary"))
                         .font(.title3)
-                    
                 }
+                
                 Spacer()
                 
                 if let wildlife = wildlifeMock {
@@ -339,27 +309,21 @@ struct TreeWildlifeSection: View {
     }
 }
 
+extension TreeWildlifeSection {
+    
+    func generateRandomColor() -> Color {
+        return Color(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1))
+    }
+}
+
 struct TreeLocationSection: View {
     let tree: Tree
     @State var clicked:Bool = false
     @State private var isPresented = false
-    //    @State var coordinateRegion: MKCoordinateRegion
-    
-    //map
-    //    let treeLocation = [
-    //        //Tree(name: "Kozy Eats", latitude: 56.951924, longitude: 24.125584)
-    //        //Tree(id: 1, forestId: 1, productId: 1, health: 6, dateSeeded: nil, assignedTree: nil, latitude: "56.951924", longitude: "24.125584")
-    //    ]
     
     var treeLocation: [Tree] {
         return [tree]
     }
-    
-    //    var getCoordinateRegion: MKCoordinateRegion {
-    //        return MKCoordinateRegion(
-    //            center: tree.coordinate,
-    //            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-    //    }
     
     @State var coordinateRegion = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 56.951924, longitude: 24.125584),
@@ -414,8 +378,7 @@ struct TreeLocationSection: View {
 }
 
 struct MapModalView: View {
-    //@Environment(\.presentationMode) var presentationMode
-    let treeLocation:[Tree]
+    let treeLocation: [Tree]
     @Binding var coordinateRegion: MKCoordinateRegion
     @Binding var isPresented: Bool
     
@@ -426,14 +389,10 @@ struct MapModalView: View {
                 MapMarker(coordinate: place.coordinate, tint: .init("color_primary_accent"))
             }
             .edgesIgnoringSafeArea(.all)
-            .onTapGesture {
-                //presentationMode.wrappedValue.dismiss()
-                
-            }.overlay(
+            .overlay(
                 Button(action: {
                     self.isPresented.toggle()
                 }, label: {
-                    //Text("Dismiss")
                     Image(systemName: "escape")
                         .foregroundColor(.init("color_primary_accent"))
                         .padding(10)

@@ -10,7 +10,7 @@ import Foundation
 struct Tour: Codable, Identifiable {
     let id: Int64
     let description: String
-    let dateTime: String
+    let dateTime: Date
     let forestId: Int64
     let slots: Int8
     let language: String
@@ -24,5 +24,5 @@ struct BookedTour: Codable, Identifiable {
     let userId: Int64
     let userName: String
     let userEmail: String
-    let bookedDateTime: String?
+    let bookedDateTime: Date?
 }

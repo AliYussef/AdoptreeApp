@@ -11,21 +11,18 @@ import Combine
 final class ApiClient {
     static let sharedApiClient = ApiClient()
     var number = 0
-    //let decoder = JSONDecoder()
-    // private var cancellables = Set<AnyCancellable>()
+    
     private init() {}
 }
 
 extension ApiClient {
-    
-    // decoder.dateDecodingStrategy = .formatted(DateFormatter())
     
     func executeRequestWithResponseBody<ResponseType: Decodable>(using request: URLRequest) -> AnyPublisher<ResponseType, Error> {
         let decoder = JSONDecoder()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         decoder.dateDecodingStrategy = .formatted(formatter)
-       
+        
         return URLSession.shared.dataTaskPublisher(for: request)
             .tryMap { data, response -> Data in
                 //~= pattern match operator
@@ -33,7 +30,7 @@ extension ApiClient {
                       200...299 ~= httpResponse.statusCode else {
                     throw URLError(.badServerResponse)
                 }
-               
+                
                 return data
             }
             .decode(type: ResponseType.self, decoder: decoder)
@@ -54,7 +51,7 @@ extension ApiClient {
                       200...299 ~= httpResponse.statusCode else {
                     throw URLError(.badServerResponse)
                 }
-  
+                
                 return data
             }
             .decode(type: ResponseType.self, decoder: decoder)

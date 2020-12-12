@@ -150,9 +150,7 @@ struct NewsView: View {
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
                     
-                    
                     VStack(alignment: .leading) {
-                        
                         Text("ANNOUNCMENTS")
                             .font(.title2)
                             .foregroundColor(.init("color_font_primary"))
@@ -168,7 +166,6 @@ struct NewsView: View {
                                             .foregroundColor(.init("color_primary_accent"))
                                             .frame(width: 100, height: 100, alignment: .center)
                                             .padding(.trailing)
-                                        
                                         
                                         VStack(alignment: .leading) {
                                             Text("Stichting adoptiebos has recently reached 1k adopters.")
@@ -190,7 +187,6 @@ struct NewsView: View {
                         .padding(.bottom, 5)
                         
                         HStack {
-                            
                             Spacer()
                             
                             NavigationLink(
@@ -201,7 +197,6 @@ struct NewsView: View {
                                         .font(.subheadline)
                                 })
                         }
-                        
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
                     
@@ -220,9 +215,3 @@ extension NewsView {
         return dateFormatter.string(from: date)
     }
 }
-
-//struct NewsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NewsView()
-//    }
-//}

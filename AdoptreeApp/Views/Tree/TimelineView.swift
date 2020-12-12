@@ -124,10 +124,8 @@ extension TimelineView {
                 return Color(color)
             }
         }
-        
         return Color.init("color_primary_accent")
     }
-    
     
 }
 
@@ -193,7 +191,6 @@ struct TimelineDetailView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-                
                 if item.type == "report" {
                     TreeDataSectionTimeline(item: item)
                 } else if item.type == "image" {
@@ -209,29 +206,6 @@ struct TimelineDetailView: View {
 
 struct TreeDataSectionTimeline: View {
     let item: Timeline
-    
-    var temperatureColor : Color {
-        if let temperature = item.temperature {
-            if temperature <= 0 {
-                return Color.init("color_blue")
-            }else if temperature > 0 && temperature <= 10 {
-                return Color.init("color_primary_accent")
-            }else if temperature > 10 && temperature <= 20 {
-                return Color.yellow
-            }else if temperature > 20 && temperature <= 30 {
-                return Color.orange
-            }
-        }
-        return Color.red
-    }
-    
-    func getSequestration() -> Double {
-        if let sequestration = item.sequestration {
-            let resultInGrams = Measurement(value: sequestration, unit: UnitMass.grams)
-            return resultInGrams.converted(to: .kilograms).value
-        }
-        return 0
-    }
     
     var body: some View {
         HStack() {
@@ -318,5 +292,31 @@ struct TreeDataSectionTimeline: View {
                     })
                 .offset(x: 0, y: 0)
         }
+    }
+}
+
+extension TreeDataSectionTimeline {
+    
+    var temperatureColor : Color {
+        if let temperature = item.temperature {
+            if temperature <= 0 {
+                return Color.init("color_blue")
+            }else if temperature > 0 && temperature <= 10 {
+                return Color.init("color_primary_accent")
+            }else if temperature > 10 && temperature <= 20 {
+                return Color.yellow
+            }else if temperature > 20 && temperature <= 30 {
+                return Color.orange
+            }
+        }
+        return Color.red
+    }
+    
+    func getSequestration() -> Double {
+        if let sequestration = item.sequestration {
+            let resultInGrams = Measurement(value: sequestration, unit: UnitMass.grams)
+            return resultInGrams.converted(to: .kilograms).value
+        }
+        return 0
     }
 }

@@ -27,7 +27,3 @@ struct Sequestration: Codable {
     let sequestration: [Double]
 }
 
-//struct SequestrationOutput: Codable {
-//    let treeId: Int64
-//    let sequestration: [Sequestration]
-//}

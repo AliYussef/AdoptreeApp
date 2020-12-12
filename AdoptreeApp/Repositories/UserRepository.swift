@@ -17,7 +17,7 @@ protocol UserRepositoryProtocol {
 }
 
 class UserRepository : UserRepositoryProtocol {
-  
+    
     func login(using urlRequest: URLRequest) -> AnyPublisher<LoginResponse, Error> {
         return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
     }

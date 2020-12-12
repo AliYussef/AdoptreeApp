@@ -70,27 +70,6 @@ extension TreeViewModel {
                 }
             })
             .store(in: &cancellables)
-        //            .sink(receiveCompletion: {result in
-        //                switch result {
-        //                    case .finished:
-        //                        break
-        //                    case .failure(let error):
-        //                        switch error {
-        //                            case let urlError as URLError:
-        //                                print(urlError)
-        //                            case let decodingError as DecodingError:
-        //                                print(decodingError)
-        //                            default:
-        //                                print(error)
-        //                        }
-        //                }
-        //
-        //            }, receiveValue: { treeImages, wildlifes in
-        //                self.treeImages.append(treeImages)
-        //                self.wildlifes.append(WildlifeOutput(forestId: forestId, wildlife: wildlifes))
-        //            })
-        //            .store(in: &cancellables)
-        
     }
     
 }
@@ -139,76 +118,8 @@ extension TreeViewModel {
 
 extension TreeViewModel {
     
-    //    func getTreeImages(for treeId:Int64 ,completion: @escaping (Result<TreeImage, RequestError>) -> Void) {
-    //
-    //        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .treeImages(1), using: .get)
-    //
-    //        treeRepository.getTreeImages(using: urlRequest)
-    //            .sink(receiveCompletion: {result in
-    //                switch result {
-    //                    case .finished:
-    //                        break
-    //                    case .failure(let error):
-    //                        switch error {
-    //                            case let urlError as URLError:
-    //                                print(urlError)
-    //                                completion(.failure(.urlError(urlError)))
-    //                            case let decodingError as DecodingError:
-    //                                print(decodingError)
-    //                                completion(.failure(.decodingError(decodingError)))
-    //                            default:
-    //                                print(error)
-    //                                completion(.failure(.genericError(error)))
-    //                        }
-    //                }
-    //
-    //            }, receiveValue: {result in
-    //                completion(.success(result))
-    //                self.treeImages.append(result)
-    //            })
-    //            .store(in: &cancellables)
-    //    }
-    
-}
-
-extension TreeViewModel {
-    
-    //    func getWildlife(from forestId: Int64, completion: @escaping(Result<[Wildlife], RequestError>) -> Void) {
-    //
-    //        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .wildlifeByForest(forestId), using: .get)
-    //
-    //        forestRepository.getWildlife(using: urlRequest)
-    //            .sink(receiveCompletion: {result in
-    //                switch result {
-    //                    case .finished:
-    //                        break
-    //                    case .failure(let error):
-    //                        switch error {
-    //                            case let urlError as URLError:
-    //                                print(urlError)
-    //                                completion(.failure(.urlError(urlError)))
-    //                            case let decodingError as DecodingError:
-    //                                print(decodingError)
-    //                                completion(.failure(.decodingError(decodingError)))
-    //                            default:
-    //                                print(error)
-    //                                completion(.failure(.genericError(error)))
-    //                        }
-    //                }
-    //
-    //            }, receiveValue: {result in
-    //                self.wildlifes.append(WildlifeOutput(forestId: forestId, wildlife: result))
-    //                completion(.success(result))
-    //            })
-    //            .store(in: &cancellables)
-    //    }
-}
-
-extension TreeViewModel {
-    
-    
     func personalizeTree(tree: AssignedTree, completion: @escaping (Result<AssignedTree, RequestError>) -> Void) {
-        //AssignedTree2(user_id: tree.user_id, tree_id: tree.tree_id, order_id: tree.order_id, tree_name: tree.tree_name, tree_color: tree.tree_color)
+        
         do {
             let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .personalize, using: .put, withParams: tree)
             

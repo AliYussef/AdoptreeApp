@@ -34,7 +34,6 @@ struct SuccessfullAdoptionView: View {
                     .resizable()
                     .frame(width: 200, height: 200, alignment: .center)
                 
-                
                 Spacer()
                 
                 Button(action: {
@@ -48,16 +47,6 @@ struct SuccessfullAdoptionView: View {
                 .background(Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
-//                NavigationLink(destination: ContentView())
-//                {
-//                    Text("Follow your tree")
-//                        .font(.subheadline)
-//                        .foregroundColor(.white)
-//                }
-//                .frame(width: UIScreen.main.bounds.width * 0.5, height: 40, alignment: .center)
-//                .background(Color.init("color_primary_accent"))
-//                .cornerRadius(10.0)
-//                .padding()
                 
             }
         }

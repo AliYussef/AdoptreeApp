@@ -17,8 +17,6 @@ struct PersonalSignView: View {
     @State private var message = ""
     let tree: Tree
     
-    //@State var canvas = PKCanvasView()
-    
     var body: some View {
         ZStack {
             Color.init("color_background")
@@ -50,9 +48,6 @@ struct PersonalSignView: View {
                         
                     })
                 }
-                
-                
-                //DrawingView(canvas: $canvas)
                 
                 Button(action: {
                     
@@ -124,24 +119,3 @@ struct PersonalSignView: View {
         }
     }
 }
-
-//struct DrawingView: UIViewRepresentable {
-//
-//    // to capture drawing for saving into album...
-//    @Binding var canvas: PKCanvasView
-//
-//    func makeUIView(context: Context) -> PKCanvasView {
-//        canvas.drawingPolicy = .anyInput
-//        return canvas
-//    }
-//
-//    func updateUIView(_ uiView: PKCanvasView, context: Context) {
-//
-//    }
-//}
-
-//struct PersonalSignView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PersonalSignView()
-//    }
-//}

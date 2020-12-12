@@ -12,7 +12,7 @@ struct ForgotPasswordView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @State var password: String = ""
     @State var confirmPassword: String = ""
-
+    
     var body: some View {
         ZStack{
             Color.init("color_background")
@@ -22,7 +22,7 @@ struct ForgotPasswordView: View {
                 if userViewModel.forgetPasswordToken.isEmpty {
                     RequestPasswordChangeView()
                 } else {
-                 
+                    
                     SecureField("Email Address", text: $password)
                         .padding()
                         .background(Color.init("color_textfield"))
@@ -98,8 +98,3 @@ struct RequestPasswordChangeView: View {
     }
 }
 
-//struct ForgotPasswordView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ForgotPasswordView()
-//    }
-//}

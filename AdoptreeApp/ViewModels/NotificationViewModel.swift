@@ -25,7 +25,6 @@ class NotificationViewModel: ObservableObject {
         self.notificationRepository = notificationRepository
         userDefaults = UserDefaults.standard
         notificationObject = NotificationObject()
-        print("notification view model")
         if !isNotificationObjectPresent() {
             saveNotificationObject()
         }

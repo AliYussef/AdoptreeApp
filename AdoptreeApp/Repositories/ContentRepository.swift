@@ -10,14 +10,10 @@ import Combine
 
 protocol ContentRepositoryProtocol {
     func getContents(using urlRequest: URLRequest) -> AnyPublisher<Result<[Content], RequestError>, Never>
-    //func getContentByTitle(using urlRequest: URLRequest) -> AnyPublisher<Result<[Content], RequestError>, Never>
+    
 }
 
 class ContentRepository: ContentRepositoryProtocol {
-    
-    //func getContentByTitle(using urlRequest: URLRequest) -> AnyPublisher<[Content], Error> {
-    //    return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
-    //}
     
     func getContents(using urlRequest: URLRequest) -> AnyPublisher<Result<[Content], RequestError>, Never> {
         return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)

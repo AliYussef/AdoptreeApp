@@ -81,61 +81,7 @@ extension NewsViewModel {
                 }
             })
             .store(in: &cancellables)
-        
-        
-//            .sink(receiveCompletion: { result in
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                print(urlError)
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                            default:
-//                                print(error)
-//                        }
-//                }
-//            }, receiveValue: { contents, tours, bookedTours in
-//                self.contents = contents.
-//                self.tours = tours
-//                self.bookedTours = bookedTours
-//            })
-//            .store(in: &cancellables)
     }
-}
-
-extension NewsViewModel {
-    
-//    func getContents(completion: @escaping (Result<[Content], RequestError>) -> Void) {
-//        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .content, using: .get)
-//
-//        contentRepository.getContents(using: urlRequest)
-//            .sink(receiveCompletion: {result in
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                print(urlError)
-//                                completion(.failure(.urlError(urlError)))
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                                completion(.failure(.decodingError(decodingError)))
-//                            default:
-//                                print(error)
-//                                completion(.failure(.genericError(error)))
-//                        }
-//                }
-//
-//            }, receiveValue: {result in
-//                completion(.success(result))
-//                self.contents = result
-//            })
-//            .store(in: &cancellables)
-//    }
 }
 
 extension NewsViewModel {

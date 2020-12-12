@@ -23,12 +23,6 @@ struct FailedAdoptionView: View {
                     .bold()
                     .foregroundColor(.init("color_font_primary"))
                 
-                //                Text("With your contribution CO2 emissions can be reduced, wildlife and biodiversity will further thrive.")
-                //                    .multilineTextAlignment(.center)
-                //                    .padding()
-                //                    .font(.subheadline)
-                //                    .foregroundColor(.init("color_font_primary"))
-                
                 Image("sad_tree")
                     .resizable()
                     .frame(width: 200, height: 200, alignment: .center)
@@ -55,9 +49,3 @@ struct FailedAdoptionView: View {
         
     }
 }
-
-//struct FailedAdoptionView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FailedAdoptionView()
-//    }
-//}

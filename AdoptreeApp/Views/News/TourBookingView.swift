@@ -67,14 +67,14 @@ struct TourBookingView: View {
                 
                 // should lead to BookedTourOverviewView()
                 Button(action: {
-//                    self.newsViewModel.bookTour(using: tour) { result in
-//                        switch (result) {
-//                            case .failure(_):
-//                                print("")
-//                            case .success(_):
-//                                print("")
-//                        }
-//                    }
+                    //                    self.newsViewModel.bookTour(using: tour) { result in
+                    //                        switch (result) {
+                    //                            case .failure(_):
+                    //                                print("")
+                    //                            case .success(_):
+                    //                                print("")
+                    //                        }
+                    //                    }
                 }, label: {
                     Text("Confirm")
                         .font(.subheadline)
@@ -89,8 +89,3 @@ struct TourBookingView: View {
     }
 }
 
-//struct TourBookingView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TourBookingView()
-//    }
-//}

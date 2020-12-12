@@ -9,7 +9,6 @@ import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject var viewRouter: ViewRouter
-   // @ObservedObject var treeViewModel: TreeViewModel
     
     var body: some View {
         
@@ -22,9 +21,3 @@ struct RootView: View {
         }
     }
 }
-
-//struct RootView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        RootView()
-//    }
-//}

@@ -12,90 +12,36 @@ import UIKit
 struct AdoptreeAppApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.scenePhase) private var scenePhase
-    
-    //@ObservedObject var treeViewModel = ViewModelFactory().makeTreeViewModel()
     var notificationViewModel: NotificationViewModel
     var userViewModel: UserViewModel
     var orderViewModel: OrderViewModel
     var viewRouter: ViewRouter
     private let viewModelFactory: ViewModelFactory
     
-    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        print("url")
-        if let url = URLContexts.first?.url {
-            print(url)
-            
-//            if let authResult = DropboxClientsManager.handleRedirectURL(url) {
-//                switch authResult {
-//                    case .success:
-//                        print("Success! User is logged into Dropbox.")
-//                    case .cancel:
-//                        print("Authorization flow was manually canceled by user!")
-//                    case .error(_, let description):
-//                        print("Error: \(description)")
-//                }
-//            }
-        }
-    }
-    
     init() {
         UITableView.appearance().backgroundColor = .clear
         UINavigationBar.appearance().titleTextAttributes = [.font : UIFont.systemFont(ofSize: 20), NSAttributedString.Key.foregroundColor: UIColor.init(named: "color_font_primary") ?? .black]
-        //UINavigationBar.appearance().barTintColor = UIColor.init(named: "primary_button")
-        // viewModelFactory.makeTreeViewModel().getAllTrees(){_ in}
+        
         viewModelFactory = ViewModelFactory()
         notificationViewModel = NotificationViewModel.shared
         userViewModel = UserViewModel.shared
-       
         orderViewModel = viewModelFactory.makeOrderViewModel()
         viewRouter = ViewRouter()
     }
     
     var body: some Scene {
         WindowGroup {
-            //NavigationView {
             ZStack{
                 Color.init("color_background")
                     .edgesIgnoringSafeArea(.all)
                 
+                //                RootView().environmentObject(viewRouter).environmentObject(orderViewModel)
+                //                    .environmentObject(notificationViewModel).environmentObject(userViewModel)
                 
-//                if viewRouter.currentPage == "onboardingView" {
-//                    OnboardingView(treeViewModel: treeViewModel)
-//                } else if viewRouter.currentPage == "contentView" {
-//                    ContentView(treeViewModel: treeViewModel)
-//                } else if viewRouter.currentPage == "loginView" {
-//                    LoginView()
-//                }
-                
-//                RootView().environmentObject(viewRouter).environmentObject(orderViewModel)
-//                    .environmentObject(notificationViewModel).environmentObject(userViewModel)
-                   
                 TimelineView(timelineViewModel: viewModelFactory.makeTimelineViewModel())
                 
-//                NavigationView {
-//                    SettingView()
-//                }
-               
-                //StartingView()
-                //TimelineView()
-                //first to start
-                //GuestHomeView()
-                //OnboardingView(treeViewModel: treeViewModel).environmentObject(viewModelFactory.makeOrderViewModel())
-                   // .environmentObject(viewModelFactory.makeUserViewModel())
-                //LoginView()
-                //TreeSelectionView()
-                // ContentView(userViewModel: userViewModel)
             }
-            .onAppear {
-                //treeViewModel.getAdoptedTrees(of: 1) {_ in}
-                //treeViewModel.getContents() {_ in}
-                
-            }
-            // }
             .accentColor(.init("color_primary_accent"))
-            //.navigationBarTitle("")
-            //.navigationBarHidden(true)
-            
         }
         .onChange(of: scenePhase) { phase in
             switch phase {

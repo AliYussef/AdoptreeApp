@@ -75,10 +75,10 @@ struct AdoptionLoginView: View {
                                     }
                                 }
                                 
-                                //self.openURL(URL(string: success.paymentLink)!)
-//                                if let paymentLink = self.orderViewModel.order?.paymentLink {
-//                                    self.openURL(URL(string:  paymentLink)!)
-//                                }
+                            //self.openURL(URL(string: success.paymentLink)!)
+                            //                                if let paymentLink = self.orderViewModel.order?.paymentLink {
+                            //                                    self.openURL(URL(string:  paymentLink)!)
+                            //                                }
                         }
                     }
                 }, label: {
@@ -95,9 +95,9 @@ struct AdoptionLoginView: View {
                     EmptyView()
                 }
                 
-//                NavigationLink(destination: FailedAdoptionView(), tag: 2, selection: $actionState) {
-//                    EmptyView()
-//                }
+                //                NavigationLink(destination: FailedAdoptionView(), tag: 2, selection: $actionState) {
+                //                    EmptyView()
+                //                }
                 
             }
         } .onOpenURL(perform: { url in
@@ -126,9 +126,3 @@ struct AdoptionLoginView: View {
         
     }
 }
-
-//struct AdoptionLoginView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AdoptionLoginView()
-//    }
-//}

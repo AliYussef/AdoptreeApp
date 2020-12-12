@@ -19,16 +19,6 @@ struct SettingView: View {
     @State var isCO2RedutionTipsOn = true
     @State var isEventsOn = false
     
-//    {
-//        didSet {
-//            notificationViewModel.notificationObject?.growth.toggle()
-//            notificationViewModel.saveNotificationObject()
-//        }
-//    }
-    
-    init(){
-        UITableView.appearance().backgroundColor = .clear
-    }
     var body: some View {
         ZStack {
             Color.init("color_background")
@@ -42,27 +32,25 @@ struct SettingView: View {
                         Text("notifications")
                             .foregroundColor(.init("color_font_secondary"))
                     }, content: {
-                        //if notificationViewModel.notificationObject != nil {
                         Toggle(isOn: $notificationViewModel.notificationObject.growth.animation()) {
-                                Text("Growth")
-                            }
-                            Toggle(isOn: $notificationViewModel.notificationObject.humidity.animation()) {
-                                Text("Humidity")
-                            }
-                            Toggle(isOn: $notificationViewModel.notificationObject.temperature.animation()) {
-                                Text("Temperature")
-                            }
-                            Toggle(isOn: $notificationViewModel.notificationObject.co2Reduction.animation()) {
-                                Text("CO2 reduction")
-                            }
-                            Toggle(isOn: $notificationViewModel.notificationObject.co2ReductionTip.animation()) {
-                                Text("CO2 redution tips")
-                            }
-                            Toggle(isOn: $notificationViewModel.notificationObject.event.animation()) {
-                                Text("Events")
-                            }
-                       // }
-                       
+                            Text("Growth")
+                        }
+                        Toggle(isOn: $notificationViewModel.notificationObject.humidity.animation()) {
+                            Text("Humidity")
+                        }
+                        Toggle(isOn: $notificationViewModel.notificationObject.temperature.animation()) {
+                            Text("Temperature")
+                        }
+                        Toggle(isOn: $notificationViewModel.notificationObject.co2Reduction.animation()) {
+                            Text("CO2 reduction")
+                        }
+                        Toggle(isOn: $notificationViewModel.notificationObject.co2ReductionTip.animation()) {
+                            Text("CO2 redution tips")
+                        }
+                        Toggle(isOn: $notificationViewModel.notificationObject.event.animation()) {
+                            Text("Events")
+                        }
+                        
                     })//.disabled(!userViewModel.isAuthenticated)
                     
                     //general
@@ -98,11 +86,11 @@ struct SettingView: View {
                             label: {
                                 Text("Over this app")
                             })
-                        NavigationLink(
-                            destination: Text("Destination"),
-                            label: {
-                                Text("Share this app")
-                            })
+                        Button(action: {
+                            actionSheet()
+                        }, label: {
+                            Text("Share this app")
+                        })
                         NavigationLink(
                             destination: Text("Destination"),
                             label: {
@@ -135,18 +123,17 @@ struct SettingView: View {
                 }.background(Color.init("color_background"))
                 .padding(.top, 10)
             }
-        }.onAppear {
-//            if let notificatioObject = notificationViewModel.notificationObject {
-//                isGrowthOn = notificatioObject.growth
-//                isHumidityOn = notificatioObject.humidity
-//                isTemperatureOn = notificatioObject.temperature
-//                isCO2ReductionOn = notificatioObject.co2Reduction
-//                isCO2RedutionTipsOn = notificatioObject.co2ReductionTip
-//                isEventsOn = notificatioObject.event
-//            }
-
         }
-        
+    }
+    
+}
+
+extension SettingView {
+    
+    func actionSheet() {
+        guard let data = URL(string: "https://www.apple.nl") else { return }
+        let av = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+        UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
     }
 }
 

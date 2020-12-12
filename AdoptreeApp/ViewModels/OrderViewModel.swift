@@ -26,31 +26,6 @@ class OrderViewModel: ObservableObject {
         self.orderRepository = orderRepository
         self.productRepository = productRepository
         self.categoryRepository = categoryRepository
-        //        self.availableProducts = [
-        //            Product(id: 1, categoryId: 1, name: "White oak", description: "A", price: 35, vatRateId: 1, isUpForAdoption: true, stock: 100, createdAt: Date(timeIntervalSince1970: 1111795200)),
-        //           Product(id: 2, categoryId: 2, name: "White oak", description: "A", price: 35, vatRateId: 1, isUpForAdoption: true, stock: 100, createdAt: Date(timeIntervalSince1970: 1111795200)),
-        //           Product(id: 3, categoryId: 2, name: "White oak", description: "A", price: 35, vatRateId: 1, isUpForAdoption: true, stock: 100, createdAt: Date(timeIntervalSince1970: 1111795200)),
-        //            Product(id: 4, categoryId: 1, name: "White oak", description: "A", price: 35, vatRateId: 1, isUpForAdoption: true, stock: 100, createdAt: Date(timeIntervalSince1970: 1111795200))
-        //
-        //        ]
-        
-        //        self.products = [
-        //            OrderProduct(product: Product(id: 1, categoryId: 1, name: "White oak", description: "A", price: 35, vatRateId: 1, isUpForAdoption: true, stock: 100, createdAt: Date(timeIntervalSince1970: 1111795200))),
-        //            OrderProduct(product: Product(id: 1, categoryId: 2, name: "White oak", description: "A", price: 35, vatRateId: 1, isUpForAdoption: true, stock: 100, createdAt: Date(timeIntervalSince1970: 1111795200))),
-        //            OrderProduct(product: Product(id: 1, categoryId: 2, name: "White oak", description: "A", price: 35, vatRateId: 1, isUpForAdoption: true, stock: 100, createdAt: Date(timeIntervalSince1970: 1111795200)))
-        //
-        //        ]
-        
-        //        self.categories = [
-        //            Category(id: 1, name: "Sapling", description: "A young tree"),
-        //            Category(id: 2, name: "Tree", description: "A non-young tree"),
-        //            Category(id: 3, name: "Tree Sign", description: "A personal sign placed next to your tree")
-        //        ]
-        
-        //self.getEc(){_ in}
-        // any calling here will call it each time you manipulate the view
-        
-        
     }
 }
 
@@ -95,34 +70,10 @@ extension OrderViewModel {
                 }
             })
             .store(in: &cancellables)
-//            .sink(receiveCompletion: {result in
-//                print(result)
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                print(urlError)
-//                            //completion(.failure(.urlError(urlError)))
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                            //completion(.failure(.decodingError(decodingError)))
-//                            default:
-//                                print(error)
-//                            //completion(.failure(.genericError(error)))
-//                        }
-//                }
-//
-//            }, receiveValue: {products, categories in
-//                self.availableProducts = products
-//                self.categories = categories
-//                self.createCategoriesDictionary()
-//                self.getTreeSignProduct()
-//
-//            })
-//            .store(in: &cancellables)
     }
+}
+
+extension OrderViewModel {
     
     func createOrder(order: Order, completion: @escaping (Result<OrderResponse, RequestError>) -> Void) {
         
@@ -187,40 +138,9 @@ extension OrderViewModel {
             })
             .store(in: &cancellables)
     }
-    
 }
 
 extension OrderViewModel {
-    
-//    func getProducts(completion: @escaping (Result<[Product], RequestError>) -> Void) {
-//
-//        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .product, using: .get)
-//
-//        productRepository.getProducts(using: urlRequest)
-//            .sink(receiveCompletion: {result in
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                print(urlError)
-//                                completion(.failure(.urlError(urlError)))
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                                completion(.failure(.decodingError(decodingError)))
-//                            default:
-//                                print(error)
-//                                completion(.failure(.genericError(error)))
-//                        }
-//                }
-//
-//            }, receiveValue: {result in
-//                completion(.success(result))
-//                self.availableProducts = result
-//            })
-//            .store(in: &cancellables)
-//    }
     
     func add(product: Product) {
         if let index = products.firstIndex(where: {$0.product.id == product.id}) {
@@ -249,25 +169,6 @@ extension OrderViewModel {
         }
     }
     
-    func activateTreeSign(is isActivated: Bool ,for product: Product) {
-        if let index = products.firstIndex(where: {$0.product.id == product.id}) {
-            products[index].isSignActivated = isActivated
-            //            handleTreeSign(for: isActivated)
-        }
-    }
-    
-    //    func handleTreeSign(for isActive: Bool) {
-    //        if isActive {
-    //            if let treeSign = treeSign {
-    //                products.append(OrderProduct(product: treeSign, quantity: 1, isSignActivated: false))
-    //            }
-    //        } else {
-    //            if let index = products.firstIndex(where: {$0.product.id == treeSign?.id}) {
-    //                products.remove(at: index)
-    //            }
-    //        }
-    //    }
-    
     func createOrderObject(for userID: Int64) -> Order {
         var orderLines: [OrderLine] = []
         products.forEach({ orderProduct in
@@ -282,16 +183,6 @@ extension OrderViewModel {
         return Order(id: nil, paymentRedirectLink: "mollie-app://payment-return", paymentStatus: nil, orderStatus: nil, userId: userID, createdAt: nil, orderLines: orderLines)
     }
     
-    func createTreeSignOrder(for userID: Int64) -> Order {
-        var orderLines: [OrderLine] = []
-        
-        if let treeSign = treeSign {
-            orderLines.append(OrderLine(id: nil, orderId: nil, productId: treeSign.id, price: nil, vat: nil, quantity: 1))
-        }
-        
-        return Order(id: nil, paymentRedirectLink: "mollie-app://payment-return", paymentStatus: nil, orderStatus: nil, userId: userID, createdAt: nil, orderLines: orderLines)
-    }
-    
     func calculateTotal() {
         var total: Double = 0.0
         
@@ -301,42 +192,12 @@ extension OrderViewModel {
                 total += treeSign?.price ?? 5.0
             }
         })
-        //print(products)
+        
         self.totalPrice = total
     }
 }
 
 extension OrderViewModel {
-    
-//    func getCategories(completion: @escaping (Result<[Category], RequestError>) -> Void) {
-//        
-//        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .category, using: .get)
-//        
-//        categoryRepository.getCategories(using: urlRequest)
-//            .sink(receiveCompletion: {result in
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                print(urlError)
-//                                completion(.failure(.urlError(urlError)))
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                                completion(.failure(.decodingError(decodingError)))
-//                            default:
-//                                print(error)
-//                                completion(.failure(.genericError(error)))
-//                        }
-//                }
-//                
-//            }, receiveValue: {result in
-//                completion(.success(result))
-//                self.categories = result
-//            })
-//            .store(in: &cancellables)
-//    }
     
     func createCategoriesDictionary() {
         categories.forEach({ cat in
@@ -353,5 +214,21 @@ extension OrderViewModel {
                 treeSign = product
             }
         })
+    }
+    
+    func activateTreeSign(is isActivated: Bool ,for product: Product) {
+        if let index = products.firstIndex(where: {$0.product.id == product.id}) {
+            products[index].isSignActivated = isActivated
+        }
+    }
+    
+    func createTreeSignOrder(for userID: Int64) -> Order {
+        var orderLines: [OrderLine] = []
+        
+        if let treeSign = treeSign {
+            orderLines.append(OrderLine(id: nil, orderId: nil, productId: treeSign.id, price: nil, vat: nil, quantity: 1))
+        }
+        
+        return Order(id: nil, paymentRedirectLink: "mollie-app://payment-return", paymentStatus: nil, orderStatus: nil, userId: userID, createdAt: nil, orderLines: orderLines)
     }
 }

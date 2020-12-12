@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct TreeTypeView: View {
-    //@StateObject var orderViewModel: OrderViewModel
     @EnvironmentObject var orderViewModel: OrderViewModel
     let treeProduct: Product
-//    let product = Product(id: 4, categoryId: 3, name: "White oak", description: "", price: 35, vatRateId: 1, isUpForAdoption: true, stock: 100, createdAt: Date(timeIntervalSince1970: 1111795200))
     
     var body: some View {
         RoundedRectangle(cornerRadius: 12.0)
@@ -29,12 +27,6 @@ struct TreeTypeView: View {
                             .bold()
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 2)
-                        //                        Text("CO2: -1500Kg")
-                        //                            .font(.body)
-                        //                            .foregroundColor(.init("color_font_secondary"))
-                        //                        Text("Age: 3 weeks")
-                        //                            .font(.body)
-                        //                            .foregroundColor(.init("color_font_secondary"))
                         
                         Text("\(orderViewModel.categoriesDic[treeProduct.categoryId] ?? "Tree")")
                             .font(.body)
@@ -72,12 +64,5 @@ struct TreeTypeView: View {
                 }.padding()
             )
             .padding(.bottom, 10)
-        //.padding(.bottom, 5)
     }
 }
-
-//struct TreeTypeView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TreeTypeView()
-//    }
-//}

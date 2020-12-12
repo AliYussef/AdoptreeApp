@@ -30,22 +30,9 @@ struct AssignedTree: Codable {
     var tree_color: String?
 }
 
-struct AssignedTree2: Codable {
-    let user_id: Int64
-    let tree_id: Int64
-    let order_id: Int64
-    var tree_name: String?
-    var tree_color: String?
-}
-
-
-
 extension Tree {
     
-    // force unwrap needs to be remeoved
     var coordinate: CLLocationCoordinate2D {
-        //if let latitude = latitude {
         CLLocationCoordinate2D(latitude: Double(latitude) ?? 0, longitude: Double(longitude) ?? 0)
-        //}
     }
 }

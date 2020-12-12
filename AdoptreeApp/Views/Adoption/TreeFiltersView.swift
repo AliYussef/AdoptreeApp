@@ -13,24 +13,11 @@ struct TreeFiltersView: View {
     @State private var countryIndex = 0
     @State private var forestIndex = 0
     @State private var ageIndex = 0
-    
     @State private var ageValues: [CGFloat] = [1, 30]
-    
     var treeTypeOptions = ["All", "White oak", "Pine"]
     var countryOptions = ["All", "Netherlands", "Bulgaria"]
     var forestNetherlandsOptions = ["All", "Mastbos", "The Amsterdamse Bos"]
     var forestBulgariaOptions = ["All", "Steneto"]
-    
-    
-    //    var image: some View {
-    //        if let nsData = "e352dbd4-77e3-4bcc-9013-bfd1b7dee739", let uiImage = UIImage(data: nsData as Data) {
-    //            return AnyView(Image(uiImage: uiImage)
-    //                            .resizable()
-    //                            .frame(width: 120, height: 120, alignment: .center)
-    //                            .aspectRatio(contentMode: .fill))
-    //        }
-    //        return AnyView(EmptyView())
-    //    }
     
     var body: some View {
         ZStack {
@@ -55,14 +42,9 @@ struct TreeFiltersView: View {
                         }
                         
                     }
-                    //                    NavigationLink(
-                    //                        destination: /*@START_MENU_TOKEN@*/Text("Destination")/*@END_MENU_TOKEN@*/,
-                    //                        label: {
-                    //                            Text("Age")
-                    //                        })
+                    
                     VStack (alignment: .leading) {
                         Text("Age")
-                        //Text(String($doubleValue))
                         
                         MultiValueSlider(
                             value: $ageValues,
@@ -74,7 +56,6 @@ struct TreeFiltersView: View {
                         )
                     }
                     ForEach(ageValues, id: \.self) { v in
-                        //let va = "\(v)"
                         Text("\(v)")
                     }
                     

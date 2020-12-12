@@ -8,13 +8,8 @@
 import SwiftUI
 
 struct AdoptionOverviewView: View {
-    //@ObservedObject var orderViewModel: OrderViewModel
     @EnvironmentObject var orderViewModel: OrderViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    //@State private var isChecked: Bool = false
-    //@State private var quantity = 1.0
-    //@State private var price = 35
-    // @State private var total = 1.0
     @State private var isAdoptionFailed = false
     
     var body: some View {
@@ -32,9 +27,7 @@ struct AdoptionOverviewView: View {
                         VStack {
                             
                             ForEach(orderViewModel.products) { product in
-//                                if product.product.id != orderViewModel.treeSign?.id {
-                                    OverviewCellView(orderProduct: product)
-//                                }
+                                OverviewCellView(orderProduct: product)
                             }
                             
                             if orderViewModel.products.count > 0 {
@@ -44,7 +37,7 @@ struct AdoptionOverviewView: View {
                                         .foregroundColor(.init("color_font_secondary"))
                                     
                                     Spacer()
-                                    //Text("€\(orderViewModel.products.reduce(0){$0 + $1.total}) EUR")
+                                    
                                     Text("€\(String(format: "%.2f", self.orderViewModel.totalPrice)) EUR")
                                         .font(.footnote)
                                         .foregroundColor(.init("color_font_secondary"))
@@ -67,8 +60,6 @@ struct AdoptionOverviewView: View {
                                         
                                     )
                             }
-                            
-                            
                         }
                     }
                     
@@ -108,17 +99,13 @@ struct AdoptionOverviewView: View {
 }
 
 struct OverviewCellView: View {
-    //@ObservedObject var orderViewModel: OrderViewModel
     @EnvironmentObject var orderViewModel: OrderViewModel
     @State var orderProduct: OrderProduct
     @State private var isChecked:Bool = false
     @State private var personalSign = ""
-    //@State private var quantity = 1
-    //@State private var price = 1
-    //@Binding var total: Double
     
+    // move to view model
     func deactivateTreeSign() -> EmptyView {
-        
         isChecked.toggle()
         orderViewModel.activateTreeSign(is: isChecked, for: orderProduct.product)
         orderViewModel.calculateTotal()
@@ -133,12 +120,6 @@ struct OverviewCellView: View {
             .frame(width: UIScreen.main.bounds.width * 0.9, height: 220, alignment: .leading)
             .overlay(
                 VStack {
-                    
-                    //                    if orderProduct.quantity > 1 {
-                    //                        addd()
-                    //                    }
-                    
-                    
                     HStack(alignment: .top) {
                         Image("tree2")
                             .resizable()
@@ -162,13 +143,9 @@ struct OverviewCellView: View {
                                     .padding(.bottom, 1)
                             }
                         }
-                        //Stepper("", value: self.$orderProduct.quantity.animation(), in: 1...100)
-                        //                        CustomStepper(orderViewModel: orderViewModel,value: self.$orderProduct.quantity.animation())
-                        //VStack {
+                        
                         CustomStepper(orderProduct: orderProduct, value: self.$orderProduct.quantity.animation(), isChecked: $isChecked)
                             .padding(.trailing)
-                        
-                        
                         
                         Button(action: {
                             withAnimation {
@@ -179,78 +156,52 @@ struct OverviewCellView: View {
                             Image(systemName: "trash.fill")
                                 .foregroundColor(.red)
                         })
-                        //.padding(.leading)
-                        // }
-                        
-                        //                            .onTapGesture(perform: {
-                        //                                orderViewModel.calculateTotal()
-                        //                            })
                     }
                     
                     Divider()
                     
-                    
-                    //if self.orderViewModel.products.count > 1 || orderProduct.quantity > 1 {
-                    //if self.orderViewModel.products.first(where: {$0.product.id == self.orderViewModel.treeSign?.id}) == nil {
-                        
-                    //}
-//                        if orderProduct.quantity > 1 || (self.orderViewModel.products.count > 1 &&  self.orderViewModel.products.first(where: {$0.product.id == self.orderViewModel.treeSign?.id}) == nil){
                     if self.orderViewModel.products.count > 1 || orderProduct.quantity > 1 {
-                            Text("Adding a personal sign for multiple trees is not possible yet. You can still add one for each tree after the adoption.")
-                                .font(.subheadline)
-                                .foregroundColor(.init("color_font_secondary"))
-                        } else {
-                            HStack {
-                                VStack (alignment: .leading) {
-                                    Text("Personal sign")
-                                        .font(.subheadline)
-                                        .foregroundColor(.init("color_font_secondary"))
-                                    TextField("Type personal sign and tick the circle", text: $personalSign)
-                                        .font(.subheadline)
-                                    
-                                }
-                                
-                                Spacer()
-                                
-                                Button(action: {
-                                    withAnimation {
-                                        self.isChecked.toggle()
-                                        self.orderViewModel.activateTreeSign(is: isChecked, for: orderProduct.product)
-                                        self.orderViewModel.calculateTotal()
-                                    }
-                                }, label: {
-                                    Image(systemName: isChecked ? "checkmark.circle.fill" : "circle")
-                                        .foregroundColor(.init("color_primary_accent"))
-                                })
-                                
-                                //                            Image(systemName: "plus.circle.fill")
-                                //                                .foregroundColor(.init("color_primary_accent"))
-                                
-                            }
-                            .padding(.top)
-                            
-                            Divider()
-                            
-                            HStack {
-                                Text("Personal sign can be added later as well")
-                                    .font(.footnote)
-                                    .foregroundColor(.init("color_font_secondary"))
-                                Spacer()
-                                Text("€\(String(format: "%.2f", orderViewModel.treeSign?.price ?? 5.0) ) EUR")
+                        Text("Adding a personal sign for multiple trees is not possible yet. You can still add one for each tree after the adoption.")
+                            .font(.subheadline)
+                            .foregroundColor(.init("color_font_secondary"))
+                    } else {
+                        HStack {
+                            VStack (alignment: .leading) {
+                                Text("Personal sign")
                                     .font(.subheadline)
                                     .foregroundColor(.init("color_font_secondary"))
+                                TextField("Type personal sign and tick the circle", text: $personalSign)
+                                    .font(.subheadline)
+                                
                             }
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                withAnimation {
+                                    self.isChecked.toggle()
+                                    self.orderViewModel.activateTreeSign(is: isChecked, for: orderProduct.product)
+                                    self.orderViewModel.calculateTotal()
+                                }
+                            }, label: {
+                                Image(systemName: isChecked ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(.init("color_primary_accent"))
+                            })
                         }
-                        //                            if isChecked {
-                        //                                deactivateTreeSign()
-                        //                            }
+                        .padding(.top)
                         
-                    
+                        Divider()
                         
-                   // }
-                    
-                    
-                    
+                        HStack {
+                            Text("Personal sign can be added later as well")
+                                .font(.footnote)
+                                .foregroundColor(.init("color_font_secondary"))
+                            Spacer()
+                            Text("€\(String(format: "%.2f", orderViewModel.treeSign?.price ?? 5.0) ) EUR")
+                                .font(.subheadline)
+                                .foregroundColor(.init("color_font_secondary"))
+                        }
+                    }
                 }
                 .padding()
             )
@@ -259,7 +210,6 @@ struct OverviewCellView: View {
 }
 
 struct CustomStepper : View {
-    //@ObservedObject var orderViewModel: OrderViewModel
     @EnvironmentObject var orderViewModel: OrderViewModel
     let orderProduct: OrderProduct
     @Binding var value: Int
@@ -268,8 +218,7 @@ struct CustomStepper : View {
     
     var body: some View {
         HStack {
-            //            Text(colorName + " \(Int(value * 255))").font(.system(.caption, design: .rounded))
-            //                .foregroundColor(textColor)
+            
             Spacer()
             
             Button(action: {
@@ -277,7 +226,7 @@ struct CustomStepper : View {
                     self.value -= self.step
                     self.orderViewModel.decreaseQuantity(of: orderProduct.product)
                     self.orderViewModel.calculateTotal()
-                    //self.feedback()
+                    
                 }
             }, label: {
                 Image(systemName: "minus.circle")
@@ -298,7 +247,7 @@ struct CustomStepper : View {
                         self.orderViewModel.activateTreeSign(is: isChecked, for: orderProduct.product)
                         self.orderViewModel.calculateTotal()
                     }
-                    //self.feedback()
+                    
                 }
             }, label: {
                 Image(systemName: "plus.circle")
@@ -308,167 +257,4 @@ struct CustomStepper : View {
             })
         }
     }
-    
-    func feedback() {
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.impactOccurred()
-    }
 }
-//struct AdoptionOverviewView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AdoptionOverviewView()
-//    }
-//}
-
-//ZStack{
-//    Color.init("color_background")
-//        .edgesIgnoringSafeArea(.all)
-//
-//
-//    VStack {
-//        Text("Overview")
-//            .font(.title2)
-//            .bold()
-//            .foregroundColor(.init("color_font_primary"))
-//            .padding(.top)
-//        ScrollView(.vertical, showsIndicators: false) {
-//            VStack {
-//
-//                RoundedRectangle(cornerRadius: 12.0)
-//                    .fill(Color.white)
-//                    .frame(width: .none, height: 250, alignment: .leading)
-//                    .overlay(
-//                        VStack {
-//
-//                            HStack(alignment: .top) {
-//                                Image("tree2")
-//                                    .resizable()
-//                                    .frame(width: 85, height: 100, alignment: .leading)
-//
-//                                VStack (alignment: .leading) {
-//                                    Text("WHITE OAK")
-//                                        .font(.subheadline)
-//                                        .bold()
-//                                        .foregroundColor(.init("color_font_secondary"))
-//                                        .padding(.bottom, 1)
-//                                    Text("CO2: -1500Kg")
-//                                        .font(.footnote)
-//                                        .foregroundColor(.init("color_font_secondary"))
-//                                    Text("Age: 3 weeks")
-//                                        .font(.footnote)
-//                                        .foregroundColor(.init("color_font_secondary"))
-//                                    Text("Price: € 35 EUR")
-//                                        .font(.footnote)
-//                                        .foregroundColor(.init("color_font_secondary"))
-//
-//                                }
-//                                Spacer()
-//                                Text(" 1 x € 35 EUR")
-//                                    .font(.subheadline)
-//                                    .bold()
-//                                    .foregroundColor(.init("color_font_secondary"))
-//                                    .padding(.bottom, 1)
-//                            }
-//                            .padding(.bottom)
-//
-//                            HStack {
-//                                Text("Location")
-//                                    .font(.subheadline)
-//                                    .foregroundColor(.init("color_font_secondary"))
-//                                Spacer()
-//                                Text("Mastbos, NL")
-//                                    .font(.subheadline)
-//                                    .foregroundColor(.init("color_font_secondary"))
-//                            }
-//
-//                            Divider()
-//
-//                            HStack {
-//                                VStack (alignment: .leading) {
-//                                    Text("Personal sign")
-//                                        .font(.subheadline)
-//                                        .foregroundColor(.init("color_font_secondary"))
-//                                    Text("Peter")
-//                                        .font(.subheadline)
-//                                        .foregroundColor(.init("color_font_secondary"))
-//                                }
-//
-//                                Spacer()
-//
-//                                Button(action: {self.isChecked.toggle()}, label: {
-//                                    Image(systemName: isChecked ? "checkmark.circle.fill" : "circle")
-//                                        .foregroundColor(.init("color_primary_accent"))
-//                                })
-//
-//                                Image(systemName: "plus.circle.fill")
-//                                    .foregroundColor(.init("color_primary_accent"))
-//
-//                            }
-//                            .padding(.top)
-//
-//                            Divider()
-//
-//                            HStack {
-//                                Text("Personal sign can be added later as well")
-//                                    .font(.footnote)
-//                                    .foregroundColor(.init("color_font_secondary"))
-//                                Spacer()
-//                                Text("€ 5 EUR")
-//                                    .font(.subheadline)
-//                                    .foregroundColor(.init("color_font_secondary"))
-//                            }
-//
-//
-//                        })
-//                    .padding()
-//                    .frame(width: .none, height: .none)
-//                    .background(Color.white)
-//                    .cornerRadius(12.0)
-//                    .padding(.bottom, 10)
-//
-//                HStack {
-//                    Text("Total:")
-//                        .font(.footnote)
-//                        .foregroundColor(.init("color_font_secondary"))
-//
-//                    Spacer()
-//
-//                    Text("€ 40 EUR")
-//                        .font(.footnote)
-//                        .foregroundColor(.init("color_font_secondary"))
-//                }
-//                .padding()
-//                .frame(width: .none, height: .none)
-//                .background(Color.white)
-//                .cornerRadius(12.0)
-//                .padding(.bottom, 10)
-//            }
-//        }
-//
-//        Spacer()
-//
-//        HStack {
-//            Button(action: {presentationMode.wrappedValue.dismiss()}, label: {
-//                Text("Adopt more")
-//                    .bold()
-//                    .foregroundColor(.white)
-//            })
-//            .frame(width: UIScreen.main.bounds.width * 0.4, height: 50, alignment: .center)
-//            .background(Color.init("color_primary_accent"))
-//            .cornerRadius(10.0)
-//            .padding()
-//
-//            NavigationLink(destination: AdoptionLoginView())
-//            {
-//                Text("Proceed")
-//                    .bold()
-//                    .foregroundColor(.white)
-//            }
-//            .frame(width: UIScreen.main.bounds.width * 0.4, height: 50, alignment: .center)
-//            .background(Color.init("color_primary_accent"))
-//            .cornerRadius(10.0)
-//            .padding()
-//        }
-//
-//    }
-//}

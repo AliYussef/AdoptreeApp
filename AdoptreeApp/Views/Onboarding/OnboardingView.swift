@@ -9,20 +9,14 @@ import SwiftUI
 
 struct OnboardingView: View {
     @State var showStartingView = false
-//    @State var isAuthenticated = false
     @State private var currentIndex = 0
-    //@ObservedObject var treeViewModel: TreeViewModel
     
     var body: some View {
-        //NavigationView {
+        
         if showStartingView {
-//            LoginView(isAuthenticated: $isAuthenticated)
-//                .transition(.move(edge: .trailing))
             StartingView()
                 .transition(.move(edge: .trailing))
-//                            .animation(.linear)
-//                            .transition(.slide)
-        }else{
+        } else {
             
             TabView(selection: $currentIndex.animation()) {
                 FirstInfoView().tag(0)
@@ -31,16 +25,12 @@ struct OnboardingView: View {
                 
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            .overlay(Fancy3DotsIndexView(numberOfPages: 3, currentIndex: currentIndex), alignment: .bottom)
+            .overlay(CustomDotsIndexView(numberOfPages: 3, currentIndex: currentIndex), alignment: .bottom)
         }
-        
-        //        }
-        //        .navigationBarTitle("")
-        //        .navigationBarHidden(true)
     }
 }
 
-struct Fancy3DotsIndexView: View {
+struct CustomDotsIndexView: View {
     let numberOfPages: Int
     let currentIndex: Int
     private let circleSize: CGFloat = 14
@@ -51,17 +41,14 @@ struct Fancy3DotsIndexView: View {
     
     var body: some View {
         HStack(spacing: circleSpacing) {
-            ForEach(0..<numberOfPages) { index in // 1
+            ForEach(0..<numberOfPages) { index in
                 if shouldShowIndex(index) {
                     Circle()
-                        .fill(currentIndex == index ? primaryColor : secondaryColor) // 2
+                        .fill(currentIndex == index ? primaryColor : secondaryColor)
                         .scaleEffect(currentIndex == index ? 1 : smallScale)
-                        
                         .frame(width: circleSize, height: circleSize)
-                        
-                        .transition(AnyTransition.opacity.combined(with: .scale)) // 3
-                        
-                        .id(index) // 4
+                        .transition(AnyTransition.opacity.combined(with: .scale))
+                        .id(index)
                 }
             }
         }

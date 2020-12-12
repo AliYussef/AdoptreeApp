@@ -34,9 +34,6 @@ struct ChangePasswordView: View {
                     .padding()
                 
                 Button(action: {
-                    withAnimation {
-                        //self.isAuthenticated.toggle()
-                    }
                     
                 }, label: {
                     Text("Confirm")

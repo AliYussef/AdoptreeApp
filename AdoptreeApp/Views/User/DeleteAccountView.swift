@@ -19,20 +19,7 @@ struct DeleteAccountView: View {
             Color.init("color_background")
                 .edgesIgnoringSafeArea(.all)
             
-            
-            
             VStack {
-                //                Picker(selection: $reasonsIndex, label: Text("Reason").font(.body
-                //                ).padding()) {
-                //                    ForEach(0 ..< reasons.count) {
-                //                        Text(self.reasons[$0])
-                //                    }
-                //                }.pickerStyle(MenuPickerStyle())
-                //                .foregroundColor(.gray)
-                //                .frame(width: UIScreen.main.bounds.width * 0.9, height: 55, alignment: .leading)
-                //                .background(Color.init("color_textfield"))
-                //                .cornerRadius(8.0)
-                
                 VStack {
                     Form {
                         Picker(selection: $reasonsIndex, label: Text("Reason").font(.subheadline)) {
@@ -42,21 +29,15 @@ struct DeleteAccountView: View {
                         }
                         
                         SecureField("Confirm password", text: $password)
-                            //.padding()
-                            //.background(Color.init("color_textfield"))
-                            // .cornerRadius(8.0)
                             .keyboardType(.default)
                             .autocapitalization(.none)
-                        //.padding()
+                        
                     }.background(Color.init("color_background"))
                     .padding(.top, 50)
                     
                 }
                 Spacer(minLength: 10)
                 Button(action: {
-                    withAnimation {
-                        //self.isAuthenticated.toggle()
-                    }
                     
                 }, label: {
                     Text("Confirm")

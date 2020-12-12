@@ -24,7 +24,7 @@ struct TreeTypesView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 70, height: 70, alignment: .center)
-                                   
+                                
                                 VStack(alignment: .leading) {
                                     Text("WHITE OAK")
                                         .font(.title2)
