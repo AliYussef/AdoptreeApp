@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BookedTourOverviewView: View {
     let bookedTour: BookedTour
+    let tour: Tour
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
@@ -26,6 +27,7 @@ struct BookedTourOverviewView: View {
                     Image("tour_guide")
                         .resizable()
                         .frame(width: 100, height: 100, alignment: .center)
+                        .padding(.trailing)
                     
                     VStack(alignment: .leading) {
                         Text("Your guide")
@@ -33,15 +35,17 @@ struct BookedTourOverviewView: View {
                             .foregroundColor(.init("color_font_secondary"))
                             .padding(.bottom, 3)
                         
-                        Text("Name: Arjan Postman")
+                        Text("Name: \(tour.guideName)")
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 0.5)
                         
-                        Text("Specialities: Knows everything about the forest")
+                        Text("Specialities: \(tour.guideSpecialty)")
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                     }
+                    
+                    Spacer()
                 }
                 .padding()
                 .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .center)
@@ -54,6 +58,7 @@ struct BookedTourOverviewView: View {
                         .resizable()
                         .frame(width: 100, height: 100, alignment: .center)
                         .foregroundColor(.init("color_green"))
+                        .padding(.trailing)
                     
                     VStack(alignment: .leading) {
                         Text("Tour info")
@@ -61,17 +66,17 @@ struct BookedTourOverviewView: View {
                             .foregroundColor(.init("color_font_secondary"))
                             .padding(.bottom, 3)
                         
-                        Text("Name: Your Name")
+                        Text("Name: \(bookedTour.userName)")
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 0.5)
                         
-                        Text("Email: email@gmail.com")
+                        Text("Email: \(bookedTour.userEmail)")
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 0.5)
                         
-                        Text("Date: 10 October 2020 14:00 - 15:00")
+                        Text("Date: \(getTourDateTime(date: tour.dateTime))")
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 0.5)
@@ -80,6 +85,8 @@ struct BookedTourOverviewView: View {
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                     }
+                    
+                    Spacer()
                 }
                 .padding()
                 .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .center)
@@ -91,15 +98,26 @@ struct BookedTourOverviewView: View {
                 Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
                 }, label: {
-                    Text("Dismiss")
+                    Text("Cancel")
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
                 .frame(width: UIScreen.main.bounds.width * 0.5, height: 40, alignment: .center)
-                .background(Color.init("color_primary_accent"))
+                .background(Color.red)
                 .cornerRadius(10.0)
                 .padding()
             }
         }
     }
+}
+
+extension BookedTourOverviewView {
+    
+    func getTourDateTime(date: Date) -> String {
+        let date = date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd LLLL YYYY HH:mm"
+        return dateFormatter.string(from: date)
+    }
+    
 }

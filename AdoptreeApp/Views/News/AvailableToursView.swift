@@ -52,17 +52,17 @@ struct TourCellView: View {
                     .frame(width: 75, height: 75, alignment: .center)
                 
                 VStack(alignment: .leading) {
-                    Text("10 December 2020")
+                    Text(getTourDate(date: tour.dateTime))
                         .font(.body)
                         .foregroundColor(.init("color_font_primary"))
                         .padding(.bottom, 5)
                     
                     HStack {
-                        Text("14:00 - 15:00.")
+                        Text(getTourTime(date: tour.dateTime))
                             .font(.caption)
                             .foregroundColor(.init("color_font_secondary"))
                         
-                        Text("Haarlem")
+                        Text("\(tour.language)")
                             .font(.caption)
                             .foregroundColor(.init("color_font_secondary"))
                     }
@@ -74,5 +74,22 @@ struct TourCellView: View {
         .background(Color.white)
         .cornerRadius(12.0)
         .padding(.bottom, 5)
+    }
+}
+
+extension TourCellView {
+    
+    func getTourDate(date: Date) -> String {
+        let date = date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd LLLL YYYY"
+        return dateFormatter.string(from: date)
+    }
+    
+    func getTourTime(date: Date) -> String {
+        let date = date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        return dateFormatter.string(from: date)
     }
 }

@@ -14,12 +14,12 @@ struct StartingView: View {
     
     var body: some View {
     
-        if userViewModel.isAuthenticated || isGuest {
+        if userViewModel.isAuthenticated || userViewModel.isGuest {
             ContentView()
                 .transition(.move(edge: .trailing))
         }
         else {
-            LoginView(isGuest: $isGuest)
+            LoginView()
         }
         
     }

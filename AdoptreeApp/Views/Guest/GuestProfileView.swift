@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GuestProfileView: View {
+    @EnvironmentObject var userViewModel: UserViewModel
+    
     var body: some View {
         
         VStack {
@@ -28,14 +30,15 @@ struct GuestProfileView: View {
             
             
             List {
-                NavigationLink(
-                    destination: Text("Destination"),
-                    label: {
-                        Text("Log in")
-                    })
+                
+                Button(action: {
+                    self.userViewModel.isGuest.toggle()
+                }, label: {
+                    Text("Log in")
+                })
                 
                 NavigationLink(
-                    destination: Text("Destination"),
+                    destination: TreeSelectionView(),
                     label: {
                         Text("Adopt now")
                     })
@@ -46,8 +49,3 @@ struct GuestProfileView: View {
     }
 }
 
-struct GuestProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        GuestProfileView()
-    }
-}

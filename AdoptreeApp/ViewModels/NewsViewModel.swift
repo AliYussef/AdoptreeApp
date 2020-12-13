@@ -35,6 +35,7 @@ extension NewsViewModel {
         
         Publishers.CombineLatest3(contentRepository.getContents(using: contentUrlRequest), tourRepository.getTours(using: tourUrlRequest), userRepository.getBookedToursByUser(using: bookedTourUrlRequest))
             .sink(receiveValue: {contents, tours, bookedTours in
+                
                 switch(contents) {
                     case .failure(let error):
                         switch error {
@@ -99,17 +100,20 @@ extension NewsViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    print(urlError)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    print(decodingError)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    print(error)
                                     completion(.failure(.genericError(error)))
                             }
                     }
                     
                 }, receiveValue: {result in
-                    completion(.success(result))
                     self.bookedTours.append(result)
+                    completion(.success(result))
                 })
                 .store(in: &cancellables)
             

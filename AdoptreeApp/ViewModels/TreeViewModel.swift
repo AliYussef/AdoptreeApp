@@ -39,6 +39,7 @@ extension TreeViewModel {
         
         Publishers.CombineLatest(treeRepository.getTreeImages(using: imagesUrlRequest), forestRepository.getWildlife(using: wildlifeUrlRequest))
             .sink(receiveValue: { images, wildlife in
+            
                 switch(images) {
                     case .failure(let error):
                         switch error {
@@ -104,11 +105,12 @@ extension TreeViewModel {
                     self.isExpanded.append(false)
                 }
                 
-                self.trees.forEach({ tree in
-                    if let treeId = tree.assignedTree?.tree_id {
-                        self.getTreeImagesAndWildlife(from: tree.forestId, of: treeId)
-                    }
-                })
+                // to be called later
+//                self.trees.forEach({ tree in
+//                    if let treeId = tree.assignedTree?.tree_id {
+//                        self.getTreeImagesAndWildlife(from: tree.forestId, of: treeId)
+//                    }
+//                })
                 completion(.success(result))
             })
             .store(in: &cancellables)

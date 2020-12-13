@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import CodableWrappers
+
 
 struct Tour: Codable, Identifiable {
     let id: Int64
     let description: String
-    let dateTime: Date
+    var dateTime: Date
     let forestId: Int64
     let slots: Int8
     let language: String

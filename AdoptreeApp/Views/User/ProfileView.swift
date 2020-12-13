@@ -16,57 +16,61 @@ struct ProfileView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-                Circle()
-                    .frame(width: 150, height: 150, alignment: .center)
-                    .foregroundColor(.init("color_textfield"))
-                    .overlay(
-                        Image("profile")
-                            .resizable()
-                            .frame(width: 150, height: 150, alignment: .center)
-                    )
-                    .padding()
                 
-                Text("YOUR NAME")
-                    .font(.title2)
-                    .foregroundColor(.init("color_font_primary"))
-                    .padding(.bottom, 50)
-                
-                
-                List {
-                    NavigationLink(
-                        destination: ContractView(),
-                        label: {
-                            Text("Your contract")
-                        })
+                if userViewModel.isAuthenticated {
+                    Circle()
+                        .frame(width: 150, height: 150, alignment: .center)
+                        .foregroundColor(.init("color_textfield"))
+                        .overlay(
+                            Image("profile")
+                                .resizable()
+                                .frame(width: 150, height: 150, alignment: .center)
+                        )
+                        .padding()
                     
-                    NavigationLink(
-                        destination: ChangeEmailView(),
-                        label: {
-                            Text("Change email address")
-                        })
+                    Text("YOUR NAME")
+                        .font(.title2)
+                        .foregroundColor(.init("color_font_primary"))
+                        .padding(.bottom, 50)
                     
-                    NavigationLink(
-                        destination: ChangePasswordView(),
-                        label: {
-                            Text("Chnage password")
-                        })
                     
-                    NavigationLink(
-                        destination: DeleteAccountView(),
-                        label: {
-                            Text("Delete your account")
-                                .foregroundColor(.red)
+                    List {
+                        NavigationLink(
+                            destination: ContractView(),
+                            label: {
+                                Text("Your contract")
+                            })
+                        
+                        NavigationLink(
+                            destination: ChangeEmailView(),
+                            label: {
+                                Text("Change email address")
+                            })
+                        
+                        NavigationLink(
+                            destination: ChangePasswordView(),
+                            label: {
+                                Text("Chnage password")
+                            })
+                        
+                        NavigationLink(
+                            destination: DeleteAccountView(),
+                            label: {
+                                Text("Delete your account")
+                                    .foregroundColor(.red)
+                            })
+                        
+                        Button(action: {
+                            // self.userViewModel.logout()
+                            self.userViewModel.isAuthenticated = false
+                        }, label: {
+                            Text("Log out")
                         })
-                    
-                    Button(action: {
-                        // self.userViewModel.logout()
-                        self.userViewModel.isAuthenticated = false
-                    }, label: {
-                        Text("Log out")
-                    })
+                    }
+                    .listStyle(PlainListStyle())
+                } else {
+                    GuestProfileView()
                 }
-                .listStyle(PlainListStyle())
-                
             }
         }
     }

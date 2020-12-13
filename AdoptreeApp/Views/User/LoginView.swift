@@ -11,7 +11,7 @@ struct LoginView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @State private var username = ""
     @State private var password = ""
-    @Binding var isGuest: Bool
+   // @Binding var isGuest: Bool?
     
     var body: some View {
         NavigationView {
@@ -84,7 +84,7 @@ struct LoginView: View {
                     
                     Button(action: {
                         withAnimation {
-                            self.isGuest.toggle()
+                            self.userViewModel.isGuest.toggle()
                         }
                         
                     }, label: {

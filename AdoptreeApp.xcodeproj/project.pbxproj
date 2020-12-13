@@ -87,6 +87,7 @@
 		8995C6402583E7EA00ED5C03 /* TreeSignRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8995C63F2583E7EA00ED5C03 /* TreeSignRepository.swift */; };
 		899AA9C32579906E006293E1 /* GuestTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AA9C22579906E006293E1 /* GuestTimelineView.swift */; };
 		899AA9C625799207006293E1 /* GuestProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AA9C525799207006293E1 /* GuestProfileView.swift */; };
+		899B403525868BBA00D3BB6D /* CodableWrappers in Frameworks */ = {isa = PBXBuildFile; productRef = 899B403425868BBA00D3BB6D /* CodableWrappers */; };
 		89A65CE72582A55600A77407 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A65CE62582A55600A77407 /* NewsViewModel.swift */; };
 		89C354042577E342004C26FB /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C354032577E342004C26FB /* PrivacyPolicyView.swift */; };
 		89C354072577E351004C26FB /* OverTheAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C354062577E351004C26FB /* OverTheAppView.swift */; };
@@ -204,6 +205,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				898E39B225766DFB00A17A00 /* KeychainAccess in Frameworks */,
+				899B403525868BBA00D3BB6D /* CodableWrappers in Frameworks */,
 				898E39B625766E4F00A17A00 /* MultiSlider in Frameworks */,
 				6FCCB7B3A4D039F4A151E485 /* Pods_AdoptreeApp.framework in Frameworks */,
 			);
@@ -477,6 +479,7 @@
 			packageProductDependencies = (
 				898E39B125766DFB00A17A00 /* KeychainAccess */,
 				898E39B525766E4F00A17A00 /* MultiSlider */,
+				899B403425868BBA00D3BB6D /* CodableWrappers */,
 			);
 			productName = AdoptreeApp;
 			productReference = 89DE87FB2575BCD4006B9011 /* AdoptreeApp.app */;
@@ -508,6 +511,7 @@
 			packageReferences = (
 				898E39B025766DFB00A17A00 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				898E39B425766E4F00A17A00 /* XCRemoteSwiftPackageReference "MultiSlider" */,
+				899B403325868BBA00D3BB6D /* XCRemoteSwiftPackageReference "CodableWrappers" */,
 			);
 			productRefGroup = 89DE87FC2575BCD4006B9011 /* Products */;
 			projectDirPath = "";
@@ -876,6 +880,14 @@
 				kind = branch;
 			};
 		};
+		899B403325868BBA00D3BB6D /* XCRemoteSwiftPackageReference "CodableWrappers" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/GottaGetSwifty/CodableWrappers.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -888,6 +900,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 898E39B425766E4F00A17A00 /* XCRemoteSwiftPackageReference "MultiSlider" */;
 			productName = MultiSlider;
+		};
+		899B403425868BBA00D3BB6D /* CodableWrappers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 899B403325868BBA00D3BB6D /* XCRemoteSwiftPackageReference "CodableWrappers" */;
+			productName = CodableWrappers;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

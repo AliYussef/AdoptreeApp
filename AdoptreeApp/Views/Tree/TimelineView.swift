@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct TimelineView: View {
+    @EnvironmentObject var userViewModel: UserViewModel
     @ObservedObject var timelineViewModel: TimelineViewModel
+    @State private var selectedTree = 0
+    @State private var selectedDate = 0
     
     var sequestrationsMock: [Sequestration]? = [Sequestration(treeId: 1, sequestration: [0.989273]), Sequestration(treeId: 2, sequestration: [0.989273, 0.7126873])]
     
@@ -21,70 +24,63 @@ struct TimelineView: View {
         TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1606828056))]),
         TreeImage(tree_id: 2, images: [ImageDetail(id: 2, tree_id: 2, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
     ]
-    
-    var strengths = ["Mild", "Medium", "Mature"]
-    
-//    let trees = [
-//        Tree(id: 1, forestId: 1, productId: 1, health: 13, dateSeeded: nil, assignedTree: AssignedTree(user_id: 1, tree_id: 1, order_id: 1, created_at: Date(timeIntervalSince1970: 1604236155), expire_date: Date(timeIntervalSince1970: 1112400000), tree_name: "White oak", tree_color: "#9DA536FF"), latitude: "", longitude: ""),
-//
-//        Tree(id: 2, forestId: 2, productId: 2, health: 13, dateSeeded: nil, assignedTree: AssignedTree(user_id: 1, tree_id: 2, order_id: 2, created_at: Date(timeIntervalSince1970: 1601557755), expire_date: Date(timeIntervalSince1970: 1115424000), tree_name: "Tree", tree_color: "#3655a5"), latitude: "", longitude: "")
-//
-//    ]
-    
-    @State private var selectedTree = 0
-    @State private var selectedDate = 0
-    
+
     var body: some View {
         ZStack {
             Color.init("color_background")
                 .edgesIgnoringSafeArea(.all)
             
-            VStack {
-                HStack {
-                    Spacer()
-                    Picker(selection: $selectedTree, label: Label(
-                        title: { Text("Tree").foregroundColor(.black) },
-                        icon: { Image(systemName: "arrowtriangle.down.fill") }
-                    )) {
-                        ForEach(0 ..< timelineViewModel.treeTypeFilter.count) {
-                            Text("\(self.timelineViewModel.treeTypeFilter[$0].treeName)")
-                        }
-                    }
-                    .frame(width: UIScreen.main.bounds.width * 0.3, height: 40)
-                    .background(Color.white)
-                    .cornerRadius(12.0)
-                    .pickerStyle(MenuPickerStyle())
-                    .padding()
-                    
-                    Picker(selection: $selectedDate, label: Label(
-                        title: { Text("Date").foregroundColor(.black) },
-                        icon: { Image(systemName: "arrowtriangle.down.fill") }
-                    )) {
-                        
-                        ForEach(0 ..< timelineViewModel.datesFilter.count) {
-                            if getHumanReadableDate2(date: self.timelineViewModel.datesFilter[$0]) == "0001" {
-                                Text("All")
-                            } else {
-                                Text(getHumanReadableDate2(date: self.timelineViewModel.datesFilter[$0]))
+            if userViewModel.isAuthenticated {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Picker(selection: $selectedTree, label: Label(
+                            title: { Text("Tree").foregroundColor(.black) },
+                            icon: { Image(systemName: "arrowtriangle.down.fill") }
+                        )) {
+                            ForEach(0 ..< timelineViewModel.treeTypeFilter.count) {
+                                Text("\(self.timelineViewModel.treeTypeFilter[$0].treeName)")
                             }
                         }
+                        .frame(width: UIScreen.main.bounds.width * 0.3, height: 40)
+                        .background(Color.white)
+                        .cornerRadius(12.0)
+                        .pickerStyle(MenuPickerStyle())
+                        .padding()
+                        
+                        Picker(selection: $selectedDate, label: Label(
+                            title: { Text("Date").foregroundColor(.black) },
+                            icon: { Image(systemName: "arrowtriangle.down.fill") }
+                        )) {
+                            
+                            ForEach(0 ..< timelineViewModel.datesFilter.count) {
+                                if getHumanReadableDate2(date: self.timelineViewModel.datesFilter[$0]) == "0001" {
+                                    Text("All")
+                                } else {
+                                    Text(getHumanReadableDate2(date: self.timelineViewModel.datesFilter[$0]))
+                                }
+                            }
+                        }
+                        .frame(width: UIScreen.main.bounds.width * 0.3, height: 40)
+                        .background(Color.white)
+                        .cornerRadius(12.0)
+                        .pickerStyle(MenuPickerStyle())
+                        .padding()
+                        
+                        Spacer()
                     }
-                    .frame(width: UIScreen.main.bounds.width * 0.3, height: 40)
-                    .background(Color.white)
-                    .cornerRadius(12.0)
-                    .pickerStyle(MenuPickerStyle())
-                    .padding()
                     
-                    Spacer()
-                }
-                
-                ScrollView(.vertical, showsIndicators: false) {
-                    LazyVStack {
-                        generateTimelineCellViews()
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVStack {
+                            generateTimelineCellViews()
+                        }
                     }
                 }
+                .padding()
+            } else {
+                GuestTimelineView()
             }
-            .padding()
+           
         }
     }
 }
@@ -130,7 +126,7 @@ extension TimelineView {
 //
 //            return true
 //        })
-        print(timelineGrouping)
+        //print(timelineGrouping)
         
         return AnyView(
             VStack {

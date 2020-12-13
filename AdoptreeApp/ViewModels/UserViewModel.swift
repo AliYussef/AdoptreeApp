@@ -12,6 +12,7 @@ import KeychainAccess
 class UserViewModel: ObservableObject {
     static let shared = UserViewModel(userRepository: UserRepository())
     @Published var isAuthenticated: Bool = false
+    @Published var isGuest: Bool = false
     @Published var forgetPasswordToken: String = ""
     private let keyChain = Keychain()
     private var accessTokenKey = "accessToken"

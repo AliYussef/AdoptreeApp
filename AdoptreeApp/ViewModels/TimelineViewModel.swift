@@ -34,6 +34,7 @@ extension TimelineViewModel {
         
         Publishers.CombineLatest(telemetryRepository.getTelemetryByTree(using: telemetryUrlRequest), treeRepository.getTreeSequestraion(using: sequestrationUrlRequest))
             .sink(receiveValue: { telemetries, sequestrations in
+               
                 switch(telemetries) {
                     case .failure(let error):
                         switch error {

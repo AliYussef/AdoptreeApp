@@ -12,17 +12,45 @@ final class ApiClient {
     static let sharedApiClient = ApiClient()
     var number = 0
     
+    lazy var decoder: JSONDecoder = {
+        let dateNoTimeFormatter = DateFormatter()
+        dateNoTimeFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let isoDateFormatter = DateFormatter()
+        isoDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        let serverFullDateFormatter = DateFormatter()
+        serverFullDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .custom({ (decoder) -> Date in
+            let container = try decoder.singleValueContainer()
+            let dateStr = try container.decode(String.self)
+
+            let len = dateStr.count
+            var date: Date? = nil
+            if dateNoTimeFormatter.date(from: dateStr) != nil {
+                date = dateNoTimeFormatter.date(from: dateStr)
+            } else if isoDateFormatter.date(from: dateStr) != nil {
+                date = isoDateFormatter.date(from: dateStr)
+            } else {
+                date = serverFullDateFormatter.date(from: dateStr)
+            }
+            guard let date_ = date else {
+                throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot decode date string \(dateStr)")
+            }
+            return date_
+        })
+        return decoder
+    }()
+    
     private init() {}
 }
 
 extension ApiClient {
     
     func executeRequestWithResponseBody<ResponseType: Decodable>(using request: URLRequest) -> AnyPublisher<ResponseType, Error> {
-        let decoder = JSONDecoder()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        decoder.dateDecodingStrategy = .formatted(formatter)
-        
+
         return URLSession.shared.dataTaskPublisher(for: request)
             .tryMap { data, response -> Data in
                 //~= pattern match operator
@@ -33,17 +61,13 @@ extension ApiClient {
                 
                 return data
             }
-            .decode(type: ResponseType.self, decoder: decoder)
+            .decode(type: ResponseType.self, decoder: self.decoder)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    
+   
     func executeRequestsWithResponseBody<ResponseType: Decodable>(using request: URLRequest) -> AnyPublisher<Result<ResponseType, RequestError>, Never> {
-        let decoder = JSONDecoder()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        decoder.dateDecodingStrategy = .formatted(formatter)
-        
+
         return URLSession.shared.dataTaskPublisher(for: request)
             .tryMap { data, response -> Data in
                 
@@ -54,7 +78,7 @@ extension ApiClient {
                 
                 return data
             }
-            .decode(type: ResponseType.self, decoder: decoder)
+            .decode(type: ResponseType.self, decoder: self.decoder)
             .map {
                 .success($0)
             }
