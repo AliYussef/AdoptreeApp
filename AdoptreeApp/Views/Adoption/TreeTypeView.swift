@@ -47,7 +47,7 @@ struct TreeTypeView: View {
                             .background(Color.init("color_primary_accent"))
                             .cornerRadius(10.0)
                             
-                            NavigationLink(destination: TreeInfoView())
+                            NavigationLink(destination: TreeInfoView(tree: treeProduct))
                             {
                                 Label("Tree info", systemImage: "info")
                                     .foregroundColor(.white)

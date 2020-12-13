@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Timeline: Codable {
+struct Timeline: Codable, Identifiable {
+    var id = UUID()
     let treeId: Int64
     let type: String
     let reportedOn: Date

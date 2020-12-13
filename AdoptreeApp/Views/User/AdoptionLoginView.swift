@@ -111,6 +111,7 @@ struct AdoptionLoginView: View {
                                 print(success)
                                 if let paymentStatus = orderViewModel.order?.paymentStatus {
                                     if paymentStatus == PaymentStatus.paid.rawValue || paymentStatus == PaymentStatus.open.rawValue {
+                                        orderViewModel.products.removeAll()
                                         print("payment successfull")
                                         actionState = 1
                                     } else {

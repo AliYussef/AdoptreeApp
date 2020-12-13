@@ -57,7 +57,7 @@ struct GuestHomeView: View {
                                     .font(.caption)
                                     .foregroundColor(.init("color_font_secondary"))
                                 
-                                NavigationLink(destination: TreeSelectionView())
+                                NavigationLink(destination: TreeTypesView())
                                 {
                                     Text("Available trees")
                                         .font(.subheadline)

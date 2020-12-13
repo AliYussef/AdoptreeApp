@@ -90,6 +90,7 @@ struct SettingView: View {
                             actionSheet()
                         }, label: {
                             Text("Share this app")
+                                .foregroundColor(.black)
                         })
                         NavigationLink(
                             destination: Text("Destination"),

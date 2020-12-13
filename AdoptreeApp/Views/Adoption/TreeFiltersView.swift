@@ -55,9 +55,9 @@ struct TreeFiltersView: View {
                             outerTrackColor: .lightGray
                         )
                     }
-                    ForEach(ageValues, id: \.self) { v in
-                        Text("\(v)")
-                    }
+//                    ForEach(ageValues, id: \.self) { v in
+//                        Text("\(v)")
+//                    }
                     
                 })
             }.background(Color.init("color_background"))
