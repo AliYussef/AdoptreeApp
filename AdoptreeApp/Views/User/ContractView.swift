@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContractView: View {
+    
     var body: some View {
         ZStack {
             Color.init("color_background")
@@ -24,28 +25,28 @@ struct ContractView: View {
                 HStack {
                     Text("Tree Type")
                     Spacer()
-                    Text("Your Name")
+                    Text("White oak")
                         .foregroundColor(.init("color_font_secondary"))
                 }
                 
                 HStack {
-                    Text("Name")
+                    Text("Location")
                     Spacer()
-                    Text("Your Name")
+                    Text("Netherlands")
                         .foregroundColor(.init("color_font_secondary"))
                 }
                 
                 HStack {
-                    Text("Name")
+                    Text("Start date")
                     Spacer()
-                    Text("Your Name")
+                    Text("25-05-2020")
                         .foregroundColor(.init("color_font_secondary"))
                 }
                 
                 HStack {
-                    Text("Name")
+                    Text("End date")
                     Spacer()
-                    Text("Your Name")
+                    Text("24-05-2021")
                         .foregroundColor(.init("color_font_secondary"))
                 }
             }

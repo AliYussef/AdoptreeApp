@@ -11,15 +11,6 @@
         }
       },
       {
-        "package": "CodableWrappers",
-        "repositoryURL": "https://github.com/GottaGetSwifty/CodableWrappers.git",
-        "state": {
-          "branch": null,
-          "revision": "7a3d47aae497012b4fb2c723beb2a505e22268e5",
-          "version": "1.2.0"
-        }
-      },
-      {
         "package": "KeychainAccess",
         "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess.git",
         "state": {
@@ -35,24 +26,6 @@
           "branch": "swiftui",
           "revision": "a31f987c330dfb949f731427e90f6ffe5662db12",
           "version": null
-        }
-      },
-      {
-        "package": "Nimble",
-        "repositoryURL": "https://github.com/Quick/Nimble.git",
-        "state": {
-          "branch": null,
-          "revision": "f8657642dfdec9973efc79cc68bcef43a653a2bc",
-          "version": "8.0.2"
-        }
-      },
-      {
-        "package": "Quick",
-        "repositoryURL": "https://github.com/Quick/Quick.git",
-        "state": {
-          "branch": null,
-          "revision": "94df9b449508344667e5afc7e80f8bcbff1e4c37",
-          "version": "2.1.0"
         }
       },
       {

@@ -23,13 +23,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="F1C-uL-lvb">
-                                <rect key="frame" x="124" y="338.5" width="166" height="219"/>
+                                <rect key="frame" x="125.5" y="342" width="163" height="212"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_adoptiebos" translatesAutoresizingMaskIntoConstraints="NO" id="j6p-iJ-sag">
-                                        <rect key="frame" x="0.0" y="0.0" width="166" height="170"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="163" height="163"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ADOPTREE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YaS-jL-6zA">
-                                        <rect key="frame" x="5.5" y="182" width="155.5" height="37"/>
+                                        <rect key="frame" x="4" y="175" width="155.5" height="37"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="31"/>
                                         <color key="textColor" name="color_logo"/>
                                         <nil key="highlightedColor"/>
@@ -43,7 +43,9 @@
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="centerX" secondItem="obG-Y5-kRd" secondAttribute="centerX" id="5cz-MP-9tL"/>
                             <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" symbolic="YES" id="SfN-ll-jLj"/>
                             <constraint firstAttribute="bottom" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="20" id="Y44-ml-fuU"/>
+                            <constraint firstItem="F1C-uL-lvb" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="hCj-cS-TB2"/>
                             <constraint firstItem="F1C-uL-lvb" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="jrt-3w-IBC"/>
+                            <constraint firstItem="F1C-uL-lvb" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="rQP-Qd-tGZ"/>
                             <constraint firstItem="F1C-uL-lvb" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="wpR-T9-o4G"/>
                         </constraints>
                     </view>
@@ -54,7 +56,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icon_adoptiebos" width="166" height="170"/>
+        <image name="icon_adoptiebos" width="163" height="163"/>
         <namedColor name="color_background">
             <color red="0.97600001096725464" green="0.9570000171661377" blue="0.9179999828338623" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

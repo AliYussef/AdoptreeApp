@@ -37,9 +37,6 @@ struct AdoptreeAppApp: App {
                 
                 RootView().environmentObject(viewRouter).environmentObject(orderViewModel)
                     .environmentObject(notificationViewModel).environmentObject(userViewModel)
-                
-//                TimelineView(timelineViewModel: viewModelFactory.makeTimelineViewModel())
-                
             }
             .accentColor(.init("color_primary_accent"))
         }

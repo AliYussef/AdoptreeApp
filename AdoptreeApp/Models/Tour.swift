@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import CodableWrappers
-
 
 struct Tour: Codable, Identifiable {
     let id: Int64
