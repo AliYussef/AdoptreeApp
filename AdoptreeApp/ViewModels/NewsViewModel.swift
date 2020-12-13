@@ -127,7 +127,7 @@ extension NewsViewModel {
     
     func cancelBookedTour(using bookedTourId: Int64, completion: @escaping (Result<HTTPURLResponse, RequestError>) -> Void) {
         
-        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .bookedtourById(bookedTourId), using: .delete)
+        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .bookedtourByIdDelete(bookedTourId), using: .delete)
         
         tourRepository.cancelBookedTour(using: urlRequest)
             .sink(receiveCompletion: {result in
@@ -141,6 +141,13 @@ extension NewsViewModel {
                         }
                 }
             }, receiveValue: {result in
+                
+//                guard let httpResponse = result as? HTTPURLResponse,
+//                      200...299 ~= httpResponse.statusCode else {
+//                    print(result)
+//                    return
+//                }
+                self.bookedTours.removeAll(where: {$0.id == bookedTourId})
                 completion(.success(result))
             })
             .store(in: &cancellables)

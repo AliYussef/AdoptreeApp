@@ -81,7 +81,7 @@ struct NewsView: View {
                                         ForEach(newsViewModel.tours) { tour in
                                             if tour.id == bookedTour.tourId {
                                                 NavigationLink(
-                                                    destination: BookedTourOverviewView(bookedTour: bookedTour, tour: tour),
+                                                    destination: BookedTourOverviewView(newsViewModel: newsViewModel, bookedTour: bookedTour, tour: tour),
                                                     label: {
                                                         VStack(alignment: .leading) {
                                                             Text(getTourDate(date: tour.dateTime))

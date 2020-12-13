@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct BookedTourOverviewView: View {
+    @ObservedObject var newsViewModel: NewsViewModel
     let bookedTour: BookedTour
     let tour: Tour
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State private var showingAlert = false
+    @State private var showingAlertConfirm = false
+    @State private var message = ""
     
     var body: some View {
         ZStack {
@@ -92,11 +96,18 @@ struct BookedTourOverviewView: View {
                 .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .center)
                 .background(Color.white)
                 .cornerRadius(12.0)
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text("Tour booking"), message: Text("\(message)"), dismissButton: .default(Text("Ok")) {
+                        self.presentationMode.wrappedValue.dismiss()
+                    })
+                }
                 
                 Spacer()
                 
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
+                    message = "Are you sure about canceling your tour?"
+                    showingAlertConfirm.toggle()
+                    print(showingAlertConfirm)
                 }, label: {
                     Text("Cancel")
                         .font(.subheadline)
@@ -106,6 +117,24 @@ struct BookedTourOverviewView: View {
                 .background(Color.red)
                 .cornerRadius(10.0)
                 .padding()
+                .alert(isPresented: $showingAlertConfirm) {
+                    Alert(title: Text("Tour canceling"), message: Text("\(message)"), primaryButton: .default(Text("Yes")){
+                        if let bookedTourId = bookedTour.id {
+                            newsViewModel.cancelBookedTour(using: bookedTourId) { result in
+                                switch (result) {
+                                    case .failure(_):
+                                        self.message = "An error occurred"
+                                        self.showingAlert.toggle()
+                                    case .success(_):
+                                        self.message = "Your tour has been canceled"
+                                        self.showingAlert.toggle()
+                                }
+                            }
+                        }
+                    },secondaryButton: .cancel(Text("No")))
+                }
+            
+                
             }
         }
     }

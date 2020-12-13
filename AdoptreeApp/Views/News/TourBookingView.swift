@@ -11,11 +11,11 @@ struct TourBookingView: View {
     @ObservedObject var newsViewModel: NewsViewModel
     let tour: Tour
     @State var bookedTour: BookedTour?
-    @State private var firstName = ""
-    @State private var lastName = ""
+    @State private var fullName = ""
     @State private var email = ""
     @State private var availableSlotsIndex = 0
     @State private var showingAlert = false
+    @State private var showingAlertInput = false
     @State private var message = ""
     @State var isTryingToBook: Bool = false
     @State var wasBookingSuccessfull: Bool = false
@@ -58,8 +58,7 @@ struct TourBookingView: View {
                                 Text("Fill in your information")
                                     .foregroundColor(.init("color_font_primary"))
                             }, content: {
-                                TextField("First name", text: $firstName)
-                                TextField("Last name", text: $lastName)
+                                TextField("First name", text: $fullName)
                                 TextField("Email", text: $email)
                                 Picker(selection: $availableSlotsIndex, label: Text("Number of guests (including you)").font(.subheadline)) {
                                     ForEach(0 ..< Int(tour.slots)) { num in
@@ -70,22 +69,27 @@ struct TourBookingView: View {
                         }.background(Color.init("color_background"))
                         .padding(.top, 50)
                     }
+                    .alert(isPresented: $showingAlertInput) {
+                        Alert(title: Text("Tour booking"), message: Text("\(message)"), dismissButton: .default(Text("Ok")))
+                    }
                     
                     // should lead to BookedTourOverviewView()
                     Button(action: {
-                        isTryingToBook.toggle()
-                        self.newsViewModel.bookTour(using: tour) { result in
-                            switch (result) {
-                                case .failure(_):
-                                    self.message = "An error occurred"
-                                    self.showingAlert.toggle()
-                                case .success(let result):
-                                    self.bookedTour = result
-                                    self.message = "Great! Your tour has been booked"
-                                    self.showingAlert.toggle()
-                            }
-                            
+                        if validateInput() {
                             isTryingToBook.toggle()
+                            self.newsViewModel.bookTour(using: tour) { result in
+                                switch (result) {
+                                    case .failure(_):
+                                        self.message = "An error occurred"
+                                        self.showingAlert.toggle()
+                                    case .success(let result):
+                                        self.bookedTour = result
+                                        self.message = "Great! Your tour has been booked"
+                                        self.showingAlert.toggle()
+                                }
+                                
+                                isTryingToBook.toggle()
+                            }
                         }
                     }, label: {
                         Text("Confirm")
@@ -101,6 +105,7 @@ struct TourBookingView: View {
                             self.wasBookingSuccessfull.toggle()
                         })
                     }
+                  
                     
                 }
                 
@@ -110,9 +115,21 @@ struct TourBookingView: View {
             }
         } else {
             if let bookedTour = bookedTour {
-                BookedTourOverviewView(bookedTour: bookedTour, tour: tour)
+                BookedTourOverviewView(newsViewModel: newsViewModel, bookedTour: bookedTour, tour: tour)
             }
         }
     }
 }
 
+extension TourBookingView {
+    
+    func validateInput() -> Bool {
+        if fullName.count < 3 || email.count < 3 {
+            message = "Please fill in all fields!"
+            showingAlertInput.toggle()
+            return false
+        }
+        
+        return true
+    }
+}

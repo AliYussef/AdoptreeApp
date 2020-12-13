@@ -10,6 +10,7 @@ import Foundation
 enum ApiEndPoint: CustomStringConvertible {
     case bookedtourById(Int64)
     case bookedtour
+    case bookedtourByIdDelete(Int64)
     case categoryById(Int64)
     case category
     case contentById(Int64)
@@ -61,6 +62,8 @@ enum ApiEndPoint: CustomStringConvertible {
                 return "user/\(id)/bookedtours"
             case .bookedtour:
                 return "bookedtour"
+            case .bookedtourByIdDelete(let id):
+                return "bookedtour/\(id)"
             case .categoryById(let id):
                 return "category/\(id)"
             case .category:
