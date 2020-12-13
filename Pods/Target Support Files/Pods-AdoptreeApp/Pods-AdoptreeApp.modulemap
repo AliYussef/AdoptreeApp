@@ -1,0 +1,6 @@
+framework module Pods_AdoptreeApp {
+  umbrella header "Pods-AdoptreeApp-umbrella.h"
+
+  export *
+  module * { export * }
+}

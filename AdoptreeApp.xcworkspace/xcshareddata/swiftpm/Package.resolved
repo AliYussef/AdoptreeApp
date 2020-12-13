@@ -1,0 +1,43 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "AvailableHapticFeedback",
+        "repositoryURL": "https://github.com/yonat/AvailableHapticFeedback",
+        "state": {
+          "branch": null,
+          "revision": "f9ae6d54af1fb06fff0ddb16246091c6de22f989",
+          "version": "1.0.2"
+        }
+      },
+      {
+        "package": "KeychainAccess",
+        "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess.git",
+        "state": {
+          "branch": null,
+          "revision": "654d52d30f3dd4592e944c3e0bccb53178c992f6",
+          "version": "4.2.1"
+        }
+      },
+      {
+        "package": "MultiSlider",
+        "repositoryURL": "https://github.com/yonat/MultiSlider.git",
+        "state": {
+          "branch": "swiftui",
+          "revision": "a31f987c330dfb949f731427e90f6ffe5662db12",
+          "version": null
+        }
+      },
+      {
+        "package": "SweeterSwift",
+        "repositoryURL": "https://github.com/yonat/SweeterSwift",
+        "state": {
+          "branch": null,
+          "revision": "783afac9c3492e905ab3f5afea4069a737edfc40",
+          "version": "1.1.4"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
