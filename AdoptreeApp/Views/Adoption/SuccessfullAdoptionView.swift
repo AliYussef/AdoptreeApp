@@ -37,6 +37,9 @@ struct SuccessfullAdoptionView: View {
                 Spacer()
                 
                 Button(action: {
+                    if self.userViewModel.isGuest {
+                        self.userViewModel.isGuest.toggle()
+                    }
                     self.userViewModel.isAuthenticated = true
                 }, label: {
                     Text("Follow your tree")
