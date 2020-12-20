@@ -25,3 +25,8 @@ struct TimelineTree {
     let treeColor: String
     let adoptedDate: Date
 }
+
+struct TimelineFilter {
+    let treeId: Int64
+    let treeName: String
+}

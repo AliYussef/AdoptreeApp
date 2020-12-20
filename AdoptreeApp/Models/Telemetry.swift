@@ -8,8 +8,8 @@
 import Foundation
 
 struct Telemetry: Codable, Identifiable {
-    let id: Int64
-    let treeId: Int64
+    let id: String
+    let treeId: String
     let reports: [Report]
 }
 

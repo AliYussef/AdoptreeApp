@@ -17,7 +17,7 @@ struct StartingView: View {
         if userViewModel.isAuthenticated || userViewModel.isGuest {
             ContentView()
                 .transition(.move(edge: .trailing))
-        }
+        } 
         else {
             LoginView()
         }

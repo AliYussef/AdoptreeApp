@@ -31,6 +31,7 @@ struct ContentView: View {
                     HomeView(treeViewModel: treeViewModel, timelineViewModel: timelineViewModel)
                         .navigationBarTitle("HOME", displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
+                        
                 }
                 .tabItem {
                     Image(systemName: "house.fill")
@@ -38,7 +39,7 @@ struct ContentView: View {
                 }
                 
                 NavigationView {
-                    TimelineView(timelineViewModel: timelineViewModel)
+                    TimelineView(timelineViewModel: timelineViewModel, treeViewModel: treeViewModel)
                         .navigationBarTitle("TIMELINE", displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     
@@ -81,7 +82,37 @@ struct ContentView: View {
                     Text("Settings")
                 }
             }
-            .accentColor(.init("color_primary_accent"))
+            .onAppear {
+                if treeViewModel.trees.isEmpty {
+                    treeViewModel.getAdoptedTrees(of: 1) { result in
+                        switch (result) {
+                            case .failure(let error):
+                                print(error)
+                            case .success(let success):
+                                //print("success")
+                                treeViewModel.trees = success
+                                for _ in treeViewModel.trees.indices {
+                                    treeViewModel.isExpanded.append(false)
+                                }
+                                //timelineViewModel.getTimeLineData(using: 1)
+                                if timelineViewModel.telemetries.isEmpty {
+                                    treeViewModel.trees.forEach({ tree in
+                                        if let treeId = tree.assignedTree?.tree_id {
+                                            timelineViewModel.getTimeLineData(using: treeId)
+                                        }
+                                    })
+                                }
+                                
+                                if timelineViewModel.datesFilter.isEmpty {
+                                    timelineViewModel.createTimelineTreeObject(trees: treeViewModel.trees)
+                                    timelineViewModel.createTimelineDateFilter(trees: treeViewModel.trees)
+                                }
+                                
+                        }
+                    }
+                }
+            }
+            //.accentColor(.init("color_primary_accent"))
             
         }
     }

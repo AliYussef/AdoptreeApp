@@ -10,21 +10,24 @@ import SwiftUI
 struct TimelineView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @ObservedObject var timelineViewModel: TimelineViewModel
+    @ObservedObject var treeViewModel: TreeViewModel
     @State private var selectedTree = 0
     @State private var selectedDate = 0
+    @State private var selectedTreeLabel = ""
+    @State private var selectedDateLabel = ""
     
-    var sequestrationsMock: [Sequestration]? = [Sequestration(treeId: 1, sequestration: [0.989273]), Sequestration(treeId: 2, sequestration: [0.989273, 0.7126873])]
-    
-    var telemetries = [
-        Telemetry(id: 1, treeId: 1, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1606828056), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1605186555), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
-        Telemetry(id: 2, treeId: 2, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1602508155), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1607778456), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
-    ]
+//    var sequestrationsMock: [Sequestration]? = [Sequestration(treeId: 1, sequestration: [0.989273]), Sequestration(treeId: 2, sequestration: [0.989273, 0.7126873])]
+//
+//    var telemetries = [
+//        Telemetry(id: "1", treeId: "1", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1606828056), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1605186555), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
+//        Telemetry(id: "2", treeId: "2", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1602508155), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1607778456), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
+//    ]
     
     var images = [
         TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1606828056))]),
         TreeImage(tree_id: 2, images: [ImageDetail(id: 2, tree_id: 2, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
     ]
-
+    
     var body: some View {
         ZStack {
             Color.init("color_background")
@@ -34,45 +37,63 @@ struct TimelineView: View {
                 VStack {
                     HStack {
                         Spacer()
-                        Picker(selection: $selectedTree, label: Label(
-                            title: { Text("Tree").foregroundColor(.black) },
-                            icon: { Image(systemName: "arrowtriangle.down.fill") }
-                        )) {
-                            ForEach(0 ..< timelineViewModel.treeTypeFilter.count) {
-                                Text("\(self.timelineViewModel.treeTypeFilter[$0].treeName)")
-                            }
-                        }
-                        .frame(width: UIScreen.main.bounds.width * 0.3, height: 40)
-                        .background(Color.white)
-                        .cornerRadius(12.0)
-                        .pickerStyle(MenuPickerStyle())
-                        .padding()
                         
-                        Picker(selection: $selectedDate, label: Label(
-                            title: { Text("Date").foregroundColor(.black) },
-                            icon: { Image(systemName: "arrowtriangle.down.fill") }
-                        )) {
-                            
-                            ForEach(0 ..< timelineViewModel.datesFilter.count) {
-                                if getHumanReadableDate2(date: self.timelineViewModel.datesFilter[$0]) == "0001" {
-                                    Text("All")
-                                } else {
-                                    Text(getHumanReadableDate2(date: self.timelineViewModel.datesFilter[$0]))
+                        if timelineViewModel.areFiltersDataReady {
+                            Picker(selection: $selectedTree, label: Label(
+                                title: { Text("\(selectedTreeLabel.isEmpty ? "Tree" : selectedTreeLabel)").foregroundColor(.black) },
+                                icon: { Image(systemName: "arrowtriangle.down.fill") }
+                            )) {
+                                ForEach(0 ..< timelineViewModel.treeTypeFilter.count) {
+                                    Text("\(self.timelineViewModel.treeTypeFilter[$0].treeName)")
                                 }
                             }
+                            .onChange(of: selectedTree, perform: { value in
+                                selectedTreeLabel = timelineViewModel.treeTypeFilter[value].treeName
+                            })
+                            .frame(width: UIScreen.main.bounds.width * 0.3, height: 40)
+                            .background(Color.white)
+                            .cornerRadius(12.0)
+                            .pickerStyle(MenuPickerStyle())
+                            .padding()
+                            
+                            Picker(selection: $selectedDate, label: Label(
+                                title: { Text("\(selectedDateLabel.isEmpty ? "Date" : selectedDateLabel)").foregroundColor(.black) },
+                                icon: { Image(systemName: "arrowtriangle.down.fill") }
+                            )) {
+                                
+                                ForEach(0 ..< timelineViewModel.datesFilter.count) {
+                                    if getHumanReadableYear(date: self.timelineViewModel.datesFilter[$0]) == "0001" {
+                                        Text("All")
+                                    } else {
+                                        Text(getHumanReadableYear(date: self.timelineViewModel.datesFilter[$0]))
+                                    }
+                                }
+                            }
+                            .onChange(of: selectedDate, perform: { value in
+                                if let year = timelineViewModel.datesFilter[value].year {
+                                    selectedDateLabel = String(year)
+                                } else {
+                                    selectedDateLabel = "All"
+                                }
+                            })
+                            .frame(width: UIScreen.main.bounds.width * 0.3, height: 40)
+                            .background(Color.white)
+                            .cornerRadius(12.0)
+                            .pickerStyle(MenuPickerStyle())
+                            .padding()
                         }
-                        .frame(width: UIScreen.main.bounds.width * 0.3, height: 40)
-                        .background(Color.white)
-                        .cornerRadius(12.0)
-                        .pickerStyle(MenuPickerStyle())
-                        .padding()
                         
                         Spacer()
                     }
                     
                     ScrollView(.vertical, showsIndicators: false) {
                         LazyVStack {
-                            generateTimelineCellViews()
+                            if !timelineViewModel.telemetries.isEmpty {
+                                generateTimelineCellViews()
+                            } else {
+                                ProgressView("Loading timeline...")
+                            }
+                            
                         }
                     }
                 }
@@ -80,7 +101,7 @@ struct TimelineView: View {
             } else {
                 GuestTimelineView()
             }
-           
+            
         }
     }
 }
@@ -88,96 +109,141 @@ struct TimelineView: View {
 extension TimelineView {
     
     func generateTimelineCellViews() -> AnyView {
-        
-        var resports:[Timeline] = []
-        telemetries.forEach({ telemetry in
-            var index = 0
-            telemetry.reports.forEach({ report in
-                if index < (sequestrationsMock?.filter({$0.treeId == telemetry.treeId}).first?.sequestration.count)! {
+
+        var reports:[Timeline] = []
+        if !timelineViewModel.timelineTreeDic.isEmpty {
+            timelineViewModel.telemetries.forEach({ telemetry in
+                var index = 0
+                telemetry.reports.forEach({ report in
+                    if index < (timelineViewModel.sequestrations.filter({$0.treeId == Int64(telemetry.treeId)}).first?.sequestration.count)! {
+                        
+                        reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: timelineViewModel.sequestrations.filter({$0.treeId == Int64(telemetry.treeId)}).first?.sequestration[index], image_blobname: nil))
+                        
+                    } else {
+                        reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: nil, image_blobname: nil))
+                    }
                     
-                    resports.append(Timeline(treeId: telemetry.treeId, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: sequestrationsMock?.filter({$0.treeId == telemetry.treeId}).first?.sequestration[index], image_blobname: nil))
+                    //timelineViewModel.datesFilter.append(Calendar.current.dateComponents([.year], from: report.reportedOn))
                     
-                } else {
-                    resports.append(Timeline(treeId: telemetry.treeId, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: nil, image_blobname: nil))
-                }
+                    index += 1
+                })
+//                if let adoptedDate = timelineViewModel.timelineTreeDic[Int64(telemetry.treeId)!]?.adoptedDate {
+//                    reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: "tree", reportedOn: adoptedDate, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: nil))
+//                }
                 
-                timelineViewModel.datesFilter.append(Calendar.current.dateComponents([.year], from: report.reportedOn))
-                
-                index += 1
             })
-            if let adoptedDate = timelineViewModel.timelineTreeDic[telemetry.treeId]?.adoptedDate {
-                resports.append(Timeline(treeId: telemetry.treeId, type: "tree", reportedOn: adoptedDate, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: nil))
-            }
-        })
+            
+            timelineViewModel.timelineTreeDic.forEach({ tree in
+                reports.append(Timeline(treeId: tree.key, type: "tree", reportedOn: tree.value.adoptedDate, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: nil))
+            })
+        }
+        
         
         images.forEach({ image in
             image.images.forEach({ imageDetail in
-                resports.append(Timeline(treeId: imageDetail.tree_id, type: "image", reportedOn: imageDetail.createdAt, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: imageDetail.image_blobname))
+                reports.append(Timeline(treeId: imageDetail.tree_id, type: "image", reportedOn: imageDetail.createdAt, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: imageDetail.image_blobname))
             })
         })
         
-        let timelineGrouping1 = Dictionary(grouping: resports, by: {Calendar.current.dateComponents([.year, .month], from: $0.reportedOn)}).sorted(by: {($0.key.year! > $1.key.year!)})
-        let timelineGrouping = timelineGrouping1.sorted(by: {($0.key.month! > $1.key.month!) && ($0.key.year! > $1.key.year!)})
-           // {($0.key.year! > $1.key.year!) && ($0.key.month! > $1.key.month!)}
-//        timelineGrouping.filter({
-//            if selectedDate > 0 {
-//                return $0.key.year! == timelineViewModel.datesFilter[selectedDate].year
-//            }
-//
-//            return true
-//        })
+        let timelineFirstGrouping = Dictionary(grouping: reports, by: {Calendar.current.dateComponents([.year, .month], from: $0.reportedOn)}).sorted(by: {($0.key.year! > $1.key.year!)})
+        let timelineGrouping = timelineFirstGrouping.sorted(by: {($0.key.month! > $1.key.month!) && ($0.key.year! > $1.key.year!)})
+        // {($0.key.year! > $1.key.year!) && ($0.key.month! > $1.key.month!)}
+        //        timelineGrouping.filter({
+        //            if selectedDate > 0 {
+        //                return $0.key.year! == timelineViewModel.datesFilter[selectedDate].year
+        //            }
+        //
+        //            return true
+        //        })
         //print(timelineGrouping)
-        
+        let reportsSorted = reports.sorted(by: {$0.reportedOn > $1.reportedOn})
         return AnyView(
             VStack {
-                ForEach(Array(zip(timelineGrouping.indices, timelineGrouping.filter({
+//                ForEach(Array(zip(timelineGrouping.indices, timelineGrouping.filter({
+//                    if selectedDate > 0 {
+//                        return $0.key.year! == timelineViewModel.datesFilter[selectedDate].year
+//                    }
+//
+//                    return true
+//                }).enumerated())), id: \.0) { index, tree in
+//
+//                    Text("\(getHumanReadableDate(date: tree.element.key))")
+//
+//                    ForEach(Array(zip(tree.element.value.indices, tree.element.value.filter({
+//                        if selectedTree > 0 {
+//                            return $0.treeId == timelineViewModel.treeTypeFilter[selectedTree].treeId
+//                        }
+//                        return true
+//                    }))), id: \.0) { index, item in
+//
+//                        if item.type == "report" {
+//                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getTreeColor(treeId: item.treeId))
+//                        } else if item.type == "tree" {
+//                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "Adopted \(timelineViewModel.timelineTreeDic[item.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: item.treeId))
+//                        } else if item.type == "image" {
+//                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "New tree image", icon: Image(systemName: "photo"), treeColor: getTreeColor(treeId: item.treeId))
+//                        }
+//
+//                    }
+//                    Divider()
+//                        .frame(width: UIScreen.main.bounds.width * 0.9, height: .none)
+//                        .padding()
+//                }
+                
+//                var currentDate = Date()
+//                var nextDate = Date()
+                
+               
+                ForEach(Array(reportsSorted.filter({
                     if selectedDate > 0 {
-                        return $0.key.year! == timelineViewModel.datesFilter[selectedDate].year
+                        return Calendar.current.dateComponents([.year], from: $0.reportedOn).year == timelineViewModel.datesFilter[selectedDate].year
+                    }
+                    if selectedTree > 0 {
+                        return $0.treeId == timelineViewModel.treeTypeFilter[selectedTree].treeId
                     }
                     
                     return true
-                }).enumerated())), id: \.0) { index, tree in
+                }).enumerated()), id: \.1.id){ index, report in
+                    //var currentDate = report.reportedOn
                     
-                    Text("\(getHumanReadableDate(date: tree.element.key))")
-                    
-                    ForEach(Array(zip(tree.element.value.indices, tree.element.value.filter({
-                        if selectedTree > 0 {
-                            return $0.treeId == timelineViewModel.treeTypeFilter[selectedTree].treeId
+                    if index > 0 {
+                        if Calendar.current.dateComponents([.year, .month], from: report.reportedOn) != Calendar.current.dateComponents([.year, .month], from: reportsSorted[index - 1].reportedOn) {
+                            Text("\(getHumanReadableDate(date: report.reportedOn))")
+                                .padding(.top)
                         }
-                        return true
-                    }))), id: \.0) { index, item in
-                        
-                        if item.type == "report" {
-                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getTreeColor(treeId: item.treeId))
-                        } else if item.type == "tree" {
-                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "Adopted \(timelineViewModel.timelineTreeDic[item.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: item.treeId))
-                        } else if item.type == "image" {
-                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "New tree image", icon: Image(systemName: "photo"), treeColor: getTreeColor(treeId: item.treeId))
-                        }
-                        
+                    } else {
+                        Text("\(getHumanReadableDate(date: report.reportedOn))")
+                            .padding(.top)
                     }
-                    Divider()
-                        .frame(width: UIScreen.main.bounds.width * 0.9, height: .none)
-                        .padding()
+                    
+                    if report.type == "report" {
+                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getTreeColor(treeId: report.treeId))
+                    } else if report.type == "tree" {
+                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Adopted \(timelineViewModel.timelineTreeDic[report.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: report.treeId))
+                    } else if report.type == "image" {
+                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "New tree image", icon: Image(systemName: "photo"), treeColor: getTreeColor(treeId: report.treeId))
+                    }
+                    
+                    
                 }
+                
             }
         )
     }
     
-    func getHumanReadableDate(date: DateComponents) -> String {
-        //convert date to month name
-        let now = Calendar.current.date(from: date)!
+    func getHumanReadableDate(date: Date) -> String {
+        let dateComponents = Calendar.current.dateComponents([.year, .month], from: date)
+        let extractedDate = Calendar.current.date(from: dateComponents)!
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "LLLL YYYY"
-        return dateFormatter.string(from: now)
+        return dateFormatter.string(from: extractedDate)
     }
     
-    func getHumanReadableDate2(date: DateComponents) -> String {
-        //convert date to month name
-        let now = Calendar.current.date(from: date)!
+    func getHumanReadableYear(date: DateComponents) -> String {
+        let extractedDate = Calendar.current.date(from: date)!
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY"
-        return dateFormatter.string(from: now)
+        return dateFormatter.string(from: extractedDate)
     }
     
     func getDay(date: Date) -> String {

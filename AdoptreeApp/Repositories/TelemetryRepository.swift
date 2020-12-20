@@ -9,12 +9,12 @@ import Foundation
 import Combine
 
 protocol TelemetryRepositoryProtocol {
-    func getTelemetryByTree(using urlRequest: URLRequest) -> AnyPublisher<Result<[Telemetry], RequestError>, Never>
+    func getTelemetryByTree(using urlRequest: URLRequest) -> AnyPublisher<Result<Telemetry, RequestError>, Never>
 }
 
 class TelemetryRepository: TelemetryRepositoryProtocol {
     
-    func getTelemetryByTree(using urlRequest: URLRequest) -> AnyPublisher<Result<[Telemetry], RequestError>, Never> {
+    func getTelemetryByTree(using urlRequest: URLRequest) -> AnyPublisher<Result<Telemetry, RequestError>, Never> {
         return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
     }
     

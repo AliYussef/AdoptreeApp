@@ -8,8 +8,8 @@
 import Foundation
 
 struct Content: Codable, Identifiable{
-    let id: Int64
-    let contentId: Int64
+    let id: String
+    let contentId: String
     let createdOn: Date
     let contentType: Int8
     let title: String

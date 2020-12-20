@@ -14,9 +14,9 @@ struct HomeView: View {
     @ObservedObject var timelineViewModel: TimelineViewModel
     
     var telemetry = [
-        Telemetry(id: 1, treeId: 1, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1111795200), temperature: -3, humidity: 90, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1113004800), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
-        Telemetry(id: 2, treeId: 2, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)]),
-        Telemetry(id: 3, treeId: 3, reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
+        Telemetry(id: "1", treeId: "1", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1111795200), temperature: -3, humidity: 90, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1113004800), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
+        Telemetry(id: "2", treeId: "2", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)]),
+        Telemetry(id: "3", treeId: "3", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
     ]
     
     var body: some View {
@@ -42,7 +42,7 @@ struct HomeView: View {
                                     isExpanded: $treeViewModel.isExpanded[index],
                                     content: {
                                         if let treeId = tree.assignedTree?.tree_id {
-                                            TreeView(tree: tree, telemetry: telemetry.filter({$0.treeId == treeId}).first?.reports.first ?? nil, sequestration: timelineViewModel.sequestrations.filter({$0.treeId == treeId}).first?.sequestration, treeImage: treeViewModel.treeImages.filter({$0.tree_id == treeId}).first, wildlife: treeViewModel.wildlifes.filter({$0.forestId == tree.forestId}).first?.wildlife)
+                                            TreeView(tree: tree, telemetry: telemetry.filter({Int64($0.treeId)! == treeId}).first?.reports.first ?? nil, sequestration: timelineViewModel.sequestrations.filter({$0.treeId == treeId}).first?.sequestration, treeImage: treeViewModel.treeImages.filter({$0.tree_id == treeId}).first, wildlife: treeViewModel.wildlifes.filter({$0.forestId == tree.forestId}).first?.wildlife)
                                         }
                                     },
                                     label: {

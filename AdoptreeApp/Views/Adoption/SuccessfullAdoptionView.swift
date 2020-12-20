@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SuccessfullAdoptionView: View {
     @EnvironmentObject var userViewModel: UserViewModel
+    @State private var actionState: Int? = 0
     
     var body: some View {
         ZStack {
@@ -36,11 +37,23 @@ struct SuccessfullAdoptionView: View {
                 
                 Spacer()
                 
+                NavigationLink(destination: HomeView(treeViewModel: ViewModelFactory().makeTreeViewModel(), timelineViewModel: ViewModelFactory().makeTimelineViewModel())
+                                .navigationBarTitle("HOME", displayMode: .inline)
+                                .navigationBarBackButtonHidden(true)
+                               , tag: 1, selection: $actionState) {
+                    EmptyView()
+                }
+                
                 Button(action: {
                     if self.userViewModel.isGuest {
                         self.userViewModel.isGuest.toggle()
+                        self.userViewModel.isAuthenticated = true
+                    } else if self.userViewModel.isAuthenticated {
+                        actionState = 1
+                    } else {
+                        self.userViewModel.isAuthenticated = true
                     }
-                    self.userViewModel.isAuthenticated = true
+                    
                 }, label: {
                     Text("Follow your tree")
                         .font(.subheadline)

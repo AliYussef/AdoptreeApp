@@ -19,6 +19,9 @@ final class ApiClient {
         let isoDateFormatter = DateFormatter()
         isoDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         
+        let secondIsoDateFormatter = DateFormatter()
+        secondIsoDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ"
+        
         let serverFullDateFormatter = DateFormatter()
         serverFullDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         
@@ -33,6 +36,8 @@ final class ApiClient {
                 date = dateNoTimeFormatter.date(from: dateStr)
             } else if isoDateFormatter.date(from: dateStr) != nil {
                 date = isoDateFormatter.date(from: dateStr)
+            } else if secondIsoDateFormatter.date(from: dateStr) != nil {
+                date = secondIsoDateFormatter.date(from: dateStr)
             } else {
                 date = serverFullDateFormatter.date(from: dateStr)
             }
@@ -75,7 +80,7 @@ extension ApiClient {
                       200...299 ~= httpResponse.statusCode else {
                     throw URLError(.badServerResponse)
                 }
-                
+                //print("request: \(request), response: \(response)")
                 return data
             }
             .decode(type: ResponseType.self, decoder: self.decoder)

@@ -22,7 +22,7 @@ class NewsViewModel: ObservableObject {
         self.tourRepository = tourRepository
         self.userRepository = userRepository
         
-        getNewsViewData(of: 1)
+       // getNewsViewData(of: 1)
     }
 }
 

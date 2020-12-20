@@ -13,21 +13,25 @@ class TreeViewModel: ObservableObject {
     @Published var treeImages: [TreeImage] = []
     @Published var wildlifes: [WildlifeOutput] = []
     @Published var treeSign: TreeSign?
+    @Published var telemetries: [Telemetry] = []
+    @Published var sequestrations: [Sequestration] = []
     @Published var isExpanded: [Bool] = [true]
     private let treeRepository: TreeRepositoryProtocol
     private let userRepository: UserRepositoryProtocol
     private let contentRepository: ContentRepositoryProtocol
     private let forestRepository: ForestRepositoryProtocol
     private let treeSignRepository: TreeSignRepositoryProtocol
+    private let telemetryRepository: TelemetryRepositoryProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    init(treeRepository: TreeRepositoryProtocol, userRepository: UserRepositoryProtocol, contentRepository: ContentRepositoryProtocol, forestRepository: ForestRepositoryProtocol, treeSignRepository: TreeSignRepositoryProtocol) {
+    init(treeRepository: TreeRepositoryProtocol, userRepository: UserRepositoryProtocol, contentRepository: ContentRepositoryProtocol, forestRepository: ForestRepositoryProtocol, treeSignRepository: TreeSignRepositoryProtocol, telemetryRepository: TelemetryRepositoryProtocol) {
         self.treeRepository = treeRepository
         self.userRepository = userRepository
         self.contentRepository = contentRepository
         self.forestRepository = forestRepository
         self.treeSignRepository = treeSignRepository
-        getAdoptedTrees(of: 1) {_ in}
+        self.telemetryRepository = telemetryRepository
+        //getAdoptedTrees(of: 1) {_ in}
     }
 }
 
@@ -100,11 +104,14 @@ extension TreeViewModel {
                 }
                 
             }, receiveValue: {result in
-                self.trees = result
-                for _ in self.trees.indices {
-                    self.isExpanded.append(false)
-                }
                 
+               
+//                self.trees.forEach({tree in
+//                    if let treeId = tree.assignedTree?.tree_id {
+//                        self.getTimeLineData(using: treeId)
+//                    }
+//                })
+                //self.getTimeLineData(using: 1)
                 // to be called later
 //                self.trees.forEach({ tree in
 //                    if let treeId = tree.assignedTree?.tree_id {
@@ -112,6 +119,10 @@ extension TreeViewModel {
 //                    }
 //                })
                 completion(.success(result))
+//                self.trees = result
+//                for _ in self.trees.indices {
+//                    self.isExpanded.append(false)
+//                }
             })
             .store(in: &cancellables)
     }
@@ -241,4 +252,52 @@ extension TreeViewModel {
         return treeSign
     }
     
+}
+
+extension TreeViewModel {
+    func getTimeLineData(using treeId:Int64) {
+        let telemetryUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .telemetryById(treeId), using: .get)
+        let sequestrationUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .sequestration(treeId), using: .get)
+        
+        Publishers.CombineLatest(telemetryRepository.getTelemetryByTree(using: telemetryUrlRequest), treeRepository.getTreeSequestraion(using: sequestrationUrlRequest))
+            .sink(receiveValue: { telemetries, sequestrations in
+                
+                switch(telemetries) {
+                    case .failure(let error):
+                        print("telemetries")
+                        switch error {
+                            case .decodingError(let decodingError):
+                                
+                                print(decodingError)
+                            case .urlError(let urlError):
+                                print(urlError)
+                            default:
+                                print(error)
+                        }
+                        
+                    case .success(let telemetries):
+                        //since the response is array but there is always one element only
+                        //if let telemetry = telemetries.first {
+                        self.telemetries.append(telemetries)
+                    //}
+                }
+                
+                switch(sequestrations) {
+                    case .failure(let error):
+                        print("sequestrations")
+                        switch error {
+                            case .decodingError(let decodingError):
+                                print(decodingError)
+                            case .urlError(let urlError):
+                                print(urlError)
+                            default:
+                                print(error)
+                        }
+                        
+                    case .success(let sequestrations):
+                        self.sequestrations.append(Sequestration(treeId: treeId, sequestration: sequestrations))
+                }
+            })
+            .store(in: &cancellables)
+    }
 }

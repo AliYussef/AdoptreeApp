@@ -29,7 +29,7 @@ extension ViewModelFactory {
     //    }
     
     func makeTreeViewModel() -> TreeViewModel {
-        return TreeViewModel(treeRepository: treeRepository, userRepository: userRepository, contentRepository: contentRepository, forestRepository: forestRepository, treeSignRepository: treeSignRepository)
+        return TreeViewModel(treeRepository: treeRepository, userRepository: userRepository, contentRepository: contentRepository, forestRepository: forestRepository, treeSignRepository: treeSignRepository, telemetryRepository: telemetryRepository)
     }
     
     func makeTimelineViewModel() -> TimelineViewModel {
