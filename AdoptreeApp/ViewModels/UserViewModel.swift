@@ -26,7 +26,7 @@ class UserViewModel: ObservableObject {
     private init(userRepository: UserRepositoryProtocol) {
         self.userRepository = userRepository
         userDefaults = UserDefaults.standard
-        userShared = UserShared(id: nil, firstname: nil, lastname: nil, email: nil)
+        userShared = UserShared(id: nil, firstname: nil, lastname: nil, username: nil, email: nil)
         getUserSharedObject()
         // when starting the app to check if accessToken not equal to nil then set authenticated to true
         isAuthenticated = accessToken != nil

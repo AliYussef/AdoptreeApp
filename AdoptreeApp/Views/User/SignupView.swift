@@ -74,7 +74,7 @@ struct SignupView: View {
                             case .failure(_):
                                 break
                             case .success(let user):
-                                userViewModel.userShared = UserShared(id: user.id, firstname: user.firstname, lastname: user.lastname, email: user.email)
+                                userViewModel.userShared = UserShared(id: user.id, firstname: user.firstname, lastname: user.lastname, username: user.username, email: user.email)
                                 userViewModel.saveUserSharedObject()
                                 if let userId = user.id {
                                     let order = self.orderViewModel.createOrderObject(for: userId)
