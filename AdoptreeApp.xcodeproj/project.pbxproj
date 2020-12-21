@@ -10,6 +10,7 @@
 		6FCCB7B3A4D039F4A151E485 /* Pods_AdoptreeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A54C660EE5A0A57986562F /* Pods_AdoptreeApp.framework */; };
 		8918D3C4257C06AF00141DD9 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8918D3C3257C06AF00141DD9 /* ViewRouter.swift */; };
 		8918D3C7257C113400141DD9 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8918D3C6257C113400141DD9 /* RootView.swift */; };
+		891CFA6825901B2700FA0738 /* InputValidationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891CFA6725901B2700FA0738 /* InputValidationViewModel.swift */; };
 		894513E725850712004ACB28 /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894513E625850712004ACB28 /* Timeline.swift */; };
 		895D7A17257FCFA8009FF641 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */; };
 		8985E3FB257FF4C8006C2DA4 /* NotificationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8985E3FA257FF4C8006C2DA4 /* NotificationRepository.swift */; };
@@ -84,6 +85,10 @@
 		898E39F8257704B700A17A00 /* ChangeEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39F7257704B700A17A00 /* ChangeEmailView.swift */; };
 		898E39FB257704C600A17A00 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39FA257704C600A17A00 /* ChangePasswordView.swift */; };
 		898E39FE257704D400A17A00 /* DeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39FD257704D400A17A00 /* DeleteAccountView.swift */; };
+		898F64DB25900D970099227E /* ValidationPublishers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898F64DA25900D970099227E /* ValidationPublishers.swift */; };
+		898F64DF25900E030099227E /* Regex in Frameworks */ = {isa = PBXBuildFile; productRef = 898F64DE25900E030099227E /* Regex */; };
+		898F64E225900E3B0099227E /* InputValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898F64E125900E3B0099227E /* InputValidation.swift */; };
+		898F64E525900E8E0099227E /* ValidationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898F64E425900E8E0099227E /* ValidationModifier.swift */; };
 		8995C6402583E7EA00ED5C03 /* TreeSignRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8995C63F2583E7EA00ED5C03 /* TreeSignRepository.swift */; };
 		899AA9C32579906E006293E1 /* GuestTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AA9C22579906E006293E1 /* GuestTimelineView.swift */; };
 		899AA9C625799207006293E1 /* GuestProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AA9C525799207006293E1 /* GuestProfileView.swift */; };
@@ -105,6 +110,7 @@
 		02A54C660EE5A0A57986562F /* Pods_AdoptreeApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdoptreeApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8918D3C3257C06AF00141DD9 /* ViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRouter.swift; sourceTree = "<group>"; };
 		8918D3C6257C113400141DD9 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		891CFA6725901B2700FA0738 /* InputValidationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputValidationViewModel.swift; sourceTree = "<group>"; };
 		894513E625850712004ACB28 /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
 		895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8985E3FA257FF4C8006C2DA4 /* NotificationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRepository.swift; sourceTree = "<group>"; };
@@ -177,6 +183,9 @@
 		898E39F7257704B700A17A00 /* ChangeEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeEmailView.swift; sourceTree = "<group>"; };
 		898E39FA257704C600A17A00 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		898E39FD257704D400A17A00 /* DeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountView.swift; sourceTree = "<group>"; };
+		898F64DA25900D970099227E /* ValidationPublishers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationPublishers.swift; sourceTree = "<group>"; };
+		898F64E125900E3B0099227E /* InputValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputValidation.swift; sourceTree = "<group>"; };
+		898F64E425900E8E0099227E /* ValidationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationModifier.swift; sourceTree = "<group>"; };
 		8995C63F2583E7EA00ED5C03 /* TreeSignRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeSignRepository.swift; sourceTree = "<group>"; };
 		899AA9C22579906E006293E1 /* GuestTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestTimelineView.swift; sourceTree = "<group>"; };
 		899AA9C525799207006293E1 /* GuestProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestProfileView.swift; sourceTree = "<group>"; };
@@ -203,6 +212,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				898F64DF25900E030099227E /* Regex in Frameworks */,
 				898E39B225766DFB00A17A00 /* KeychainAccess in Frameworks */,
 				898E39B625766E4F00A17A00 /* MultiSlider in Frameworks */,
 				6FCCB7B3A4D039F4A151E485 /* Pods_AdoptreeApp.framework in Frameworks */,
@@ -388,6 +398,8 @@
 			children = (
 				89DE881B2575BF91006B9011 /* Localization.swift */,
 				89DE881E2575BFAB006B9011 /* ViewModelHelper.swift */,
+				898F64DA25900D970099227E /* ValidationPublishers.swift */,
+				898F64E425900E8E0099227E /* ValidationModifier.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -412,6 +424,7 @@
 				898E3929257662D600A17A00 /* Category.swift */,
 				8985E405257FF9C1006C2DA4 /* NotificationObject.swift */,
 				894513E625850712004ACB28 /* Timeline.swift */,
+				898F64E125900E3B0099227E /* InputValidation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -442,6 +455,7 @@
 				898E39412576644800A17A00 /* OrderViewModel.swift */,
 				8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */,
 				89A65CE62582A55600A77407 /* NewsViewModel.swift */,
+				891CFA6725901B2700FA0738 /* InputValidationViewModel.swift */,
 				898E39472576646200A17A00 /* ViewModelFactory.swift */,
 			);
 			path = ViewModels;
@@ -477,6 +491,7 @@
 			packageProductDependencies = (
 				898E39B125766DFB00A17A00 /* KeychainAccess */,
 				898E39B525766E4F00A17A00 /* MultiSlider */,
+				898F64DE25900E030099227E /* Regex */,
 			);
 			productName = AdoptreeApp;
 			productReference = 89DE87FB2575BCD4006B9011 /* AdoptreeApp.app */;
@@ -508,6 +523,7 @@
 			packageReferences = (
 				898E39B025766DFB00A17A00 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				898E39B425766E4F00A17A00 /* XCRemoteSwiftPackageReference "MultiSlider" */,
+				898F64DD25900E030099227E /* XCRemoteSwiftPackageReference "Regex" */,
 			);
 			productRefGroup = 89DE87FC2575BCD4006B9011 /* Products */;
 			projectDirPath = "";
@@ -582,10 +598,13 @@
 				898E39152576623500A17A00 /* Product.swift in Sources */,
 				898E3972257666A900A17A00 /* PersonalSignView.swift in Sources */,
 				8995C6402583E7EA00ED5C03 /* TreeSignRepository.swift in Sources */,
+				891CFA6825901B2700FA0738 /* InputValidationViewModel.swift in Sources */,
 				898E390F257661F700A17A00 /* TreeImage.swift in Sources */,
 				898E397B2576670400A17A00 /* AvailableToursView.swift in Sources */,
+				898F64E525900E8E0099227E /* ValidationModifier.swift in Sources */,
 				898E395A2576663B00A17A00 /* SecondInfoView.swift in Sources */,
 				898E395D2576664900A17A00 /* ThirdInfoView.swift in Sources */,
+				898F64DB25900D970099227E /* ValidationPublishers.swift in Sources */,
 				898E397E2576677900A17A00 /* TourBookingView.swift in Sources */,
 				898E39182576624D00A17A00 /* Order.swift in Sources */,
 				898E396F2576669C00A17A00 /* TreePersonalizationView.swift in Sources */,
@@ -606,6 +625,7 @@
 				898E391E2576627B00A17A00 /* Forest.swift in Sources */,
 				898E39BA25766F1C00A17A00 /* GuestHomeView.swift in Sources */,
 				898E39E225768EA800A17A00 /* TimelineViewModel.swift in Sources */,
+				898F64E225900E3B0099227E /* InputValidation.swift in Sources */,
 				89DE881F2575BFAB006B9011 /* ViewModelHelper.swift in Sources */,
 				898E391B2576626A00A17A00 /* Country.swift in Sources */,
 				898E39542576661A00A17A00 /* OnboardingView.swift in Sources */,
@@ -876,6 +896,14 @@
 				kind = branch;
 			};
 		};
+		898F64DD25900E030099227E /* XCRemoteSwiftPackageReference "Regex" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/crossroadlabs/Regex.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -888,6 +916,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 898E39B425766E4F00A17A00 /* XCRemoteSwiftPackageReference "MultiSlider" */;
 			productName = MultiSlider;
+		};
+		898F64DE25900E030099227E /* Regex */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 898F64DD25900E030099227E /* XCRemoteSwiftPackageReference "Regex" */;
+			productName = Regex;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

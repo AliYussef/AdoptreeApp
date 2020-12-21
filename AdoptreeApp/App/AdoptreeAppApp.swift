@@ -35,8 +35,10 @@ struct AdoptreeAppApp: App {
                 Color.init("color_background")
                     .edgesIgnoringSafeArea(.all)
                 
-                RootView().environmentObject(viewRouter).environmentObject(orderViewModel)
-                    .environmentObject(notificationViewModel).environmentObject(userViewModel)
+//                RootView().environmentObject(viewRouter).environmentObject(orderViewModel)
+//                    .environmentObject(notificationViewModel).environmentObject(userViewModel)
+                
+                SignupView()
             }
             .accentColor(.init("color_primary_accent"))
         }

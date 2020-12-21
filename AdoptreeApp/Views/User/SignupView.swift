@@ -8,19 +8,16 @@
 import SwiftUI
 
 struct SignupView: View {
-    @Environment(\.openURL) var openURL
     @EnvironmentObject var orderViewModel: OrderViewModel
     @EnvironmentObject var userViewModel: UserViewModel
-    @State private var firstName = ""
-    @State private var lastName = ""
-    @State private var email = ""
-    @State private var username = ""
-    @State private var password = ""
-    @State private var confirmPassword = ""
-    
-    init(){
-        UITableView.appearance().backgroundColor = .clear
-    }
+    @ObservedObject var inputValidationViewModel = InputValidationViewModel()
+    @State var isSaveDisabled = true
+//    @State private var firstName = ""
+//    @State private var lastName = ""
+//    @State private var email = ""
+//    @State private var username = ""
+//    @State private var password = ""
+//    @State private var confirmPassword = ""
     
     var body: some View {
         ZStack {
@@ -34,36 +31,62 @@ struct SignupView: View {
                         Text("Create an account")
                             .foregroundColor(.init("color_font_primary"))
                     }, content: {
-                        TextField("First name", text: $firstName)
-                        TextField("Last name", text: $lastName)
-                        TextField("Email", text: $email)
-                        TextField("Username", text: $username)
-                        TextField("Password", text: $password)
-                        TextField("Confirm password", text: $confirmPassword)
+                        TextField("First name", text: $inputValidationViewModel.firstName)
+                            .validation(inputValidationViewModel.firstNameValidation)
+                        
+                        TextField("Last name", text: $inputValidationViewModel.lastName)
+                            .validation(inputValidationViewModel.lastNameValidation)
+                        
+                        TextField("Email", text: $inputValidationViewModel.email)
+                            .validation(inputValidationViewModel.emailValidation)
+                            .validation(inputValidationViewModel.emailEmptyValidation)
+                            .keyboardType(.default)
+                            .autocapitalization(.none)
+                        
+                        TextField("Username", text: $inputValidationViewModel.username)
+                            .validation(inputValidationViewModel.usernameValidation)
+                            .keyboardType(.default)
+                            .autocapitalization(.none)
+                        
+                        TextField("Password", text: $inputValidationViewModel.password)
+                            .validation(inputValidationViewModel.passwordValidation)
+                            .keyboardType(.default)
+                            .autocapitalization(.none)
+                        
+                        TextField("Confirm password", text: $inputValidationViewModel.confirmPassword)
+                            .validation(inputValidationViewModel.confirmPasswordValidation)
+                            .validation(inputValidationViewModel.confirmPasswordMatchingValidation)
+                            .keyboardType(.default)
+                            .autocapitalization(.none)
                     })
-                }.background(Color.init("color_background"))
+                }
+                .onReceive(inputValidationViewModel.allValidation) { validation in
+                    self.isSaveDisabled = !validation.isSuccess
+                }
+                .background(Color.init("color_background"))
                 .padding(.top, 50)
                 
                 Button(action: {
-                    //login here first
-                    // self.userViewModel.login(user: T##User, completion: T##(Result<LoginResponse, RequestError>) -> Void))
-                    var orderLines: [OrderLine] = []
-                    self.orderViewModel.products.forEach({ orderProduct in
-                        orderLines.append(OrderLine(id: nil, orderId: nil, productId: orderProduct.product.id, price: nil, vat: nil, quantity: orderProduct.quantity))
-                    })
-                    let order = Order(id: nil, paymentRedirectLink: "mollie-app://payment-return", paymentStatus: nil, orderStatus: nil, userId: 1, createdAt: nil, orderLines: orderLines)
-                    
-                    self.orderViewModel.createOrder(order: order) {_ in}
-                    
-                    if let paymentLink = self.orderViewModel.orderResponse?.paymentLink {
-                        self.openURL(URL(string:  paymentLink)!)
+                    //register here
+                    let order = self.orderViewModel.createOrderObject(for: 1)
+                    self.orderViewModel.createOrder(order: order) { result in
+                        switch (result) {
+                            case .failure(_):
+                                break
+                            case .success(let success):
+                                if let url = URL(string: success.paymentLink) {
+                                    if UIApplication.shared.canOpenURL(url) {
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    }
+                                }
+                        }
                     }
-                    
                 }, label: {
-                    Text("Log in & pay")
+                    Text("Sign up & pay")
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
+                .disabled(self.isSaveDisabled)
                 .frame(width: 160, height: 40, alignment: .center)
                 .background(Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
