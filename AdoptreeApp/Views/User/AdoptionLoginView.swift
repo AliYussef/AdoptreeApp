@@ -11,6 +11,7 @@ struct AdoptionLoginView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var orderViewModel: OrderViewModel
     @EnvironmentObject var userViewModel: UserViewModel
+    @ObservedObject var inputValidationViewModel = InputValidationViewModel()
     @State private var username = ""
     @State private var password = ""
     @State private var actionState: Int? = 0
@@ -57,20 +58,30 @@ struct AdoptionLoginView: View {
                 Spacer()
                 
                 Button(action: {
-                    //login here first
-                    // self.userViewModel.login(user: T##User, completion: T##(Result<LoginResponse, RequestError>) -> Void))
-                    let order = self.orderViewModel.createOrderObject(for: 1)
-                    self.orderViewModel.createOrder(order: order) { result in
+                    let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, forgetToken: nil, role: nil, createdAt: nil)
+                    userViewModel.login(user: user) { result in
                         switch (result) {
                             case .failure(_):
                                 break
-                            case .success(let success):
-                                if let url = URL(string: success.paymentLink) {
-                                    if UIApplication.shared.canOpenURL(url) {
-                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            case .success(let response):
+                                //userViewModel.accessToken = response.authtoken
+                                //if let userId = user.id {
+                                    let order = self.orderViewModel.createOrderObject(for: 1)
+                                    self.orderViewModel.createOrder(order: order) { result in
+                                        switch (result) {
+                                            case .failure(_):
+                                                break
+                                            case .success(let success):
+                                                if let url = URL(string: success.paymentLink) {
+                                                    if UIApplication.shared.canOpenURL(url) {
+                                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                                    }
+                                                }
+                                        }
                                     }
-                                }
+                                //}
                         }
+                        
                     }
                 }, label: {
                     Text("Log in & pay")
@@ -87,23 +98,25 @@ struct AdoptionLoginView: View {
                 }
                 
             }
-        } .onOpenURL(perform: { url in
+        }.onOpenURL(perform: { url in
             if url.host == "payment-return" {
                 if let orderId = orderViewModel.orderResponse?.id {
                     orderViewModel.getOrderById(using: orderId) { result in
                         switch (result) {
-                            case .failure(let error):
-                                print(error)
-                            case .success(let success):
-                                print(success)
-                                if let paymentStatus = orderViewModel.order?.paymentStatus {
-                                    if paymentStatus == PaymentStatus.paid.rawValue || paymentStatus == PaymentStatus.open.rawValue {
-                                        orderViewModel.products.removeAll()
-                                        print("payment successfull")
-                                        actionState = 1
-                                    } else {
-                                        print("payment unsuccessfull")
-                                        self.isAdoptionFailed.toggle()
+                            case .failure(_):
+                                break
+                            case .success(_):
+                                //print(success)
+                                if orderViewModel.order?.orderLines[0].productId != orderViewModel.treeSign?.id {
+                                    if let paymentStatus = orderViewModel.order?.paymentStatus {
+                                        if paymentStatus == PaymentStatus.paid.rawValue || paymentStatus == PaymentStatus.open.rawValue {
+                                            orderViewModel.products.removeAll()
+                                            //print("payment successfull")
+                                            actionState = 1
+                                        } else {
+                                            // print("payment unsuccessfull")
+                                            self.isAdoptionFailed.toggle()
+                                        }
                                     }
                                 }
                         }

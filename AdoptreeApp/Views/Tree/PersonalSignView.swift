@@ -50,37 +50,22 @@ struct PersonalSignView: View {
                 }
                 
                 Button(action: {
-                    
-                    let order = self.orderViewModel.createTreeSignOrder(for: 1)
-                    self.orderViewModel.createOrder(order: order) { result in
-                        switch (result) {
-                            case .failure(let error):
-                                print(error)
-                            case .success(let success):
-                                if let url = URL(string: success.paymentLink) {
-                                    if UIApplication.shared.canOpenURL(url) {
-                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    if treeSign.count == 0 {
+                        self.message = "Personal sign cannot be empty!"
+                        self.showingAlert.toggle()
+                        
+                    } else {
+                        let order = self.orderViewModel.createTreeSignOrder(for: 1)
+                        self.orderViewModel.createOrder(order: order) { result in
+                            switch (result) {
+                                case .failure(_):
+                                    break
+                                case .success(let success):
+                                    if let url = URL(string: success.paymentLink) {
+                                        if UIApplication.shared.canOpenURL(url) {
+                                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                        }
                                     }
-                                }
-                        }
-                    }
-                    
-                    if let treeSignProduct = orderViewModel.treeSign {
-                        if let orderId = orderViewModel.orderResponse?.id {
-                            let treeSign = treeViewModel.createTreeSignObject(tree: tree, treeSignProduct: treeSignProduct, signText: self.treeSign, orderId: orderId)
-                            
-                            if let treeSign = treeSign {
-                                treeViewModel.createTreeSign(treeSign: treeSign) {  result in
-                                    switch (result) {
-                                        case .failure(_):
-                                            self.message = "An error occurred. Please try again!"
-                                            self.showingAlert.toggle()
-                                        case .success(_):
-                                            self.message = "Successfully purchased a sign"
-                                            self.showingAlert.toggle()
-                                            presentationMode.wrappedValue.dismiss()
-                                    }
-                                }
                             }
                         }
                     }
@@ -116,6 +101,49 @@ struct PersonalSignView: View {
             if orderViewModel.availableProducts.isEmpty {
                 orderViewModel.getProductsAndCategories()
             }
-        }
+        }.onOpenURL(perform: { url in
+            if url.host == "payment-return" {
+                if let orderId = orderViewModel.orderResponse?.id {
+                    orderViewModel.getOrderById(using: orderId) { result in
+                        switch (result) {
+                            case .failure(_):
+                                break
+                            case .success(_):
+                                //print(success)
+                                if orderViewModel.order?.orderLines[0].productId == orderViewModel.treeSign?.id {
+                                    if let paymentStatus = orderViewModel.order?.paymentStatus {
+                                        if paymentStatus == PaymentStatus.paid.rawValue || paymentStatus == PaymentStatus.open.rawValue {
+                                            
+                                            if let treeSignProduct = orderViewModel.treeSign {
+                                                if let orderId = orderViewModel.orderResponse?.id {
+                                                    let treeSign = treeViewModel.createTreeSignObject(tree: tree, treeSignProduct: treeSignProduct, signText: self.treeSign, orderId: orderId)
+                                                    
+                                                    if let treeSign = treeSign {
+                                                        treeViewModel.createTreeSign(treeSign: treeSign) {  result in
+                                                            switch (result) {
+                                                                case .failure(_):
+                                                                    break
+                                                                case .success(_):
+                                                                    self.message = "Successfully purchased a sign"
+                                                                    self.showingAlert.toggle()
+                                                                    presentationMode.wrappedValue.dismiss()
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            self.message = "An error occurred. Please try again!"
+                                            self.showingAlert.toggle()
+                                        }
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        })
+        
+        
     }
 }

@@ -12,15 +12,22 @@ import KeychainAccess
 class UserViewModel: ObservableObject {
     static let shared = UserViewModel(userRepository: UserRepository())
     @Published var isAuthenticated: Bool = false
+    @Published var tempAccessToken: String = ""
     @Published var isGuest: Bool = false
     @Published var forgetPasswordToken: String = ""
     private let keyChain = Keychain()
+    private let userDefaults: UserDefaults
     private var accessTokenKey = "accessToken"
+    @Published var userShared: UserShared
+    private var userKey = "userObject"
     private var cancellables = Set<AnyCancellable>()
     private let userRepository: UserRepositoryProtocol
     
     private init(userRepository: UserRepositoryProtocol) {
         self.userRepository = userRepository
+        userDefaults = UserDefaults.standard
+        userShared = UserShared(id: nil, firstname: nil, lastname: nil, email: nil)
+        getUserSharedObject()
         // when starting the app to check if accessToken not equal to nil then set authenticated to true
         isAuthenticated = accessToken != nil
     }
@@ -45,17 +52,37 @@ extension UserViewModel {
             isAuthenticated = true
         }
     }
+    
+    func getUserSharedObject(){
+        do {
+            userShared = try userDefaults.getObject(forKey: userKey, castTo: UserShared.self)
+            //return true
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        //return false
+    }
+    
+    func saveUserSharedObject() {
+        
+        do {
+            try userDefaults.setObject(userShared, forKey: userKey)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 }
 
 extension UserViewModel {
     
-    func registerUser(user: User, completion: @escaping (Result<LoginResponse, RequestError>) -> Void) {
+    func registerUser(user: User, completion: @escaping (Result<User, RequestError>) -> Void) {
         
         do {
             
             let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .user, using: .post, withParams: user)
             
-            userRepository.login(using: urlRequest)
+            userRepository.registerUser(using: urlRequest)
                 .sink(receiveCompletion: {result in
                     switch result {
                         case .finished:

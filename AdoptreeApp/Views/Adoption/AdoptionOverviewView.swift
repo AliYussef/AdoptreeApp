@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AdoptionOverviewView: View {
     @EnvironmentObject var orderViewModel: OrderViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var isAdoptionFailed = false
     
@@ -66,7 +67,7 @@ struct AdoptionOverviewView: View {
                     Spacer()
                     
                     HStack {
-                        Button(action: {presentationMode.wrappedValue.dismiss()}, label: {
+                        Button(action: { presentationMode.wrappedValue.dismiss() }, label: {
                             Text("Adopt more")
                                 .font(.subheadline)
                                 .foregroundColor(.white)
@@ -76,19 +77,49 @@ struct AdoptionOverviewView: View {
                         .cornerRadius(10.0)
                         .padding()
                         
-                        NavigationLink(destination: AdoptionLoginView(isAdoptionFailed: $isAdoptionFailed))
-                        {
-                            Text("Proceed")
-                                .font(.subheadline)
-                                .foregroundColor(.white)
+                        if userViewModel.isAuthenticated {
+                            Button(action: {
+                                //if let userId = userViewModel.userShared.id {
+                                let order = self.orderViewModel.createOrderObject(for: 1)
+                                self.orderViewModel.createOrder(order: order) { result in
+                                    switch (result) {
+                                        case .failure(_):
+                                            break
+                                        case .success(let success):
+                                            if let url = URL(string: success.paymentLink) {
+                                                if UIApplication.shared.canOpenURL(url) {
+                                                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                                }
+                                            }
+                                    }
+                                }
+                                // }
+                            }, label: {
+                                Text("Pay")
+                                    .font(.subheadline)
+                                    .foregroundColor(.white)
+                            })
+                            .frame(width: UIScreen.main.bounds.width * 0.4, height: 40, alignment: .center)
+                            .background(Color.init("color_primary_accent"))
+                            .cornerRadius(10.0)
+                            .padding()
+                            .disabled(orderViewModel.products.count == 0)
+                            
+                        } else {
+                            
+                            NavigationLink(destination: AdoptionLoginView(isAdoptionFailed: $isAdoptionFailed))
+                            {
+                                Text("Proceed")
+                                    .font(.subheadline)
+                                    .foregroundColor(.white)
+                            }
+                            .frame(width: UIScreen.main.bounds.width * 0.4, height: 40, alignment: .center)
+                            .background(Color.init("color_primary_accent"))
+                            .cornerRadius(10.0)
+                            .padding()
+                            .disabled(orderViewModel.products.count == 0)
                         }
-                        .frame(width: UIScreen.main.bounds.width * 0.4, height: 40, alignment: .center)
-                        .background(Color.init("color_primary_accent"))
-                        .cornerRadius(10.0)
-                        .padding()
-                        .disabled(orderViewModel.products.count == 0)
                     }
-                    
                 }
             }
             .navigationBarHidden(false)

@@ -68,15 +68,27 @@ struct SignupView: View {
                 
                 Button(action: {
                     //register here
-                    let order = self.orderViewModel.createOrderObject(for: 1)
-                    self.orderViewModel.createOrder(order: order) { result in
+                    let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, forgetToken: nil, role: nil, createdAt: nil)
+                    userViewModel.registerUser(user: user) { result in
                         switch (result) {
                             case .failure(_):
                                 break
-                            case .success(let success):
-                                if let url = URL(string: success.paymentLink) {
-                                    if UIApplication.shared.canOpenURL(url) {
-                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            case .success(let user):
+                                userViewModel.userShared = UserShared(id: user.id, firstname: user.firstname, lastname: user.lastname, email: user.email)
+                                userViewModel.saveUserSharedObject()
+                                if let userId = user.id {
+                                    let order = self.orderViewModel.createOrderObject(for: userId)
+                                    self.orderViewModel.createOrder(order: order) { result in
+                                        switch (result) {
+                                            case .failure(_):
+                                                break
+                                            case .success(let success):
+                                                if let url = URL(string: success.paymentLink) {
+                                                    if UIApplication.shared.canOpenURL(url) {
+                                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                                    }
+                                                }
+                                        }
                                     }
                                 }
                         }

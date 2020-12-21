@@ -41,3 +41,11 @@ struct LoginResponse: Decodable {
         case authtoken = "authtoken"
     }
 }
+
+struct UserShared: Codable {
+    let id: Int64?
+    let firstname: String?
+    let lastname: String?
+    //let username: String
+    let email: String?
+}
