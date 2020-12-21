@@ -16,6 +16,8 @@ struct AdoptionLoginView: View {
     @State private var password = ""
     @State private var actionState: Int? = 0
     @Binding var isAdoptionFailed: Bool
+    @State private var showingAlert = false
+    @State private var message = ""
     
     var body: some View {
         ZStack{
@@ -62,15 +64,17 @@ struct AdoptionLoginView: View {
                     userViewModel.login(user: user) { result in
                         switch (result) {
                             case .failure(_):
-                                break
+                                message = "An error occurred. Please check your username and password!"
+                                showingAlert.toggle()
                             case .success(let response):
+                                //userViewModel.tempAccessToken = response.authtoken
                                 //userViewModel.accessToken = response.authtoken
                                 //if let userId = user.id {
                                     let order = self.orderViewModel.createOrderObject(for: 1)
                                     self.orderViewModel.createOrder(order: order) { result in
                                         switch (result) {
                                             case .failure(_):
-                                                break
+                                                break // add message here as well
                                             case .success(let success):
                                                 if let url = URL(string: success.paymentLink) {
                                                     if UIApplication.shared.canOpenURL(url) {
@@ -92,6 +96,9 @@ struct AdoptionLoginView: View {
                 .background(Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text("Login"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                }
                 
                 NavigationLink(destination: SuccessfullAdoptionView(), tag: 1, selection: $actionState) {
                     EmptyView()

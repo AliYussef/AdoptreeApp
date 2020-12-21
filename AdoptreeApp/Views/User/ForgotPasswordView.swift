@@ -111,7 +111,7 @@ struct RequestPasswordChangeView: View {
             self.userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: inputValidationViewModel.username, email: inputValidationViewModel.username)) {result in
                 switch (result) {
                     case .failure(_):
-                        message = "An error has occurred. Please check your username or email!"
+                        message = "An error has occurred. Please check your username and email!"
                         showingAlert.toggle()
                     case .success(_):
                         break

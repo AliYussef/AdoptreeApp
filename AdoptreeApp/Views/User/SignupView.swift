@@ -12,12 +12,8 @@ struct SignupView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @ObservedObject var inputValidationViewModel = InputValidationViewModel()
     @State var isSaveDisabled = true
-//    @State private var firstName = ""
-//    @State private var lastName = ""
-//    @State private var email = ""
-//    @State private var username = ""
-//    @State private var password = ""
-//    @State private var confirmPassword = ""
+    @State private var showingAlert = false
+    @State private var message = ""
     
     var body: some View {
         ZStack {
@@ -72,7 +68,8 @@ struct SignupView: View {
                     userViewModel.registerUser(user: user) { result in
                         switch (result) {
                             case .failure(_):
-                                break
+                                message = "Somthing went wrong. Please try again!"
+                                showingAlert.toggle()
                             case .success(let user):
                                 userViewModel.userShared = UserShared(id: user.id, firstname: user.firstname, lastname: user.lastname, username: user.username, email: user.email)
                                 userViewModel.saveUserSharedObject()
@@ -81,7 +78,7 @@ struct SignupView: View {
                                     self.orderViewModel.createOrder(order: order) { result in
                                         switch (result) {
                                             case .failure(_):
-                                                break
+                                                break // add message here as well
                                             case .success(let success):
                                                 if let url = URL(string: success.paymentLink) {
                                                     if UIApplication.shared.canOpenURL(url) {
@@ -103,6 +100,9 @@ struct SignupView: View {
                 .background(Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text("Signup"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                }
                 
             }
         }

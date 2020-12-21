@@ -45,13 +45,15 @@ struct SuccessfullAdoptionView: View {
                 }
                 
                 Button(action: {
-                    if self.userViewModel.isGuest {
-                        self.userViewModel.isGuest.toggle()
-                        self.userViewModel.isAuthenticated = true
-                    } else if self.userViewModel.isAuthenticated {
+                    if userViewModel.isGuest {
+                        userViewModel.isGuest.toggle()
+                        //userViewModel.accessToken = userViewModel.tempAccessToken
+                        userViewModel.isAuthenticated = true //this should be removed once authentication is set up
+                    } else if userViewModel.isAuthenticated {
                         actionState = 1
                     } else {
-                        self.userViewModel.isAuthenticated = true
+                        //userViewModel.accessToken = userViewModel.tempAccessToken
+                        userViewModel.isAuthenticated = true //this should be removed once authentication is set up
                     }
                     
                 }, label: {
