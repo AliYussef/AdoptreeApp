@@ -48,12 +48,12 @@ struct SignupView: View {
                             .keyboardType(.default)
                             .autocapitalization(.none)
                         
-                        TextField("Password", text: $inputValidationViewModel.password)
+                        SecureField("Password", text: $inputValidationViewModel.password)
                             .validation(inputValidationViewModel.passwordValidation)
                             .keyboardType(.default)
                             .autocapitalization(.none)
                         
-                        TextField("Confirm password", text: $inputValidationViewModel.confirmPassword)
+                        SecureField("Confirm password", text: $inputValidationViewModel.confirmPassword)
                             .validation(inputValidationViewModel.confirmPasswordValidation)
                             .validation(inputValidationViewModel.confirmPasswordMatchingValidation)
                             .keyboardType(.default)

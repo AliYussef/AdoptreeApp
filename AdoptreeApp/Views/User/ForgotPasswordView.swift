@@ -10,8 +10,10 @@ import SwiftUI
 struct ForgotPasswordView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var userViewModel: UserViewModel
-    @State var password: String = ""
-    @State var confirmPassword: String = ""
+    @ObservedObject var inputValidationViewModel = InputValidationViewModel()
+    @State var isSaveDisabled = true
+    @State private var showingAlert = false
+    @State private var message = ""
     
     var body: some View {
         ZStack{
@@ -20,10 +22,11 @@ struct ForgotPasswordView: View {
             VStack {
                 
                 if userViewModel.forgetPasswordToken.isEmpty {
-                    RequestPasswordChangeView()
+                    RequestPasswordChangeView(inputValidationViewModel: inputValidationViewModel)
                 } else {
                     
-                    SecureField("Email Address", text: $password)
+                    SecureField("Password", text: $inputValidationViewModel.password)
+                        .validation(inputValidationViewModel.passwordValidation)
                         .padding()
                         .background(Color.init("color_textfield"))
                         .cornerRadius(8.0)
@@ -31,7 +34,9 @@ struct ForgotPasswordView: View {
                         .autocapitalization(.none)
                         .padding()
                     
-                    SecureField("Email Address", text: $confirmPassword)
+                    SecureField("Confirm password", text: $inputValidationViewModel.confirmPassword)
+                        .validation(inputValidationViewModel.confirmPasswordValidation)
+                        .validation(inputValidationViewModel.confirmPasswordMatchingValidation)
                         .padding()
                         .background(Color.init("color_textfield"))
                         .cornerRadius(8.0)
@@ -40,20 +45,34 @@ struct ForgotPasswordView: View {
                         .padding()
                     
                     Button(action: {
-                        // validate input here //
-                        self.userViewModel.resetPassword(resetPasswordBody: ResetPasswordBody(user_id: nil, token: self.userViewModel.forgetPasswordToken, created_at: nil, valid_until: nil, password: password, validate_password: confirmPassword)) {_ in}
-                        // if successull  show message//
-                        self.presentationMode.wrappedValue.dismiss()
+                        self.userViewModel.resetPassword(resetPasswordBody: ResetPasswordBody(user_id: nil, token: self.userViewModel.forgetPasswordToken, created_at: nil, valid_until: nil, password: inputValidationViewModel.password, validate_password: inputValidationViewModel.confirmPassword)) {result in
+                            switch (result) {
+                                case .failure(_):
+                                    message = "Somthing went wrong. Please try again!"
+                                    showingAlert.toggle()
+                                case .success(_):
+                                    message = "Password has been reset"
+                                    showingAlert.toggle()
+                                    self.presentationMode.wrappedValue.dismiss()
+                            }
+                        }
                     }, label: {
                         Text("Reset my password")
                             .font(.subheadline)
                             .foregroundColor(.white)
                     })
-                    .frame(width: UIScreen.main.bounds.width * 0.6, height: 40, alignment: .center)
+                    .disabled(self.isSaveDisabled)
+                    .frame(width: UIScreen.main.bounds.width * 0.6, height: 50, alignment: .center)
                     .background(Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
                     .padding()
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("Reset password"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    }
                 }
+            }
+            .onReceive(inputValidationViewModel.resetPasswordValidation) { validation in
+                self.isSaveDisabled = !validation.isSuccess
             }
         }
         .navigationBarTitle("Forgot password", displayMode: .inline)
@@ -63,11 +82,15 @@ struct ForgotPasswordView: View {
 
 struct RequestPasswordChangeView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @State var email: String = ""
-    @State var username: String = ""
+    @ObservedObject var inputValidationViewModel: InputValidationViewModel
+    @State var isSaveDisabled = true
+    @State private var showingAlert = false
+    @State private var message = ""
     
     var body: some View {
-        TextField("Email Address", text: $email)
+        TextField("Email Address", text: $inputValidationViewModel.email)
+            .validation(inputValidationViewModel.emailEmptyValidation)
+            .validation(inputValidationViewModel.emailValidation)
             .padding()
             .background(Color.init("color_textfield"))
             .cornerRadius(8.0)
@@ -75,7 +98,8 @@ struct RequestPasswordChangeView: View {
             .autocapitalization(.none)
             .padding()
         
-        TextField("Username", text: $username)
+        TextField("Username", text: $inputValidationViewModel.username)
+            .validation(inputValidationViewModel.usernameValidation)
             .padding()
             .background(Color.init("color_textfield"))
             .cornerRadius(8.0)
@@ -84,17 +108,33 @@ struct RequestPasswordChangeView: View {
             .padding()
         
         Button(action: {
-            // add validation here //
-            self.userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: username, email: email)) {_ in}
+            self.userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: inputValidationViewModel.username, email: inputValidationViewModel.username)) {result in
+                switch (result) {
+                    case .failure(_):
+                        message = "An error has occurred. Please check your username or email!"
+                        showingAlert.toggle()
+                    case .success(_):
+                        break
+                        //message = "Password has been reset"
+                        //showingAlert.toggle()
+                }
+            }
         }, label: {
             Text("Request password change")
                 .font(.subheadline)
                 .foregroundColor(.white)
         })
-        .frame(width: UIScreen.main.bounds.width * 0.6, height: 40, alignment: .center)
+        .disabled(self.isSaveDisabled)
+        .frame(width: UIScreen.main.bounds.width * 0.6, height: 50, alignment: .center)
         .background(Color.init("color_primary_accent"))
         .cornerRadius(10.0)
         .padding()
+        .onReceive(inputValidationViewModel.requestResetPasswordValidation) { validation in
+            self.isSaveDisabled = !validation.isSuccess
+        }
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text("Reset password"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+        }
     }
 }
 

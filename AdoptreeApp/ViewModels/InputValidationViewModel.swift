@@ -9,8 +9,6 @@ import Foundation
 import Combine
 
 class InputValidationViewModel: ObservableObject {
-    
-    // MARK: Published Properties
     let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
     @Published var firstName = ""
     @Published var lastName = ""
@@ -26,9 +24,8 @@ class InputValidationViewModel: ObservableObject {
             passwords[1] = confirmPassword
         }
     }
-    
     @Published var passwords: [String] = ["0","1"]
-    // MARK: Validation Publishers
+  
     
     lazy var firstNameValidation: ValidationPublisher = {
         $firstName.nonEmptyValidator("First name must be provided")
@@ -62,15 +59,6 @@ class InputValidationViewModel: ObservableObject {
         $passwords.passwordMatcherValidation(password, "Passwords do not match")
     }()
     
-//    func confirmPasswordMatchingValidation() -> ValidationPublisher {
-//        return $confirmPassword.passwordMatcherValidation(password, "Passwords do not match")
-//    }
-    
-    // MARK: Combined Publishers
-    
-    // These are split up by section as CombineLatest only supports
-    // a maximum of 4 input publishers maximum.
-    
     lazy var firstBlockValidation: ValidationPublisher = {
         Publishers.CombineLatest4(
             firstNameValidation,
@@ -78,10 +66,10 @@ class InputValidationViewModel: ObservableObject {
             emailValidation,
             emailEmptyValidation
         ).map { v1, v2, v3, v4 in
-            print("firstNameValidation: \(v1)")
-            print("lastNameValidation: \(v2)")
-            print("emailValidation: \(v3)")
-            print("emailEmptyValidation: \(v4)")
+           // print("firstNameValidation: \(v1)")
+           // print("lastNameValidation: \(v2)")
+            //print("emailValidation: \(v3)")
+            //print("emailEmptyValidation: \(v4)")
             return [v1, v2, v3, v4].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
         }.eraseToAnyPublisher()
     }()
@@ -93,10 +81,10 @@ class InputValidationViewModel: ObservableObject {
             confirmPasswordValidation,
             confirmPasswordMatchingValidation
         ).map { v1, v2, v3, v4 in
-            print("usernameValidation: \(v1)")
-            print("passwordValidation: \(v2)")
-            print("confirmPasswordValidation: \(v3)")
-            print("confirmPasswordMatchingValidation: \(v4)")
+           // print("usernameValidation: \(v1)")
+            //print("passwordValidation: \(v2)")
+           // print("confirmPasswordValidation: \(v3)")
+            //print("confirmPasswordMatchingValidation: \(v4)")
             return [v1, v2, v3, v4].allSatisfy {
                 $0.isSuccess } ? .success : .failure(message: "")
         }.eraseToAnyPublisher()
@@ -111,4 +99,22 @@ class InputValidationViewModel: ObservableObject {
         }.eraseToAnyPublisher()
     }()
     
+    lazy var resetPasswordValidation: ValidationPublisher = {
+        Publishers.CombineLatest(
+            confirmPasswordValidation,
+            confirmPasswordMatchingValidation
+        ).map { v1, v2 in
+            return [v1, v2].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
+        }.eraseToAnyPublisher()
+    }()
+    
+    lazy var requestResetPasswordValidation: ValidationPublisher = {
+        Publishers.CombineLatest3(
+            usernameValidation,
+            emailEmptyValidation,
+            emailValidation
+        ).map { v1, v2, v3 in
+            return [v1, v2, v3].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
+        }.eraseToAnyPublisher()
+    }()
 }
