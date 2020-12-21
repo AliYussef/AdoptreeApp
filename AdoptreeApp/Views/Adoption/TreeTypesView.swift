@@ -22,7 +22,7 @@ struct TreeTypesView: View {
                     } else {
                         
                         ForEach(orderViewModel.availableProducts) { treeProduct in
-                            if orderViewModel.categoriesDic[treeProduct.categoryId] == "Sapling"{
+                            if orderViewModel.categoriesDic[treeProduct.categoryId]?.lowercased() == "sapling" {
                                 
                                 RoundedRectangle(cornerRadius: 12.0)
                                     .fill(Color.white)
@@ -30,7 +30,7 @@ struct TreeTypesView: View {
                                     .overlay(
                                         
                                         HStack(alignment: .top){
-                                            Image("tree_type")
+                                            Image("tree")
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fill)
                                                 .frame(width: 70, height: 70, alignment: .center)

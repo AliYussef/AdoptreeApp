@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TreeInfoView: View {
+    @EnvironmentObject var orderViewModel: OrderViewModel
     let tree: Product
     
     var body: some View {
@@ -16,14 +17,14 @@ struct TreeInfoView: View {
                 .edgesIgnoringSafeArea(.all)
             
             ScrollView(.vertical, showsIndicators: false) {
-                VStack {
+                VStack(alignment: .leading) {
                     
                     RoundedRectangle(cornerRadius: 12.0)
                         .fill(Color.white)
                         .frame(width: .none, height: 100, alignment: .center)
                         .overlay(
                             HStack(alignment: .top){
-                                Image("tree_type")
+                                Image("\(orderViewModel.categoriesDic[tree.categoryId]?.lowercased() == "tree" ? "tree" : "sapling")")
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 70, height: 70, alignment: .center)
@@ -42,7 +43,6 @@ struct TreeInfoView: View {
                                 Spacer()
                             }.padding()
                         )
-                        .padding(.bottom)
                     
                     Text("""
 \(tree.description)

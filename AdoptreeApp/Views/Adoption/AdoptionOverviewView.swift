@@ -152,7 +152,7 @@ struct OverviewCellView: View {
             .overlay(
                 VStack {
                     HStack(alignment: .top) {
-                        Image("tree2")
+                        Image("\(orderViewModel.categoriesDic[orderProduct.product.categoryId]?.lowercased() == "tree" ? "tree" : "sapling")")
                             .resizable()
                             .frame(width: 40, height: 50, alignment: .leading)
                         
