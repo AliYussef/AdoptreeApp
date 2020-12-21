@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct FirstInfoView: View {
+    @Binding var currentIndex: Int
+    
     var body: some View {
         VStack {
             Spacer()
@@ -35,6 +37,29 @@ struct FirstInfoView: View {
                 .aspectRatio(contentMode: .fit)
                 .padding()
             
+            HStack {
+                Spacer()
+                
+                Button(action: {
+                    withAnimation(.linear){
+                        self.currentIndex += 1
+                    }
+                }, label: {
+                    Text("Next")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                    
+                    Image(systemName: "arrow.right.circle.fill")
+                        .resizable()
+                        .frame(width: 28, height: 28, alignment: .trailing)
+                        .foregroundColor(.white)
+                })
+                .frame(width: UIScreen.main.bounds.width * 0.35, height: 40, alignment: .center)
+                .background(Color.init("color_primary_accent"))
+                .cornerRadius(10.0)
+                .padding()
+            }
+            
             Spacer()
         }
     }
@@ -42,6 +67,6 @@ struct FirstInfoView: View {
 
 struct FirstInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        FirstInfoView()
+        FirstInfoView(currentIndex: .constant(0))
     }
 }

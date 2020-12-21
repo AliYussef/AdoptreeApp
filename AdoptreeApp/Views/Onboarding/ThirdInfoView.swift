@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ThirdInfoView: View {
     @Binding  var showStartingView: Bool
+    @Binding var currentIndex: Int
     
     var body: some View {
         VStack {
@@ -50,28 +51,55 @@ struct ThirdInfoView: View {
                     .padding(.trailing)
                 CellView(iconName: nil, iconImage: Image("icon_tree"), iconWidth: 23.0, iconHeight: 28.0, title: "Tree types", info: "2")
             }
+            .padding()
+            
             
             Spacer()
             
-            Button(action: {
-                withAnimation {
-                    self.showStartingView.toggle()
-                }
+            HStack {
+                Button(action: {
+                    withAnimation(.linear){
+                    self.currentIndex -= 1
+                    }
+                }, label: {
+                    Image(systemName: "arrow.backward.circle.fill")
+                        .resizable()
+                        .frame(width: 28, height: 28, alignment: .trailing)
+                        .foregroundColor(.white)
+                    
+                    Text("Previous")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                })
+                .frame(width: UIScreen.main.bounds.width * 0.35, height: 40, alignment: .center)
+                .background(Color.init("color_primary_accent"))
+                .cornerRadius(10.0)
+                .padding()
                 
-            }, label: {
-                Text("Start now")
-                    .font(.subheadline)
-                    .foregroundColor(.white)
+                Spacer()
                 
-                Image(systemName: "arrow.right.circle.fill")
-                    .resizable()
-                    .frame(width: 28, height: 28, alignment: .trailing)
-                    .foregroundColor(.white)
-            })
-            .frame(width: 180, height: 40, alignment: .center)
-            .background(Color.init("color_primary_accent"))
-            .cornerRadius(10.0)
-            .padding()
+                Button(action: {
+                    withAnimation {
+                        self.showStartingView.toggle()
+                    }
+                    
+                }, label: {
+                    Text("Start now")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                    
+                    Image(systemName: "arrow.right.circle.fill")
+                        .resizable()
+                        .frame(width: 28, height: 28, alignment: .trailing)
+                        .foregroundColor(.white)
+                })
+                .frame(width: UIScreen.main.bounds.width * 0.35, height: 40, alignment: .center)
+                
+                .background(Color.init("color_primary_accent"))
+                .cornerRadius(10.0)
+                .padding()
+                
+            }
             
             Spacer()
         }
@@ -114,5 +142,11 @@ struct CellView: View {
         .frame(width: 165, height: 153, alignment: .center)
         .background(Color.init(.white))
         .cornerRadius(12.0)
+    }
+}
+
+struct ThirdInfoView_Previews: PreviewProvider {
+    static var previews: some View {
+        ThirdInfoView(showStartingView: .constant(true), currentIndex: .constant(2))
     }
 }

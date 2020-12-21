@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SecondInfoView: View {
+    @Binding var currentIndex: Int
+    
     var body: some View {
         VStack {
             Spacer()
@@ -25,6 +27,48 @@ struct SecondInfoView: View {
                 .aspectRatio(contentMode: .fit)
                 .padding()
             
+            HStack {
+                Button(action: {
+                    withAnimation(.linear){
+                    self.currentIndex -= 1
+                    }
+                }, label: {
+                    Image(systemName: "arrow.backward.circle.fill")
+                        .resizable()
+                        .frame(width: 28, height: 28, alignment: .trailing)
+                        .foregroundColor(.white)
+                    
+                    Text("Previous")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                })
+                .frame(width: UIScreen.main.bounds.width * 0.35, height: 40, alignment: .center)
+                .background(Color.init("color_primary_accent"))
+                .cornerRadius(10.0)
+                .padding()
+                
+                Spacer()
+                
+                Button(action: {
+                    withAnimation(.linear){
+                    self.currentIndex += 1
+                    }
+                }, label: {
+                    Text("Next")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                    
+                    Image(systemName: "arrow.right.circle.fill")
+                        .resizable()
+                        .frame(width: 28, height: 28, alignment: .trailing)
+                        .foregroundColor(.white)
+                })
+                .frame(width: UIScreen.main.bounds.width * 0.35, height: 40, alignment: .center)
+                .background(Color.init("color_primary_accent"))
+                .cornerRadius(10.0)
+                .padding()
+            }
+            
             Spacer()
         }
     }
@@ -32,6 +76,6 @@ struct SecondInfoView: View {
 
 struct SecondInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        SecondInfoView()
+        SecondInfoView(currentIndex: .constant(1))
     }
 }

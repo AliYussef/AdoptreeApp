@@ -38,7 +38,7 @@ struct AdoptreeAppApp: App {
 //                RootView().environmentObject(viewRouter).environmentObject(orderViewModel)
 //                    .environmentObject(notificationViewModel).environmentObject(userViewModel)
                 
-                SignupView()
+                OnboardingView()
             }
             .accentColor(.init("color_primary_accent"))
         }

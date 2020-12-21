@@ -19,9 +19,9 @@ struct OnboardingView: View {
         } else {
             
             TabView(selection: $currentIndex.animation()) {
-                FirstInfoView().tag(0)
-                SecondInfoView().tag(1)
-                ThirdInfoView(showStartingView: $showStartingView).tag(2)
+                FirstInfoView(currentIndex: $currentIndex).tag(0)
+                SecondInfoView(currentIndex: $currentIndex).tag(1)
+                ThirdInfoView(showStartingView: $showStartingView, currentIndex: $currentIndex).tag(2)
                 
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
