@@ -307,3 +307,39 @@ extension TreeViewModel {
     }
     
 }
+
+extension TreeViewModel {
+    
+    func renewTreeContract(for tree: AssignedTree, completion: @escaping (Result<AssignedTree, RequestError>) -> Void) {
+        do {
+            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .renewTree, using: .put, withParams: tree)
+            
+            treeRepository.renewTreeContract(using: urlRequest)
+                .sink(receiveCompletion: {result in
+                    switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            switch error {
+                                case let urlError as URLError:
+                                    completion(.failure(.urlError(urlError)))
+                                case let decodingError as DecodingError:
+                                    completion(.failure(.decodingError(decodingError)))
+                                default:
+                                    completion(.failure(.genericError(error)))
+                            }
+                    }
+                    
+                }, receiveValue: {result in
+                    completion(.success(result))
+                    self.updateAssignedTree(assignedTree: result)
+                })
+                .store(in: &cancellables)
+            
+        } catch let encodingError as EncodingError{
+            completion(.failure(.encodingError(encodingError)))
+        } catch let error{
+            completion(.failure(.genericError(error)))
+        }
+    }
+}

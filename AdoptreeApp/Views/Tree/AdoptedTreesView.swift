@@ -27,6 +27,9 @@ struct AdoptedTreesView: View {
 struct AdoptedTreesCell: View {
     @EnvironmentObject var orderViewModel: OrderViewModel
     @ObservedObject var treeViewModel: TreeViewModel
+    @State private var showingAlert = false
+    @State private var showingAlertConfirm = false
+    @State private var message = ""
     let tree: Tree
     
     var body: some View {
@@ -45,12 +48,30 @@ struct AdoptedTreesCell: View {
                             .frame(width: 20, height: 20)
                             .foregroundColor(.init("color_primary_accent"))
                     })
+                    .alert(isPresented: $showingAlertConfirm) {
+                        Alert(title: Text("Contract renewal"), message: Text("\(message)"), primaryButton: .default(Text("Yes")){
+                            //might add payment as well
+                            if let tree = tree.assignedTree {
+//                                treeViewModel.renewTreeContract(for: tree) { result in
+//                                    switch (result) {
+//                                        case .failure(_):
+//                                            message = "An Error has occurred. Please try again!"
+//                                            showingAlert.toggle()
+//                                        case .success(_):
+//                                            message = "Congratulations􀎸 your adoption has been extended by 1 year"
+//                                            showingAlert.toggle()
+//                                    }
+//                                }
+                            }
+                        },secondaryButton: .cancel(Text("No")))
+                    }
                 
                 Spacer()
                 
                 if isTreeUpForRenewal() {
                     Button(action: {
-                        //add renew here
+                        message = "Are you sure you want to extend your adoption?"
+                        showingAlertConfirm.toggle()
                     }, label: {
                         HStack {
                             Text("Renew")
@@ -64,6 +85,9 @@ struct AdoptedTreesCell: View {
                     .padding(3)
                     .background(Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("Contract renewal"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    }
                 }
             }
             .padding([.leading, .trailing, .bottom])
