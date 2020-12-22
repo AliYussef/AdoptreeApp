@@ -13,6 +13,7 @@
 		891CFA6825901B2700FA0738 /* InputValidationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891CFA6725901B2700FA0738 /* InputValidationViewModel.swift */; };
 		894513E725850712004ACB28 /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894513E625850712004ACB28 /* Timeline.swift */; };
 		895D7A17257FCFA8009FF641 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */; };
+		898074F12591610A00645676 /* AdoptedTreesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898074F02591610A00645676 /* AdoptedTreesView.swift */; };
 		8985E3FB257FF4C8006C2DA4 /* NotificationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8985E3FA257FF4C8006C2DA4 /* NotificationRepository.swift */; };
 		8985E3FE257FF627006C2DA4 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */; };
 		8985E406257FF9C1006C2DA4 /* NotificationObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8985E405257FF9C1006C2DA4 /* NotificationObject.swift */; };
@@ -95,6 +96,7 @@
 		89A65CE72582A55600A77407 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A65CE62582A55600A77407 /* NewsViewModel.swift */; };
 		89C354042577E342004C26FB /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C354032577E342004C26FB /* PrivacyPolicyView.swift */; };
 		89C354072577E351004C26FB /* OverTheAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C354062577E351004C26FB /* OverTheAppView.swift */; };
+		89D3EBB02592290A00076E51 /* CountryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D3EBAF2592290A00076E51 /* CountryRepository.swift */; };
 		89DE87FF2575BCD4006B9011 /* AdoptreeAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DE87FE2575BCD4006B9011 /* AdoptreeAppApp.swift */; };
 		89DE88012575BCD4006B9011 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DE88002575BCD4006B9011 /* ContentView.swift */; };
 		89DE88032575BCD5006B9011 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89DE88022575BCD5006B9011 /* Assets.xcassets */; };
@@ -113,6 +115,7 @@
 		891CFA6725901B2700FA0738 /* InputValidationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputValidationViewModel.swift; sourceTree = "<group>"; };
 		894513E625850712004ACB28 /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
 		895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		898074F02591610A00645676 /* AdoptedTreesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptedTreesView.swift; sourceTree = "<group>"; };
 		8985E3FA257FF4C8006C2DA4 /* NotificationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRepository.swift; sourceTree = "<group>"; };
 		8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		8985E405257FF9C1006C2DA4 /* NotificationObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationObject.swift; sourceTree = "<group>"; };
@@ -192,6 +195,7 @@
 		89A65CE62582A55600A77407 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
 		89C354032577E342004C26FB /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		89C354062577E351004C26FB /* OverTheAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverTheAppView.swift; sourceTree = "<group>"; };
+		89D3EBAF2592290A00076E51 /* CountryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryRepository.swift; sourceTree = "<group>"; };
 		89DE87FB2575BCD4006B9011 /* AdoptreeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AdoptreeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89DE87FE2575BCD4006B9011 /* AdoptreeAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptreeAppApp.swift; sourceTree = "<group>"; };
 		89DE88002575BCD4006B9011 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -254,6 +258,7 @@
 				898E396B2576668900A17A00 /* TreeInfoView.swift */,
 				898E396E2576669C00A17A00 /* TreePersonalizationView.swift */,
 				898E3971257666A900A17A00 /* PersonalSignView.swift */,
+				898074F02591610A00645676 /* AdoptedTreesView.swift */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -321,6 +326,7 @@
 				898E39C6257688FC00A17A00 /* TourRepository.swift */,
 				898E39C92576890700A17A00 /* CategoryRepository.swift */,
 				898E39CC2576891200A17A00 /* ContentRepository.swift */,
+				89D3EBAF2592290A00076E51 /* CountryRepository.swift */,
 				898E39CF2576891E00A17A00 /* ForestRepository.swift */,
 				898E39D22576892B00A17A00 /* TelemetryRepository.swift */,
 				898E39D52576893600A17A00 /* ProductRepository.swift */,
@@ -645,6 +651,7 @@
 				898E3987257667BB00A17A00 /* AdoptionLoginView.swift in Sources */,
 				898E39F8257704B700A17A00 /* ChangeEmailView.swift in Sources */,
 				898E399F257669AB00A17A00 /* AdoptionOverviewView.swift in Sources */,
+				898074F12591610A00645676 /* AdoptedTreesView.swift in Sources */,
 				898E39FB257704C600A17A00 /* ChangePasswordView.swift in Sources */,
 				89DE87FF2575BCD4006B9011 /* AdoptreeAppApp.swift in Sources */,
 				898E396C2576668900A17A00 /* TreeInfoView.swift in Sources */,
@@ -669,6 +676,7 @@
 				898E39E625769DB400A17A00 /* GreenIdeaView.swift in Sources */,
 				898E39EA2576A12A00A17A00 /* AnnouncmentDetailView.swift in Sources */,
 				89A65CE72582A55600A77407 /* NewsViewModel.swift in Sources */,
+				89D3EBB02592290A00076E51 /* CountryRepository.swift in Sources */,
 				898E39632576666200A17A00 /* TreeView.swift in Sources */,
 				898E39A2257669B800A17A00 /* TreeFiltersView.swift in Sources */,
 				898E39032576619100A17A00 /* Tree.swift in Sources */,

@@ -20,16 +20,13 @@ class ViewModelFactory {
     private let notificationRepository = NotificationRepository()
     private let tourRepository = TourRepository()
     private let treeSignRepository = TreeSignRepository()
+    private let countryRepository = CountryRepository()
 }
 
 extension ViewModelFactory {
     
-    //    func makeUserViewModel() -> UserViewModel {
-    //        return UserViewModel(userRepository: userRepository)
-    //    }
-    
     func makeTreeViewModel() -> TreeViewModel {
-        return TreeViewModel(treeRepository: treeRepository, userRepository: userRepository, contentRepository: contentRepository, forestRepository: forestRepository, treeSignRepository: treeSignRepository, telemetryRepository: telemetryRepository)
+        return TreeViewModel(treeRepository: treeRepository, userRepository: userRepository, countryRepository: countryRepository, forestRepository: forestRepository, treeSignRepository: treeSignRepository)
     }
     
     func makeTimelineViewModel() -> TimelineViewModel {
@@ -43,7 +40,5 @@ extension ViewModelFactory {
     func makeNewsViewModel() -> NewsViewModel {
         return NewsViewModel(contentRepository: contentRepository, tourRepository: tourRepository, userRepository: userRepository)
     }
-    //    func makeNotificationViewModel() -> NotificationViewModel {
-    //        return NotificationViewModel(notificationRepository: notificationRepository)
-    //    }
+
 }

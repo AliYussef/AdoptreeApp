@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContractView: View {
+    @EnvironmentObject var userViewModel: UserViewModel
+    @ObservedObject var treeViewModel: TreeViewModel
     
     var body: some View {
         ZStack {
@@ -18,44 +20,22 @@ struct ContractView: View {
                 HStack {
                     Text("Name")
                     Spacer()
-                    Text("Your Name")
+                    Text("\(userViewModel.userShared.firstname ?? "YOUR") \(userViewModel.userShared.lastname ?? "NAME")")
                         .foregroundColor(.init("color_font_secondary"))
                 }
                 
-                HStack {
-                    Text("Tree Type")
-                    Spacer()
-                    Text("White oak")
-                        .foregroundColor(.init("color_font_secondary"))
-                }
-                
-                HStack {
-                    Text("Location")
-                    Spacer()
-                    Text("Netherlands")
-                        .foregroundColor(.init("color_font_secondary"))
-                }
-                
-                HStack {
-                    Text("Start date")
-                    Spacer()
-                    Text("25-05-2020")
-                        .foregroundColor(.init("color_font_secondary"))
-                }
-                
-                HStack {
-                    Text("End date")
-                    Spacer()
-                    Text("24-05-2021")
-                        .foregroundColor(.init("color_font_secondary"))
-                }
+                NavigationLink(
+                    destination: AdoptedTreesView(treeViewModel: treeViewModel),
+                    label: {
+                        Text("Adopted trees")
+                            .foregroundColor(.black)
+                    })
             }
         }
-    }
-}
-
-struct ContractView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContractView()
+        .onAppear {
+            if treeViewModel.countries.isEmpty && treeViewModel.forests.isEmpty {
+                treeViewModel.getForestsAndCountries()
+            }
+        }
     }
 }

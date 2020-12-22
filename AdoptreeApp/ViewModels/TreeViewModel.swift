@@ -13,26 +13,68 @@ class TreeViewModel: ObservableObject {
     @Published var treeImages: [TreeImage] = []
     @Published var wildlifes: [WildlifeOutput] = []
     @Published var treeSign: TreeSign?
-    @Published var telemetries: [Telemetry] = []
-    @Published var sequestrations: [Sequestration] = []
+    @Published var countries: [Country] = []
+    @Published var forests: [Forest] = []
     @Published var isExpanded: [Bool] = [true]
     private let treeRepository: TreeRepositoryProtocol
     private let userRepository: UserRepositoryProtocol
-    private let contentRepository: ContentRepositoryProtocol
+    private let countryRepository: CountryRepositoryProtocol
     private let forestRepository: ForestRepositoryProtocol
     private let treeSignRepository: TreeSignRepositoryProtocol
-    private let telemetryRepository: TelemetryRepositoryProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    init(treeRepository: TreeRepositoryProtocol, userRepository: UserRepositoryProtocol, contentRepository: ContentRepositoryProtocol, forestRepository: ForestRepositoryProtocol, treeSignRepository: TreeSignRepositoryProtocol, telemetryRepository: TelemetryRepositoryProtocol) {
+    init(treeRepository: TreeRepositoryProtocol, userRepository: UserRepositoryProtocol, countryRepository: CountryRepositoryProtocol, forestRepository: ForestRepositoryProtocol, treeSignRepository: TreeSignRepositoryProtocol) {
         self.treeRepository = treeRepository
         self.userRepository = userRepository
-        self.contentRepository = contentRepository
+        self.countryRepository = countryRepository
         self.forestRepository = forestRepository
         self.treeSignRepository = treeSignRepository
-        self.telemetryRepository = telemetryRepository
         //getAdoptedTrees(of: 1) {_ in}
     }
+}
+
+extension TreeViewModel {
+    
+    func getAdoptedTrees(of userId:Int64 ,completion: @escaping (Result<[Tree], RequestError>) -> Void) {
+        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .trees(1), using: .get)
+        
+        userRepository.getAdoptedTrees(using: urlRequest)
+            .sink(receiveCompletion: {result in
+                switch result {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        switch error {
+                            case let urlError as URLError:
+                                print(urlError)
+                                completion(.failure(.urlError(urlError)))
+                            case let decodingError as DecodingError:
+                                print(decodingError)
+                                completion(.failure(.decodingError(decodingError)))
+                            default:
+                                print(error)
+                                completion(.failure(.genericError(error)))
+                        }
+                }
+                
+            }, receiveValue: {result in
+                
+                // to be called later
+                //                self.trees.forEach({ tree in
+                //                    if let treeId = tree.assignedTree?.tree_id {
+                //                        self.getTreeImagesAndWildlife(from: tree.forestId, of: treeId)
+                //                    }
+                //                })
+                completion(.success(result))
+                //below is already called in content view
+                //                self.trees = result
+                //                for _ in self.trees.indices {
+                //                    self.isExpanded.append(false)
+                //                }
+            })
+            .store(in: &cancellables)
+    }
+    
 }
 
 extension TreeViewModel {
@@ -73,56 +115,6 @@ extension TreeViewModel {
                     case .success(let wildlife):
                         self.wildlifes.append(WildlifeOutput(forestId: forestId, wildlife: wildlife))
                 }
-            })
-            .store(in: &cancellables)
-    }
-    
-}
-
-extension TreeViewModel {
-    
-    func getAdoptedTrees(of userId:Int64 ,completion: @escaping (Result<[Tree], RequestError>) -> Void) {
-        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .trees(1), using: .get)
-        
-        userRepository.getAdoptedTrees(using: urlRequest)
-            .sink(receiveCompletion: {result in
-                switch result {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        switch error {
-                            case let urlError as URLError:
-                                print(urlError)
-                                completion(.failure(.urlError(urlError)))
-                            case let decodingError as DecodingError:
-                                print(decodingError)
-                                completion(.failure(.decodingError(decodingError)))
-                            default:
-                                print(error)
-                                completion(.failure(.genericError(error)))
-                        }
-                }
-                
-            }, receiveValue: {result in
-                
-               
-//                self.trees.forEach({tree in
-//                    if let treeId = tree.assignedTree?.tree_id {
-//                        self.getTimeLineData(using: treeId)
-//                    }
-//                })
-                //self.getTimeLineData(using: 1)
-                // to be called later
-//                self.trees.forEach({ tree in
-//                    if let treeId = tree.assignedTree?.tree_id {
-//                        self.getTreeImagesAndWildlife(from: tree.forestId, of: treeId)
-//                    }
-//                })
-                completion(.success(result))
-//                self.trees = result
-//                for _ in self.trees.indices {
-//                    self.isExpanded.append(false)
-//                }
             })
             .store(in: &cancellables)
     }
@@ -206,9 +198,9 @@ extension TreeViewModel {
                 })
                 .store(in: &cancellables)
             
-        }catch let encodingError as EncodingError{
+        } catch let encodingError as EncodingError{
             completion(.failure(.encodingError(encodingError)))
-        }catch let error{
+        } catch let error{
             completion(.failure(.genericError(error)))
         }
     }
@@ -255,19 +247,18 @@ extension TreeViewModel {
 }
 
 extension TreeViewModel {
-    func getTimeLineData(using treeId:Int64) {
-        let telemetryUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .telemetryById(treeId), using: .get)
-        let sequestrationUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .sequestration(treeId), using: .get)
+    
+    func getForestsAndCountries() {
+        let countryUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .country, using: .get)
+        let forestUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .forest, using: .get)
         
-        Publishers.CombineLatest(telemetryRepository.getTelemetryByTree(using: telemetryUrlRequest), treeRepository.getTreeSequestraion(using: sequestrationUrlRequest))
-            .sink(receiveValue: { telemetries, sequestrations in
+        Publishers.CombineLatest(countryRepository.getCountries(using: countryUrlRequest), forestRepository.getForests(using: forestUrlRequest))
+            .sink(receiveValue: { countries, forests in
                 
-                switch(telemetries) {
+                switch(countries) {
                     case .failure(let error):
-                        print("telemetries")
                         switch error {
                             case .decodingError(let decodingError):
-                                
                                 print(decodingError)
                             case .urlError(let urlError):
                                 print(urlError)
@@ -275,16 +266,12 @@ extension TreeViewModel {
                                 print(error)
                         }
                         
-                    case .success(let telemetries):
-                        //since the response is array but there is always one element only
-                        //if let telemetry = telemetries.first {
-                        self.telemetries.append(telemetries)
-                    //}
+                    case .success(let results):
+                        self.countries = results
                 }
                 
-                switch(sequestrations) {
+                switch(forests) {
                     case .failure(let error):
-                        print("sequestrations")
                         switch error {
                             case .decodingError(let decodingError):
                                 print(decodingError)
@@ -294,8 +281,8 @@ extension TreeViewModel {
                                 print(error)
                         }
                         
-                    case .success(let sequestrations):
-                        self.sequestrations.append(Sequestration(treeId: treeId, sequestration: sequestrations))
+                    case .success(let results):
+                        self.forests = results
                 }
             })
             .store(in: &cancellables)

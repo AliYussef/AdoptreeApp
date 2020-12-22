@@ -37,9 +37,11 @@ struct AdoptreeAppApp: App {
                 
 //                RootView().environmentObject(viewRouter).environmentObject(orderViewModel)
 //                    .environmentObject(notificationViewModel).environmentObject(userViewModel)
+                NavigationView {
+                    ContractView(treeViewModel: viewModelFactory.makeTreeViewModel())
+                        .environmentObject(userViewModel)
+                }
                 
-               ForgotPasswordView()
-                .environmentObject(userViewModel)
             }
             .accentColor(.init("color_primary_accent"))
         }

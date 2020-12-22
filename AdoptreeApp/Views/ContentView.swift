@@ -61,7 +61,7 @@ struct ContentView: View {
                 }
                 
                 NavigationView {
-                    ProfileView()
+                    ProfileView(treeViewModel: treeViewModel)
                         .navigationBarTitle("PROFILE", displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     
