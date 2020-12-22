@@ -30,6 +30,11 @@ struct AssignedTree: Codable {
     var tree_color: String?
 }
 
+struct TreeLocation {
+    let country: String
+    let forest: String
+}
+
 extension Tree {
     
     var coordinate: CLLocationCoordinate2D {

@@ -93,7 +93,7 @@ struct TreeDataSection: View {
     
     var body: some View {
         // monitoring factors
-        if let telemetry = telemetry {
+//        if let telemetry = telemetry {
             HStack() {
                 RoundedRectangle(cornerRadius: 12.0)
                     .fill(Color.init("color_gray"))
@@ -121,7 +121,7 @@ struct TreeDataSection: View {
                                 .foregroundColor(Color.white)
                                 .padding(.bottom, 30)
                             
-                            Text("\(telemetry.treeLength)cm")
+                            Text("\(telemetry?.treeLength ?? 0)cm")
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color.white)
@@ -143,7 +143,7 @@ struct TreeDataSection: View {
                                     .stroke(temperatureColor, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round, miterLimit: .infinity, dash: [20,0], dashPhase: 0))
                                     .frame(width: 100, height: 100, alignment: .center)
                                     .padding(.bottom, 20)
-                                Text("\(telemetry.temperature) °")
+                                Text("\(telemetry?.temperature ?? 0) °")
                                     .font(.title)
                                     .fontWeight(.semibold)
                                     .foregroundColor(Color.init("color_font_primary"))
@@ -161,14 +161,14 @@ struct TreeDataSection: View {
                                 .foregroundColor(Color.white)
                                 .padding(.bottom, 30)
                             
-                            Text("\(telemetry.humidity)%")
+                            Text("\(telemetry?.humidity ?? 0)%")
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color.white)
                                 .padding(.bottom, 50)})
                     .offset(x: 0, y: 0)
             }.padding(.bottom, 5)
-        }
+//        }
         
     }
 }

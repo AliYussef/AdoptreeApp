@@ -16,6 +16,7 @@ class TreeViewModel: ObservableObject {
     @Published var countries: [Country] = []
     @Published var forests: [Forest] = []
     @Published var isExpanded: [Bool] = [true]
+    @Published var treeLocationDic: [Int64: TreeLocation] = [:]
     private let treeRepository: TreeRepositoryProtocol
     private let userRepository: UserRepositoryProtocol
     private let countryRepository: CountryRepositoryProtocol
@@ -283,8 +284,26 @@ extension TreeViewModel {
                         
                     case .success(let results):
                         self.forests = results
+                        self.createTreeLocationDic()
                 }
             })
             .store(in: &cancellables)
     }
+    
+    func createTreeLocationDic() {
+        var forestDic: [Int64 : Int64] = [:]
+        
+        forests.forEach({ forest in
+            forestDic[forest.id] = forest.countryId
+        })
+        print(forestDic)
+        trees.forEach({ tree in
+            if let treeId = tree.assignedTree?.tree_id {
+                
+                treeLocationDic[treeId] = TreeLocation(country: countries.first(where: {$0.id == forestDic[tree.forestId]})?.name ?? "Unknown", forest: forests.first(where: {$0.id == tree.forestId})?.name ?? "Unknown")
+            }
+        })
+        print(treeLocationDic)
+    }
+    
 }

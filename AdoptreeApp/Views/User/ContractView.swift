@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContractView: View {
     @EnvironmentObject var userViewModel: UserViewModel
+    @EnvironmentObject var orderViewModel: OrderViewModel
     @ObservedObject var treeViewModel: TreeViewModel
     
     var body: some View {
@@ -35,6 +36,10 @@ struct ContractView: View {
         .onAppear {
             if treeViewModel.countries.isEmpty && treeViewModel.forests.isEmpty {
                 treeViewModel.getForestsAndCountries()
+            }
+            
+            if orderViewModel.availableProducts.isEmpty {
+                orderViewModel.getProductsAndCategories()
             }
         }
     }

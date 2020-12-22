@@ -155,6 +155,7 @@ struct OverviewCellView: View {
                         Image("\(orderViewModel.categoriesDic[orderProduct.product.categoryId]?.lowercased() == "tree" ? "tree" : "sapling")")
                             .resizable()
                             .frame(width: 40, height: 50, alignment: .leading)
+                            .foregroundColor(.init("color_primary_accent"))
                         
                         VStack (alignment: .leading) {
                             Text("\(orderProduct.product.name)")

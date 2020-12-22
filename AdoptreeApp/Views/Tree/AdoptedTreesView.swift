@@ -19,17 +19,13 @@ struct AdoptedTreesView: View {
                     AdoptedTreesCell(treeViewModel: treeViewModel, tree: tree)
                 }
             }
+            .padding(.top)
         }
     }
 }
 
-struct AdoptedTreesView_Previews: PreviewProvider {
-    static var previews: some View {
-        AdoptedTreesView(treeViewModel: .init(treeRepository: TreeRepository(), userRepository: UserRepository(), countryRepository: CountryRepository(), forestRepository: ForestRepository(), treeSignRepository: TreeSignRepository()))
-    }
-}
-
 struct AdoptedTreesCell: View {
+    @EnvironmentObject var orderViewModel: OrderViewModel
     @ObservedObject var treeViewModel: TreeViewModel
     let tree: Tree
     
@@ -39,7 +35,7 @@ struct AdoptedTreesCell: View {
             HStack {
                 Label(
                     title: {
-                        Text("\(tree.assignedTree?.tree_name ?? "Tree")")
+                        Text("\((tree.assignedTree?.tree_name?.isEmpty ?? false ? "Tree" : tree.assignedTree?.tree_name) ?? "Tree")")
                             .font(.title2)
                     },
                     icon: {
@@ -47,13 +43,14 @@ struct AdoptedTreesCell: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 20, height: 20)
+                            .foregroundColor(.init("color_primary_accent"))
                     })
                 
                 Spacer()
                 
                 if isTreeUpForRenewal() {
                     Button(action: {
-                        
+                        //add renew here
                     }, label: {
                         HStack {
                             Text("Renew")
@@ -69,25 +66,36 @@ struct AdoptedTreesCell: View {
                     .cornerRadius(10.0)
                 }
             }
-            .padding([.leading, .trailing])
+            .padding([.leading, .trailing, .bottom])
             
             RoundedRectangle(cornerRadius: 12.0)
                 .fill(Color.white)
-                .frame(width: UIScreen.main.bounds.width * 0.9, height: 192, alignment: .leading)
+                .frame(width: UIScreen.main.bounds.width * 0.9, height: 245, alignment: .leading)
                 .overlay(
                     List {
                         HStack {
                             Text("Tree Type")
                             Spacer()
-                            Text("White oak")
+                            Text("\(orderViewModel.availableProducts.first(where: {$0.id == tree.productId})?.name ?? "Tree")")
                                 .foregroundColor(.init("color_font_secondary"))
                         }
                         
                         HStack {
-                            Text("Location")
+                            Text("Country")
                             Spacer()
-                            Text("Netherlands")
-                                .foregroundColor(.init("color_font_secondary"))
+                            if let treeId = tree.assignedTree?.tree_id {
+                                Text("\(treeViewModel.treeLocationDic[treeId]?.country ?? "Unknown")")
+                                    .foregroundColor(.init("color_font_secondary"))
+                            }
+                        }
+                        
+                        HStack {
+                            Text("Forest")
+                            Spacer()
+                            if let treeId = tree.assignedTree?.tree_id {
+                                Text("\(treeViewModel.treeLocationDic[treeId]?.forest ?? "Unknown")")
+                                    .foregroundColor(.init("color_font_secondary"))
+                            }
                         }
                         
                         HStack {

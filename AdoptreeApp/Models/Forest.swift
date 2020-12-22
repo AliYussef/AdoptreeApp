@@ -13,6 +13,6 @@ struct Forest: Codable {
     let countryId: Int64
     let xLength: Int64
     let yLength: Int64
-    let latitude: Double
-    let longitude: Double
+    let latitude: String
+    let longitude: String
 }
