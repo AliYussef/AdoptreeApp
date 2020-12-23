@@ -205,6 +205,7 @@ struct NewsView: View {
                                         .font(.subheadline)
                                 })
                         }
+                        .padding(.bottom)
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
                     

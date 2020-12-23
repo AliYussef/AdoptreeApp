@@ -25,7 +25,7 @@ class InputValidationViewModel: ObservableObject {
         }
     }
     @Published var passwords: [String] = ["0","1"]
-  
+    
     
     lazy var firstNameValidation: ValidationPublisher = {
         $firstName.nonEmptyValidator("First name must be provided")
@@ -66,8 +66,8 @@ class InputValidationViewModel: ObservableObject {
             emailValidation,
             emailEmptyValidation
         ).map { v1, v2, v3, v4 in
-           // print("firstNameValidation: \(v1)")
-           // print("lastNameValidation: \(v2)")
+            // print("firstNameValidation: \(v1)")
+            // print("lastNameValidation: \(v2)")
             //print("emailValidation: \(v3)")
             //print("emailEmptyValidation: \(v4)")
             return [v1, v2, v3, v4].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
@@ -81,9 +81,9 @@ class InputValidationViewModel: ObservableObject {
             confirmPasswordValidation,
             confirmPasswordMatchingValidation
         ).map { v1, v2, v3, v4 in
-           // print("usernameValidation: \(v1)")
+            // print("usernameValidation: \(v1)")
             //print("passwordValidation: \(v2)")
-           // print("confirmPasswordValidation: \(v3)")
+            // print("confirmPasswordValidation: \(v3)")
             //print("confirmPasswordMatchingValidation: \(v4)")
             return [v1, v2, v3, v4].allSatisfy {
                 $0.isSuccess } ? .success : .failure(message: "")
@@ -117,4 +117,24 @@ class InputValidationViewModel: ObservableObject {
             return [v1, v2, v3].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
         }.eraseToAnyPublisher()
     }()
+    
+    lazy var changeEmailValidation: ValidationPublisher = {
+        Publishers.CombineLatest3(
+            emailEmptyValidation,
+            emailValidation,
+            passwordValidation
+        ).map { v1, v2, v3 in
+            return [v1, v2, v3].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
+        }.eraseToAnyPublisher()
+    }()
+    
+    lazy var loginValidation: ValidationPublisher = {
+        Publishers.CombineLatest(
+            usernameValidation,
+            passwordValidation
+        ).map { v1, v2 in
+            return [v1, v2].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
+        }.eraseToAnyPublisher()
+    }()
+    
 }

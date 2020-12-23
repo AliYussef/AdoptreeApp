@@ -57,7 +57,7 @@ struct SignupView: View {
                     })
                 }
                 .onReceive(inputValidationViewModel.allValidation) { validation in
-                    self.isSaveDisabled = !validation.isSuccess
+                    isSaveDisabled = !validation.isSuccess
                 }
                 .background(Color.init("color_background"))
                 .padding(.top, 50)
@@ -95,9 +95,9 @@ struct SignupView: View {
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
-                .disabled(self.isSaveDisabled)
+                .disabled(isSaveDisabled)
                 .frame(width: 160, height: 40, alignment: .center)
-                .background(Color.init("color_primary_accent"))
+                .background(isSaveDisabled ? Color.gray : Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {

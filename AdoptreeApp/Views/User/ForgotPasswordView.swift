@@ -45,7 +45,7 @@ struct ForgotPasswordView: View {
                         .padding()
                     
                     Button(action: {
-                        self.userViewModel.resetPassword(resetPasswordBody: ResetPasswordBody(user_id: nil, token: self.userViewModel.forgetPasswordToken, created_at: nil, valid_until: nil, password: inputValidationViewModel.password, validate_password: inputValidationViewModel.confirmPassword)) {result in
+                        userViewModel.resetPassword(resetPasswordBody: ResetPasswordBody(user_id: nil, token: self.userViewModel.forgetPasswordToken, created_at: nil, valid_until: nil, password: inputValidationViewModel.password, validate_password: inputValidationViewModel.confirmPassword)) {result in
                             switch (result) {
                                 case .failure(_):
                                     message = "Somthing went wrong. Please try again!"
@@ -61,9 +61,9 @@ struct ForgotPasswordView: View {
                             .font(.subheadline)
                             .foregroundColor(.white)
                     })
-                    .disabled(self.isSaveDisabled)
+                    .disabled(isSaveDisabled)
                     .frame(width: UIScreen.main.bounds.width * 0.6, height: 50, alignment: .center)
-                    .background(Color.init("color_primary_accent"))
+                    .background(isSaveDisabled ? Color.gray : Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
                     .padding()
                     .alert(isPresented: $showingAlert) {
@@ -72,7 +72,7 @@ struct ForgotPasswordView: View {
                 }
             }
             .onReceive(inputValidationViewModel.resetPasswordValidation) { validation in
-                self.isSaveDisabled = !validation.isSuccess
+                isSaveDisabled = !validation.isSuccess
             }
         }
         .navigationBarTitle("Forgot password", displayMode: .inline)
@@ -108,15 +108,15 @@ struct RequestPasswordChangeView: View {
             .padding()
         
         Button(action: {
-            self.userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: inputValidationViewModel.username, email: inputValidationViewModel.username)) {result in
+            userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: inputValidationViewModel.username, email: inputValidationViewModel.username)) {result in
                 switch (result) {
                     case .failure(_):
                         message = "An error has occurred. Please check your username and email!"
                         showingAlert.toggle()
                     case .success(_):
                         break
-                        //message = "Password has been reset"
-                        //showingAlert.toggle()
+                    //message = "Password has been reset"
+                    //showingAlert.toggle()
                 }
             }
         }, label: {
@@ -124,13 +124,13 @@ struct RequestPasswordChangeView: View {
                 .font(.subheadline)
                 .foregroundColor(.white)
         })
-        .disabled(self.isSaveDisabled)
+        .disabled(isSaveDisabled)
         .frame(width: UIScreen.main.bounds.width * 0.6, height: 50, alignment: .center)
-        .background(Color.init("color_primary_accent"))
+        .background(isSaveDisabled ? Color.gray : Color.init("color_primary_accent"))
         .cornerRadius(10.0)
         .padding()
         .onReceive(inputValidationViewModel.requestResetPasswordValidation) { validation in
-            self.isSaveDisabled = !validation.isSuccess
+            isSaveDisabled = !validation.isSuccess
         }
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Reset password"), message: Text("\(message)"), dismissButton: .default(Text("OK")))

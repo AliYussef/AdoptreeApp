@@ -12,8 +12,7 @@ struct AdoptionLoginView: View {
     @EnvironmentObject var orderViewModel: OrderViewModel
     @EnvironmentObject var userViewModel: UserViewModel
     @ObservedObject var inputValidationViewModel = InputValidationViewModel()
-    @State private var username = ""
-    @State private var password = ""
+    @State var isSaveDisabled = true
     @State private var actionState: Int? = 0
     @Binding var isAdoptionFailed: Bool
     @State private var showingAlert = false
@@ -26,7 +25,8 @@ struct AdoptionLoginView: View {
             
             VStack {
                 Spacer()
-                TextField("Username", text: $username)
+                TextField("Username", text: $inputValidationViewModel.username)
+                    .validation(inputValidationViewModel.usernameValidation)
                     .padding()
                     .background(Color.init("color_textfield"))
                     .cornerRadius(8.0)
@@ -34,7 +34,8 @@ struct AdoptionLoginView: View {
                     .autocapitalization(.none)
                     .padding()
                 
-                SecureField("Password", text: $password)
+                SecureField("Password", text: $inputValidationViewModel.password)
+                    .validation(inputValidationViewModel.passwordValidation)
                     .padding()
                     .background(Color.init("color_textfield"))
                     .cornerRadius(8.0)
@@ -92,8 +93,9 @@ struct AdoptionLoginView: View {
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
+                .disabled(isSaveDisabled)
                 .frame(width: 160, height: 40, alignment: .center)
-                .background(Color.init("color_primary_accent"))
+                .background(isSaveDisabled ? Color.gray : Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {
@@ -105,7 +107,11 @@ struct AdoptionLoginView: View {
                 }
                 
             }
-        }.onOpenURL(perform: { url in
+        }
+        .onReceive(inputValidationViewModel.loginValidation) { validation in
+            isSaveDisabled = !validation.isSuccess
+        }
+        .onOpenURL(perform: { url in
             if url.host == "payment-return" {
                 if let orderId = orderViewModel.orderResponse?.id {
                     orderViewModel.getOrderById(using: orderId) { result in

@@ -9,13 +9,15 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @State private var username = ""
-    @State private var password = ""
-   // @Binding var isGuest: Bool?
+    @ObservedObject var inputValidationViewModel = InputValidationViewModel()
+    @State var isLoginDisabled = true
+    @State private var showingAlert = false
+    @State private var message = ""
+    @State var isTryingToLogin: Bool = false
     
     var body: some View {
         NavigationView {
-            ZStack{
+            ZStack {
                 Color.init("color_background")
                     .edgesIgnoringSafeArea(.all)
                 VStack {
@@ -27,7 +29,8 @@ struct LoginView: View {
                         .padding()
                     
                     Spacer()
-                    TextField("Username", text: $username)
+                    TextField("Username", text: $inputValidationViewModel.username)
+                        .validation(inputValidationViewModel.usernameValidation)
                         .padding()
                         .background(Color.init("color_textfield"))
                         .cornerRadius(8.0)
@@ -35,7 +38,8 @@ struct LoginView: View {
                         .autocapitalization(.none)
                         .padding()
                     
-                    SecureField("Password", text: $password)
+                    SecureField("Password", text: $inputValidationViewModel.password)
+                        .validation(inputValidationViewModel.passwordValidation)
                         .padding()
                         .background(Color.init("color_textfield"))
                         .cornerRadius(8.0)
@@ -44,19 +48,36 @@ struct LoginView: View {
                         .padding()
                     
                     Button(action: {
+                        isTryingToLogin.toggle()
                         withAnimation {
                             self.userViewModel.isAuthenticated.toggle()
                         }
                         
+//                        let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, forgetToken: nil, role: nil, createdAt: nil)
+//                        userViewModel.login(user: user) { result in
+//                            switch (result) {
+//                                case .failure(_):
+//                                    message = "An error occurred. Please check your username and password!"
+//                                    showingAlert.toggle()
+//                                case .success(let response):
+//                                    //userViewModel.accessToken = response.authtoken
+//                                    break
+//                            }
+//                            isTryingToLogin.toggle()
+//                        }
                     }, label: {
                         Text("Log in")
                             .font(.subheadline)
                             .foregroundColor(.white)
                     })
+                    .disabled(isLoginDisabled)
                     .frame(width: 180, height: 40, alignment: .center)
-                    .background(Color.init("color_primary_accent"))
+                    .background(isLoginDisabled ? Color.gray : Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
                     .padding()
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("Login"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    }
                     
                     HStack {
                         Text("Haven’t adopted a tree yet?")
@@ -97,11 +118,28 @@ struct LoginView: View {
                 }
                 .navigationBarBackButtonHidden(true)
                 
+                if isTryingToLogin {
+                    withAnimation(.linear) {
+                        ZStack {
+                            Image("tree")
+                                .resizable()
+                                .scaledToFill()
+                                .opacity(0.0)
+                                .background(Blur(style: .systemUltraThinMaterial))
+                                .edgesIgnoringSafeArea(.all)
+                            
+                            ProgressView("Logging in...")
+                        }
+                    }
+                }
             }
+        }
+        .onReceive(inputValidationViewModel.loginValidation) { validation in
+            isLoginDisabled = !validation.isSuccess
         }
         .navigationBarTitle("")
         .navigationBarHidden(true)
         
-        
     }
 }
+

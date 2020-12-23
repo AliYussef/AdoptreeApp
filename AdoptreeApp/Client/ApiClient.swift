@@ -10,7 +10,6 @@ import Combine
 
 final class ApiClient {
     static let sharedApiClient = ApiClient()
-    var number = 0
     
     lazy var decoder: JSONDecoder = {
         let dateNoTimeFormatter = DateFormatter()

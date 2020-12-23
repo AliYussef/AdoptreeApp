@@ -215,5 +215,68 @@ extension UserViewModel {
             completion(.failure(.genericError(error)))
         }
     }
+}
+
+extension UserViewModel {
     
+    func updateUserAccount(user: User, completion: @escaping (Result<User, RequestError>) -> Void) {
+        do {
+            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .user, using: .put, withParams: user)
+            
+            userRepository.updateUserAccount(using: urlRequest)
+                .sink(receiveCompletion: {result in
+                    switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            switch error {
+                                case let urlError as URLError:
+                                    completion(.failure(.urlError(urlError)))
+                                case let decodingError as DecodingError:
+                                    completion(.failure(.decodingError(decodingError)))
+                                default:
+                                    completion(.failure(.genericError(error)))
+                            }
+                    }
+                }, receiveValue: { result in
+                    self.userShared = UserShared(id: result.id, firstname: result.firstname, lastname: result.lastname, username: result.username, email: result.email)
+                    self.saveUserSharedObject()
+                    completion(.success(result))
+                })
+                .store(in: &cancellables)
+            
+        } catch let encodingError as EncodingError{
+            completion(.failure(.encodingError(encodingError)))
+        } catch let error{
+            completion(.failure(.genericError(error)))
+        }
+    }
+    
+    func deleteUserAccount(completion: @escaping (Result<HTTPURLResponse, RequestError>) -> Void) {
+        
+        guard userShared.id != nil else {
+            return
+        }
+        
+        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .userById(userShared.id!), using: .delete)
+        
+        userRepository.deleteUserAccount(using: urlRequest)
+            .sink(receiveCompletion: {result in
+                switch result {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        switch error {
+                            case let urlError:
+                                completion(.failure(.urlError(urlError)))
+                        }
+                }
+            }, receiveValue: { result in
+                completion(.success(result))
+                //self.userShared = UserShared(id: nil, firstname: nil, lastname: nil, username: nil, email: nil)
+                //self.saveUserSharedObject()
+                //self.logout()
+            })
+            .store(in: &cancellables)
+    }
 }

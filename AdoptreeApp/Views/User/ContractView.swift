@@ -17,20 +17,27 @@ struct ContractView: View {
             Color.init("color_background")
                 .edgesIgnoringSafeArea(.all)
             
-            List {
-                HStack {
-                    Text("Name")
-                    Spacer()
-                    Text("\(userViewModel.userShared.firstname ?? "YOUR") \(userViewModel.userShared.lastname ?? "NAME")")
-                        .foregroundColor(.init("color_font_secondary"))
-                }
+            VStack(alignment: .leading) {
+                Text("Contract")
+                    .font(.title2)
+                    .foregroundColor(.init("color_font_primary"))
+                    .padding([.top, .leading])
                 
-                NavigationLink(
-                    destination: AdoptedTreesView(treeViewModel: treeViewModel),
-                    label: {
-                        Text("Adopted trees")
-                            .foregroundColor(.black)
-                    })
+                List {
+                    HStack {
+                        Text("Name")
+                        Spacer()
+                        Text("\(userViewModel.userShared.firstname ?? "YOUR") \(userViewModel.userShared.lastname ?? "NAME")")
+                            .foregroundColor(.init("color_font_secondary"))
+                    }
+                    
+                    NavigationLink(
+                        destination: AdoptedTreesView(treeViewModel: treeViewModel),
+                        label: {
+                            Text("Adopted trees")
+                                .foregroundColor(.black)
+                        })
+                }
             }
         }
         .onAppear {

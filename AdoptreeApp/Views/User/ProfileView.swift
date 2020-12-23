@@ -54,7 +54,7 @@ struct ProfileView: View {
                             })
                         
                         NavigationLink(
-                            destination: DeleteAccountView(),
+                            destination: DeleteAccountView(treeViewModel: treeViewModel),
                             label: {
                                 Text("Delete your account")
                                     .foregroundColor(.red)

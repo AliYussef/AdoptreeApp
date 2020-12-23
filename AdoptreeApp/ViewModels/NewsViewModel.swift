@@ -141,12 +141,6 @@ extension NewsViewModel {
                         }
                 }
             }, receiveValue: {result in
-                
-//                guard let httpResponse = result as? HTTPURLResponse,
-//                      200...299 ~= httpResponse.statusCode else {
-//                    print(result)
-//                    return
-//                }
                 self.bookedTours.removeAll(where: {$0.id == bookedTourId})
                 completion(.success(result))
             })
