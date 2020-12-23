@@ -10,6 +10,9 @@ import Combine
 
 class NewsViewModel: ObservableObject {
     @Published var contents: [Content] = []
+    @Published var informativeContents: [Content] = []
+    @Published var anncouncmentContents: [Content] = []
+    @Published var aboutContents: [Content] = []
     @Published var tours: [Tour] = []
     @Published var bookedTours: [BookedTour] = []
     private let contentRepository: ContentRepositoryProtocol
@@ -21,8 +24,6 @@ class NewsViewModel: ObservableObject {
         self.contentRepository = contentRepository
         self.tourRepository = tourRepository
         self.userRepository = userRepository
-        
-       // getNewsViewData(of: 1)
     }
 }
 
@@ -48,7 +49,8 @@ extension NewsViewModel {
                         }
                         
                     case .success(let contents):
-                        self.contents = contents
+                        self.contents = contents.sorted(by: {$0.createdOn > $1.createdOn})
+                        self.createContentData()
                 }
                 
                 switch(tours) {
@@ -82,6 +84,21 @@ extension NewsViewModel {
                 }
             })
             .store(in: &cancellables)
+    }
+}
+
+extension NewsViewModel {
+
+    func createContentData() {
+        contents.forEach({ content in
+            if content.contentType == ContentType.informative.rawValue {
+                informativeContents.append(content)
+            } else if content.contentType == ContentType.announcement.rawValue {
+                anncouncmentContents.append(content)
+            } else if content.contentType == ContentType.about.rawValue {
+                aboutContents.append(content)
+            }
+        })
     }
 }
 

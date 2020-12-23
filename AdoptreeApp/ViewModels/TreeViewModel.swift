@@ -60,13 +60,13 @@ extension TreeViewModel {
                 
             }, receiveValue: {result in
                 
-                // to be called later
-                //                self.trees.forEach({ tree in
-                //                    if let treeId = tree.assignedTree?.tree_id {
-                //                        self.getTreeImagesAndWildlife(from: tree.forestId, of: treeId)
-                //                    }
-                //                })
                 completion(.success(result))
+                // to be called later
+                self.trees.forEach({ tree in
+                    if let treeId = tree.assignedTree?.tree_id {
+                        self.getTreeImagesAndWildlife(from: tree.forestId, of: treeId)
+                    }
+                })
                 //below is already called in content view
                 //                self.trees = result
                 //                for _ in self.trees.indices {
@@ -114,7 +114,9 @@ extension TreeViewModel {
                         }
                         
                     case .success(let wildlife):
-                        self.wildlifes.append(WildlifeOutput(forestId: forestId, wildlife: wildlife))
+                        if !self.wildlifes.contains(where: {$0.forestId == forestId}) {
+                            self.wildlifes.append(WildlifeOutput(forestId: forestId, wildlife: wildlife))
+                        }
                 }
             })
             .store(in: &cancellables)
@@ -296,14 +298,14 @@ extension TreeViewModel {
         forests.forEach({ forest in
             forestDic[forest.id] = forest.countryId
         })
-        print(forestDic)
+        //print(forestDic)
         trees.forEach({ tree in
             if let treeId = tree.assignedTree?.tree_id {
                 
                 treeLocationDic[treeId] = TreeLocation(country: countries.first(where: {$0.id == forestDic[tree.forestId]})?.name ?? "Unknown", forest: forests.first(where: {$0.id == tree.forestId})?.name ?? "Unknown")
             }
         })
-        print(treeLocationDic)
+        //print(treeLocationDic)
     }
     
 }

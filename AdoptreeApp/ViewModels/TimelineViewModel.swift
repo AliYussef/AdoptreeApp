@@ -22,9 +22,6 @@ class TimelineViewModel: ObservableObject {
     init(telemetryRepository: TelemetryRepositoryProtocol, treeRepository: TreeRepositoryProtocol) {
         self.telemetryRepository = telemetryRepository
         self.treeRepository = treeRepository
-        
-        //createTimelineTreeObject()
-        //createTimelineDateFilter()
     }
 }
 extension TimelineViewModel {
@@ -104,7 +101,6 @@ extension TimelineViewModel {
                 }
             }
         })
-        print(treeTypeFilter)
     }
     
     func createTimelineDateFilter(trees: [Tree]) {

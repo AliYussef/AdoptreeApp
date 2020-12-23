@@ -106,7 +106,7 @@ struct NewsView: View {
                             }
                         }
                     }
-                 
+                    
                     VStack(alignment: .leading) {
                         
                         Text("GREEN IDEAS")
@@ -115,26 +115,30 @@ struct NewsView: View {
                             .padding()
                         
                         VStack {
-                            NavigationLink(
-                                destination: GreenIdeaDetailView(),
-                                label: {
-                                    HStack {
-                                        Image("green_idea")
-                                            .resizable()
-                                            .frame(width: 120, height: 120, alignment: .center)
-                                        
-                                        VStack(alignment: .leading) {
-                                            Text("10 December 2020")
-                                                .font(.body)
-                                                .foregroundColor(.init("color_font_primary"))
-                                                .padding(.bottom, 5)
+                            if let greenIdea = newsViewModel.informativeContents.first {
+                                NavigationLink(
+                                    destination: GreenIdeaDetailView(greenIdea: greenIdea),
+                                    label: {
+                                        HStack {
+                                            Image("green_idea")
+                                                .resizable()
+                                                .frame(width: 120, height: 120, alignment: .center)
                                             
-                                            Text("25 October 2020")
-                                                .font(.caption)
-                                                .foregroundColor(.init("color_font_secondary"))
+                                            VStack(alignment: .leading) {
+                                                
+                                                Text("\(greenIdea.title)")
+                                                    .font(.body)
+                                                    .foregroundColor(.init("color_font_primary"))
+                                                    .padding(.bottom, 5)
+                                                
+                                                Text(getHumanReadableDate(date: greenIdea.createdOn))
+                                                    .font(.caption)
+                                                    .foregroundColor(.init("color_font_secondary"))
+                                            }
+                                            
                                         }
-                                    }
-                                })
+                                    })
+                            }
                         }
                         .padding()
                         .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
@@ -147,7 +151,7 @@ struct NewsView: View {
                             Spacer()
                             
                             NavigationLink(
-                                destination: GreenIdeaView(),
+                                destination: GreenIdeaView(newsViewModel: newsViewModel),
                                 label: {
                                     Label("Explore more", systemImage: "arrow.right")
                                         .foregroundColor(.init("color_font_primary"))
@@ -165,28 +169,31 @@ struct NewsView: View {
                             .padding()
                         
                         VStack {
-                            NavigationLink(
-                                destination: AnnouncmentDetailView(),
-                                label: {
-                                    HStack {
-                                        Image(systemName: "newspaper")
-                                            .resizable()
-                                            .foregroundColor(.init("color_primary_accent"))
-                                            .frame(width: 100, height: 100, alignment: .center)
-                                            .padding(.trailing)
-                                        
-                                        VStack(alignment: .leading) {
-                                            Text("Stichting adoptiebos has recently reached 1k adopters.")
-                                                .font(.body)
-                                                .foregroundColor(.init("color_font_primary"))
-                                                .padding(.bottom, 5)
+                            if let announcment = newsViewModel.anncouncmentContents.first {
+                                NavigationLink(
+                                    destination: AnnouncmentDetailView(announcment: announcment),
+                                    label: {
+                                        HStack {
+                                            Image(systemName: "newspaper")
+                                                .resizable()
+                                                .foregroundColor(.init("color_primary_accent"))
+                                                .frame(width: 100, height: 100, alignment: .center)
+                                                .padding(.trailing)
                                             
-                                            Text("25 October 2020")
-                                                .font(.caption)
-                                                .foregroundColor(.init("color_font_secondary"))
+                                            VStack(alignment: .leading) {
+                                                
+                                                Text("\(announcment.title)")
+                                                    .font(.body)
+                                                    .foregroundColor(.init("color_font_primary"))
+                                                    .padding(.bottom, 5)
+                                                
+                                                Text(getHumanReadableDate(date: announcment.createdOn))
+                                                    .font(.caption)
+                                                    .foregroundColor(.init("color_font_secondary"))
+                                            }
                                         }
-                                    }
-                                })
+                                    })
+                            }
                         }
                         .padding()
                         .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
@@ -198,7 +205,7 @@ struct NewsView: View {
                             Spacer()
                             
                             NavigationLink(
-                                destination: AnnouncmentView(),
+                                destination: AnnouncmentView(newsViewModel: newsViewModel),
                                 label: {
                                     Label("Explore more", systemImage: "arrow.right")
                                         .foregroundColor(.init("color_font_primary"))
@@ -221,6 +228,13 @@ extension NewsView {
         let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "LLLL"
+        return dateFormatter.string(from: date)
+    }
+    
+    func getHumanReadableDate(date: Date) -> String {
+        let date = date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM YYYY"
         return dateFormatter.string(from: date)
     }
     

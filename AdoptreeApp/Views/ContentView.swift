@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    private let viewModelFactory: ViewModelFactory
+    @EnvironmentObject var userViewModel: UserViewModel
     @ObservedObject var treeViewModel: TreeViewModel
     @ObservedObject var timelineViewModel: TimelineViewModel
     @ObservedObject var newsViewModel: NewsViewModel
+    private let viewModelFactory: ViewModelFactory
     
     init() {
         viewModelFactory = ViewModelFactory()
@@ -83,37 +84,43 @@ struct ContentView: View {
                 }
             }
             .onAppear {
-                if treeViewModel.trees.isEmpty {
-                    treeViewModel.getAdoptedTrees(of: 1) { result in
-                        switch (result) {
-                            case .failure(let error):
-                                print(error)
-                            case .success(let success):
-                                //print("success")
-                                treeViewModel.trees = success
-                                for _ in treeViewModel.trees.indices {
-                                    treeViewModel.isExpanded.append(false)
-                                }
-                                //timelineViewModel.getTimeLineData(using: 1)
-                                if timelineViewModel.telemetries.isEmpty {
-                                    treeViewModel.trees.forEach({ tree in
-                                        if let treeId = tree.assignedTree?.tree_id {
-                                            timelineViewModel.getTimeLineData(using: treeId)
-                                        }
-                                    })
-                                }
-                                
-                                if timelineViewModel.datesFilter.isEmpty {
-                                    timelineViewModel.createTimelineTreeObject(trees: treeViewModel.trees)
-                                    timelineViewModel.createTimelineDateFilter(trees: treeViewModel.trees)
-                                }
-                                
+                if userViewModel.isAuthenticated {
+                    if treeViewModel.trees.isEmpty {
+                        // add user ID here later
+                        treeViewModel.getAdoptedTrees(of: 1) { result in
+                            switch (result) {
+                                case .failure(_):
+                                    break
+                                case .success(let success):
+                                    //print("success")
+                                    treeViewModel.trees = success
+                                    for _ in treeViewModel.trees.indices {
+                                        treeViewModel.isExpanded.append(false)
+                                    }
+                                    //timelineViewModel.getTimeLineData(using: 1)
+                                    if timelineViewModel.telemetries.isEmpty {
+                                        treeViewModel.trees.forEach({ tree in
+                                            if let treeId = tree.assignedTree?.tree_id {
+                                                timelineViewModel.getTimeLineData(using: treeId)
+                                            }
+                                        })
+                                    }
+                                    
+                                    if timelineViewModel.datesFilter.isEmpty {
+                                        timelineViewModel.createTimelineTreeObject(trees: treeViewModel.trees)
+                                        timelineViewModel.createTimelineDateFilter(trees: treeViewModel.trees)
+                                    }
+                                    
+                            }
                         }
+                    }
+                    
+                    if newsViewModel.contents.isEmpty {
+                        // add user ID here later
+                        newsViewModel.getNewsViewData(of: 1)
                     }
                 }
             }
-            //.accentColor(.init("color_primary_accent"))
-            
         }
     }
 }

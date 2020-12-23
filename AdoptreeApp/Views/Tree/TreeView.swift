@@ -89,7 +89,7 @@ extension TreeHealthSection {
 struct TreeDataSection: View {
     let telemetry: Report?
     let sequestration: [Double]?
-    var sequestrationsMock: [Double]? = [0.989273, 0.7126873, 0.827817, 0.2812727]
+   // var sequestrationsMock: [Double]? = [0.989273, 0.7126873, 0.827817, 0.2812727]
     
     var body: some View {
         // monitoring factors
@@ -191,7 +191,7 @@ extension TreeDataSection {
     }
     
     func getSequestration() -> Double {
-        if let sequestration = sequestrationsMock {
+        if let sequestration = sequestration {
             let result = sequestration.reduce(0, +)
             let resultInGrams = Measurement(value: result, unit: UnitMass.grams)
             return resultInGrams.converted(to: .kilograms).value
@@ -273,7 +273,7 @@ struct TreeWildlifeSection: View {
                 
                 Spacer()
                 
-                if let wildlife = wildlifeMock {
+                if let wildlife = wildlife {
                     ForEach(wildlife){ wildlife in
                         HStack {
                             Circle()

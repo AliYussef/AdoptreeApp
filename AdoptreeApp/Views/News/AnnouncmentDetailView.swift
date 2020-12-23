@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AnnouncmentDetailView: View {
-    //let announcmentContent: Content
+    let announcment: Content
     
     var body: some View {
         ZStack {
@@ -30,12 +30,14 @@ struct AnnouncmentDetailView: View {
                     .background(Color.white)
                     
                     VStack {
-                        Text("Stichting adoptiebos has recently reached 1k adopters.")
+                        Text("\(announcment.title)")
                             .font(.title2)
                             .foregroundColor(.init("color_font_primary"))
                             .padding(10)
                         
-                        Text("1. Eat less red meat. Traditional red meat comes from ruminant livestock such as cattle and sheep. These animals produce large amounts of methane, which is a greenhouse gas that packs 72 times the punch of CO2 over a 20 year period. Other types of meat, such as chicken, pork or kangaroo, produce far less emissions. At average levels of consumption, a family’s emissions from beef would easily outweigh the construction and running costs of a large 4WD vehicle, in less than 5 years. There is no need to cut out red meat entirely, but fewer steaks and snags mean far less CO2.")
+                        Text("""
+ \(announcment.text)
+ """)
                             .font(.body)
                             .foregroundColor(.init("color_font_secondary"))
                         
@@ -44,11 +46,5 @@ struct AnnouncmentDetailView: View {
                 }
             }
         }
-    }
-}
-
-struct AnnouncmentDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        AnnouncmentDetailView()
     }
 }

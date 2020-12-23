@@ -11,11 +11,11 @@ struct Content: Codable, Identifiable{
     let id: String
     let contentId: String
     let createdOn: Date
-    let contentType: Int8
+    let contentType: String
     let title: String
     let text: String
 }
 
-enum ContentType: Int {
-    case about = 0, announcement, event, informative
+enum ContentType: String {
+    case about, announcement, event, informative
 }

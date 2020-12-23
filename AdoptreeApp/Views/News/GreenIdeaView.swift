@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GreenIdeaView: View {
+    @ObservedObject var newsViewModel: NewsViewModel
     
     var body: some View {
         ZStack {
@@ -22,15 +23,11 @@ struct GreenIdeaView: View {
                         .foregroundColor(.init("color_font_primary"))
                         .padding()
                     
-                    NavigationLink(
-                        destination: GreenIdeaDetailView(),
-                        label: { GreenIdeaCellView() })
-                    NavigationLink(
-                        destination: GreenIdeaDetailView(),
-                        label: { GreenIdeaCellView() })
-                    NavigationLink(
-                        destination: GreenIdeaDetailView(),
-                        label: { GreenIdeaCellView() })
+                    ForEach(newsViewModel.informativeContents) { greenIdea in
+                        NavigationLink(
+                            destination: GreenIdeaDetailView(greenIdea: greenIdea),
+                            label: { GreenIdeaCellView(greenIdea: greenIdea) })
+                    }
                 }
             }
         }
@@ -38,7 +35,7 @@ struct GreenIdeaView: View {
 }
 
 struct GreenIdeaCellView: View {
-    //let content: Content
+    let greenIdea: Content
     
     var body: some View {
         VStack {
@@ -48,12 +45,12 @@ struct GreenIdeaCellView: View {
                     .frame(width: 120, height: 120, alignment: .center)
                 
                 VStack(alignment: .leading) {
-                    Text("10 December 2020")
+                    Text("\(greenIdea.title)")
                         .font(.body)
                         .foregroundColor(.init("color_font_primary"))
                         .padding(.bottom, 5)
                     
-                    Text("25 October 2020")
+                    Text(getHumanReadableDate(date: greenIdea.createdOn))
                         .font(.caption)
                         .foregroundColor(.init("color_font_secondary"))
                 }
@@ -67,8 +64,12 @@ struct GreenIdeaCellView: View {
     }
 }
 
-struct GreenIdeaView_Previews: PreviewProvider {
-    static var previews: some View {
-        GreenIdeaView()
+extension GreenIdeaCellView {
+    
+    func getHumanReadableDate(date: Date) -> String {
+        let date = date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM YYYY"
+        return dateFormatter.string(from: date)
     }
 }

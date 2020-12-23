@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AnnouncmentView: View {
+    @ObservedObject var newsViewModel: NewsViewModel
+    
     var body: some View {
         ZStack {
             Color.init("color_background")
@@ -20,17 +22,12 @@ struct AnnouncmentView: View {
                         .font(.title2)
                         .foregroundColor(.init("color_font_primary"))
                         .padding()
-                    
+                    ForEach(newsViewModel.anncouncmentContents) { announcment in
                     NavigationLink(
-                        destination: AnnouncmentDetailView(),
-                        label: { AnnouncmentCellView()})
-                    NavigationLink(
-                        destination: AnnouncmentDetailView(),
-                        label: { AnnouncmentCellView() })
-                    NavigationLink(
-                        destination: AnnouncmentDetailView(),
-                        label: { AnnouncmentCellView() })
-                    
+                        destination: AnnouncmentDetailView(announcment: announcment),
+                        label: { AnnouncmentCellView(announcment: announcment)})
+               
+                    }
                 }
             }
         }
@@ -38,7 +35,7 @@ struct AnnouncmentView: View {
 }
 
 struct AnnouncmentCellView: View {
-    //let content: Content
+    let announcment: Content
     
     var body: some View {
         VStack {
@@ -50,12 +47,12 @@ struct AnnouncmentCellView: View {
                     .padding(.trailing)
                 
                 VStack(alignment: .leading) {
-                    Text("10 December 2020")
+                    Text("\(announcment.title)")
                         .font(.body)
                         .foregroundColor(.init("color_font_primary"))
                         .padding(.bottom, 5)
                     
-                    Text("25 October 2020")
+                    Text(getHumanReadableDate(date: announcment.createdOn))
                         .font(.caption)
                         .foregroundColor(.init("color_font_secondary"))
                 }
@@ -69,8 +66,12 @@ struct AnnouncmentCellView: View {
     }
 }
 
-struct AnnouncmentView_Previews: PreviewProvider {
-    static var previews: some View {
-        AnnouncmentView()
+extension AnnouncmentCellView {
+    
+    func getHumanReadableDate(date: Date) -> String {
+        let date = date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM YYYY"
+        return dateFormatter.string(from: date)
     }
 }

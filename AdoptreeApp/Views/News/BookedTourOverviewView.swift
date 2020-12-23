@@ -61,7 +61,7 @@ struct BookedTourOverviewView: View {
                     Image(systemName: "info.circle")
                         .resizable()
                         .frame(width: 100, height: 100, alignment: .center)
-                        .foregroundColor(.init("color_green"))
+                        .foregroundColor(.init("color_primary_accent"))
                         .padding(.trailing)
                     
                     VStack(alignment: .leading) {
