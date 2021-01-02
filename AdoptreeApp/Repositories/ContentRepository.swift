@@ -16,7 +16,7 @@ protocol ContentRepositoryProtocol {
 class ContentRepository: ContentRepositoryProtocol {
     
     func getContents(using urlRequest: URLRequest) -> AnyPublisher<Result<[Content], RequestError>, Never> {
-        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
 }

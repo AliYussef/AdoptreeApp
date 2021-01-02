@@ -55,6 +55,10 @@ enum ApiEndPoint: CustomStringConvertible {
     case wildlife
     case forgetpassword
     case resetpassword
+    case login
+    case register
+    case logout
+    case refreshToken
     
     var description: String {
         switch self {
@@ -152,6 +156,14 @@ enum ApiEndPoint: CustomStringConvertible {
                 return "user/forgetpassword"
             case .resetpassword:
                 return "user/resetpassword"
+            case .login:
+                return "auth/login"
+            case .register:
+                return "auth/register"
+            case .logout:
+                return "auth/logout"
+            case .refreshToken:
+                return "auth/refreshToken"
         }
     }
 }

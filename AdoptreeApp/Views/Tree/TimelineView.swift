@@ -9,8 +9,8 @@ import SwiftUI
 
 struct TimelineView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @ObservedObject var timelineViewModel: TimelineViewModel
-    @ObservedObject var treeViewModel: TreeViewModel
+    @StateObject var timelineViewModel: TimelineViewModel
+    @StateObject var treeViewModel: TreeViewModel
     @State private var selectedTree = 0
     @State private var selectedDate = 0
     @State private var selectedTreeLabel = ""
@@ -23,10 +23,10 @@ struct TimelineView: View {
 //        Telemetry(id: "2", treeId: "2", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1602508155), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1607778456), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
 //    ]
     
-    var images = [
-        TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1606828056))]),
-        TreeImage(tree_id: 2, images: [ImageDetail(id: 2, tree_id: 2, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
-    ]
+//    var images = [
+//        TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1606828056))]),
+//        TreeImage(tree_id: 2, images: [ImageDetail(id: 2, tree_id: 2, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
+//    ]
     
     var body: some View {
         ZStack {
@@ -88,10 +88,43 @@ struct TimelineView: View {
                     
                     ScrollView(.vertical, showsIndicators: false) {
                         LazyVStack {
-                            if !timelineViewModel.telemetries.isEmpty {
-                                generateTimelineCellViews()
+                            if !timelineViewModel.reports.isEmpty {
+                                
+                                ForEach(Array(timelineViewModel.reports.filter({
+                                    if selectedDate > 0 {
+                                        return Calendar.current.dateComponents([.year], from: $0.reportedOn).year == timelineViewModel.datesFilter[selectedDate].year
+                                    }
+                                    if selectedTree > 0 {
+                                        return $0.treeId == timelineViewModel.treeTypeFilter[selectedTree].treeId
+                                    }
+                                    
+                                    return true
+                                }).enumerated()), id: \.1.id){ index, report in
+                                    //var currentDate = report.reportedOn
+                                    
+                                    if index > 0 {
+                                        if Calendar.current.dateComponents([.year, .month], from: report.reportedOn) != Calendar.current.dateComponents([.year, .month], from: timelineViewModel.reports[index - 1].reportedOn) {
+                                            Text("\(getHumanReadableDate(date: report.reportedOn))")
+                                                .padding(.top)
+                                        }
+                                    } else {
+                                        Text("\(getHumanReadableDate(date: report.reportedOn))")
+                                            .padding(.top)
+                                    }
+                                    
+                                    if report.type == "report" {
+                                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getTreeColor(treeId: report.treeId))
+                                    } else if report.type == "tree" {
+                                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Adopted \(timelineViewModel.timelineTreeDic[report.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: report.treeId))
+                                    } else if report.type == "image" {
+                                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "New tree image", icon: Image(systemName: "photo"), treeColor: getTreeColor(treeId: report.treeId))
+                                    }
+                                    
+                                    
+                                }
                             } else {
                                 ProgressView("Loading timeline...")
+                                generateTimelineCellViews()
                             }
                             
                         }
@@ -109,9 +142,14 @@ struct TimelineView: View {
 extension TimelineView {
     
     func generateTimelineCellViews() -> AnyView {
-
-        var reports:[Timeline] = []
-        if !timelineViewModel.timelineTreeDic.isEmpty {
+        
+        if !timelineViewModel.telemetries.isEmpty && !timelineViewModel.sequestrations.isEmpty {
+            let images = [
+                TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1606828056))]),
+                TreeImage(tree_id: 2, images: [ImageDetail(id: 2, tree_id: 2, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
+            ]
+            
+            var reports:[Timeline] = []
             timelineViewModel.telemetries.forEach({ telemetry in
                 var index = 0
                 telemetry.reports.forEach({ report in
@@ -123,112 +161,26 @@ extension TimelineView {
                         reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: nil, image_blobname: nil))
                     }
                     
-                    //timelineViewModel.datesFilter.append(Calendar.current.dateComponents([.year], from: report.reportedOn))
-                    
                     index += 1
                 })
-//                if let adoptedDate = timelineViewModel.timelineTreeDic[Int64(telemetry.treeId)!]?.adoptedDate {
-//                    reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: "tree", reportedOn: adoptedDate, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: nil))
-//                }
-                
             })
             
             timelineViewModel.timelineTreeDic.forEach({ tree in
                 reports.append(Timeline(treeId: tree.key, type: "tree", reportedOn: tree.value.adoptedDate, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: nil))
             })
-        }
-        
-        
-        images.forEach({ image in
-            image.images.forEach({ imageDetail in
-                reports.append(Timeline(treeId: imageDetail.tree_id, type: "image", reportedOn: imageDetail.createdAt, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: imageDetail.image_blobname))
+            
+            
+            images.forEach({ image in
+                image.images.forEach({ imageDetail in
+                    reports.append(Timeline(treeId: imageDetail.tree_id, type: "image", reportedOn: imageDetail.createdAt, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: imageDetail.image_blobname))
+                })
             })
-        })
-        
-        let timelineFirstGrouping = Dictionary(grouping: reports, by: {Calendar.current.dateComponents([.year, .month], from: $0.reportedOn)}).sorted(by: {($0.key.year! > $1.key.year!)})
-        let timelineGrouping = timelineFirstGrouping.sorted(by: {($0.key.month! > $1.key.month!) && ($0.key.year! > $1.key.year!)})
-        // {($0.key.year! > $1.key.year!) && ($0.key.month! > $1.key.month!)}
-        //        timelineGrouping.filter({
-        //            if selectedDate > 0 {
-        //                return $0.key.year! == timelineViewModel.datesFilter[selectedDate].year
-        //            }
-        //
-        //            return true
-        //        })
-        //print(timelineGrouping)
-        let reportsSorted = reports.sorted(by: {$0.reportedOn > $1.reportedOn})
-        return AnyView(
-            VStack {
-//                ForEach(Array(zip(timelineGrouping.indices, timelineGrouping.filter({
-//                    if selectedDate > 0 {
-//                        return $0.key.year! == timelineViewModel.datesFilter[selectedDate].year
-//                    }
-//
-//                    return true
-//                }).enumerated())), id: \.0) { index, tree in
-//
-//                    Text("\(getHumanReadableDate(date: tree.element.key))")
-//
-//                    ForEach(Array(zip(tree.element.value.indices, tree.element.value.filter({
-//                        if selectedTree > 0 {
-//                            return $0.treeId == timelineViewModel.treeTypeFilter[selectedTree].treeId
-//                        }
-//                        return true
-//                    }))), id: \.0) { index, item in
-//
-//                        if item.type == "report" {
-//                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getTreeColor(treeId: item.treeId))
-//                        } else if item.type == "tree" {
-//                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "Adopted \(timelineViewModel.timelineTreeDic[item.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: item.treeId))
-//                        } else if item.type == "image" {
-//                            TimelineCell(item: item, date: "\(getDay(date: item.reportedOn))", title: "New tree image", icon: Image(systemName: "photo"), treeColor: getTreeColor(treeId: item.treeId))
-//                        }
-//
-//                    }
-//                    Divider()
-//                        .frame(width: UIScreen.main.bounds.width * 0.9, height: .none)
-//                        .padding()
-//                }
-                
-//                var currentDate = Date()
-//                var nextDate = Date()
-                
-               
-                ForEach(Array(reportsSorted.filter({
-                    if selectedDate > 0 {
-                        return Calendar.current.dateComponents([.year], from: $0.reportedOn).year == timelineViewModel.datesFilter[selectedDate].year
-                    }
-                    if selectedTree > 0 {
-                        return $0.treeId == timelineViewModel.treeTypeFilter[selectedTree].treeId
-                    }
-                    
-                    return true
-                }).enumerated()), id: \.1.id){ index, report in
-                    //var currentDate = report.reportedOn
-                    
-                    if index > 0 {
-                        if Calendar.current.dateComponents([.year, .month], from: report.reportedOn) != Calendar.current.dateComponents([.year, .month], from: reportsSorted[index - 1].reportedOn) {
-                            Text("\(getHumanReadableDate(date: report.reportedOn))")
-                                .padding(.top)
-                        }
-                    } else {
-                        Text("\(getHumanReadableDate(date: report.reportedOn))")
-                            .padding(.top)
-                    }
-                    
-                    if report.type == "report" {
-                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getTreeColor(treeId: report.treeId))
-                    } else if report.type == "tree" {
-                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Adopted \(timelineViewModel.timelineTreeDic[report.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: report.treeId))
-                    } else if report.type == "image" {
-                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "New tree image", icon: Image(systemName: "photo"), treeColor: getTreeColor(treeId: report.treeId))
-                    }
-                    
-                    
-                }
-                
-            }
-        )
+            
+            let reportsSorted = reports.sorted(by: {$0.reportedOn > $1.reportedOn})
+            timelineViewModel.reports = reportsSorted
+        }
+       
+        return AnyView(EmptyView())
     }
     
     func getHumanReadableDate(date: Date) -> String {

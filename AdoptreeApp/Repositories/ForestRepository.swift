@@ -16,11 +16,11 @@ protocol ForestRepositoryProtocol {
 class ForestRepository: ForestRepositoryProtocol {
     
     func getForests(using urlRequest: URLRequest) -> AnyPublisher<Result<[Forest], RequestError>, Never> {
-        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
     func getWildlife(using urlRequest: URLRequest) -> AnyPublisher<Result<[Wildlife], RequestError>, Never> {
-        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
 }

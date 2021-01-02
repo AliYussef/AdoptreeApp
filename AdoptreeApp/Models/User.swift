@@ -14,6 +14,7 @@ struct User: Codable {
     let username: String
     let email: String
     let password: String
+    let salt: String?
     let forgetToken: String?
     let role: String?
     let createdAt: Date?
@@ -35,11 +36,20 @@ struct ResetPasswordBody: Codable {
 }
 
 struct LoginResponse: Decodable {
-    let authtoken: String
+    let accessToken: String
+    let refreshToken: String
+    let userId: String
     
     enum CodingKeys: String, CodingKey {
-        case authtoken = "authtoken"
+        case accessToken = "Access key"
+        case refreshToken = "Refresh token"
+        case userId = "UserId"
     }
+}
+
+struct RefreshTokenResponse: Decodable {
+    let accessToken: String?
+    let refreshToken: String?
 }
 
 struct UserShared: Codable {

@@ -15,7 +15,7 @@ protocol TelemetryRepositoryProtocol {
 class TelemetryRepository: TelemetryRepositoryProtocol {
     
     func getTelemetryByTree(using urlRequest: URLRequest) -> AnyPublisher<Result<Telemetry, RequestError>, Never> {
-        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
 }

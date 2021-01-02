@@ -64,7 +64,7 @@ struct SignupView: View {
                 
                 Button(action: {
                     //register here
-                    let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, forgetToken: nil, role: nil, createdAt: nil)
+                    let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, salt: nil, forgetToken: nil, role: nil, createdAt: nil)
                     userViewModel.registerUser(user: user) { result in
                         switch (result) {
                             case .failure(_):

@@ -10,8 +10,8 @@ import MapKit
 
 struct HomeView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @ObservedObject var treeViewModel: TreeViewModel
-    @ObservedObject var timelineViewModel: TimelineViewModel
+    @StateObject var treeViewModel: TreeViewModel
+    @StateObject var timelineViewModel: TimelineViewModel
     
 //    var telemetry = [
 //        Telemetry(id: "1", treeId: "1", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1111795200), temperature: -3, humidity: 90, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1113004800), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewsView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @ObservedObject var newsViewModel: NewsViewModel
+    @StateObject var newsViewModel: NewsViewModel
     
     var body: some View {
         ZStack {
@@ -114,37 +114,39 @@ struct NewsView: View {
                             .foregroundColor(.init("color_font_primary"))
                             .padding()
                         
-                        VStack {
-                            if let greenIdea = newsViewModel.informativeContents.first {
-                                NavigationLink(
-                                    destination: GreenIdeaDetailView(greenIdea: greenIdea),
-                                    label: {
-                                        HStack {
-                                            Image("green_idea")
-                                                .resizable()
-                                                .frame(width: 120, height: 120, alignment: .center)
-                                            
-                                            VStack(alignment: .leading) {
+                       // if !newsViewModel.informativeContents.isEmpty {
+                            VStack {
+                                if let greenIdea = newsViewModel.informativeContents.first {
+                                    NavigationLink(
+                                        destination: GreenIdeaDetailView(greenIdea: greenIdea),
+                                        label: {
+                                            HStack {
+                                                Image("green_idea")
+                                                    .resizable()
+                                                    .frame(width: 120, height: 120, alignment: .center)
                                                 
-                                                Text("\(greenIdea.title)")
-                                                    .font(.body)
-                                                    .foregroundColor(.init("color_font_primary"))
-                                                    .padding(.bottom, 5)
+                                                VStack(alignment: .leading) {
+                                                    
+                                                    Text("\(greenIdea.title)")
+                                                        .font(.body)
+                                                        .foregroundColor(.init("color_font_primary"))
+                                                        .padding(.bottom, 5)
+                                                    
+                                                    Text(getHumanReadableDate(date: greenIdea.createdOn))
+                                                        .font(.caption)
+                                                        .foregroundColor(.init("color_font_secondary"))
+                                                }
                                                 
-                                                Text(getHumanReadableDate(date: greenIdea.createdOn))
-                                                    .font(.caption)
-                                                    .foregroundColor(.init("color_font_secondary"))
                                             }
-                                            
-                                        }
-                                    })
+                                        })
+                                }
                             }
-                        }
-                        .padding()
-                        .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
-                        .background(Color.white)
-                        .cornerRadius(12.0)
-                        .padding(.bottom, 5)
+                            .padding()
+                            .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
+                            .background(Color.white)
+                            .cornerRadius(12.0)
+                            .padding(.bottom, 5)
+                        //}
                         
                         HStack {
                             
@@ -217,6 +219,14 @@ struct NewsView: View {
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
                     
                 }
+            }
+        }
+        .onAppear {
+            if userViewModel.isAuthenticated && userViewModel.userShared.id != nil {
+//                if newsViewModel.contents.isEmpty {
+//                    // add user ID here later
+//                    newsViewModel.getNewsViewData(of: userViewModel.userShared.id!)
+//                }
             }
         }
     }

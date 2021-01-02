@@ -49,22 +49,26 @@ struct LoginView: View {
                     
                     Button(action: {
                         isTryingToLogin.toggle()
-                        withAnimation {
-                            self.userViewModel.isAuthenticated.toggle()
-                        }
-                        
-//                        let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, forgetToken: nil, role: nil, createdAt: nil)
-//                        userViewModel.login(user: user) { result in
-//                            switch (result) {
-//                                case .failure(_):
-//                                    message = "An error occurred. Please check your username and password!"
-//                                    showingAlert.toggle()
-//                                case .success(let response):
-//                                    //userViewModel.accessToken = response.authtoken
-//                                    break
-//                            }
-//                            isTryingToLogin.toggle()
+//                        withAnimation {
+//                            self.userViewModel.isAuthenticated.toggle()
 //                        }
+                        
+                        let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, salt: nil, forgetToken: nil, role: nil, createdAt: nil)
+                        userViewModel.login(user: user) { result in
+                            switch (result) {
+                                case .failure(_):
+                                    message = "An error occurred. Please check your username and password!"
+                                    showingAlert.toggle()
+                                case .success(let response):
+                                    userViewModel.accessToken = response.accessToken
+                                    userViewModel.refreshToken = response.refreshToken
+                                    if let userId = Int64(response.userId) {
+                                        userViewModel.getUserById(for: userId) {_ in}
+                                    }
+                                    //break
+                            }
+                            isTryingToLogin.toggle()
+                        }
                     }, label: {
                         Text("Log in")
                             .font(.subheadline)

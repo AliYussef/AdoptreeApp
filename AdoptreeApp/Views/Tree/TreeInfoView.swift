@@ -28,6 +28,7 @@ struct TreeInfoView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 70, height: 70, alignment: .center)
+                                    .foregroundColor(.init("color_primary_accent"))
                                 
                                 VStack(alignment: .leading) {
                                     Text("\(tree.name)")

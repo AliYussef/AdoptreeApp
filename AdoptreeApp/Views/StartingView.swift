@@ -9,8 +9,8 @@ import SwiftUI
 
 struct StartingView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @State private var isAuthenticated = false
-    @State private var isGuest = false
+    //@State private var isAuthenticated = false
+    //@State private var isGuest = false
     
     var body: some View {
     

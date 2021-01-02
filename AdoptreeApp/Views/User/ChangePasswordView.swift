@@ -46,7 +46,7 @@ struct ChangePasswordView: View {
                         if let firstName = userViewModel.userShared.firstname {
                             if let lastName = userViewModel.userShared.lastname {
                                 if let username = userViewModel.userShared.username {
-                                    let user = User(id: userId, firstname: firstName, lastname: lastName, username: username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, forgetToken: nil, role: nil, createdAt: nil)
+                                    let user = User(id: userId, firstname: firstName, lastname: lastName, username: username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, salt: nil, forgetToken: nil, role: nil, createdAt: nil)
                                     
                                     userViewModel.updateUserAccount(user: user) { result in
                                         switch (result) {

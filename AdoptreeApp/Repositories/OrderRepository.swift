@@ -16,10 +16,10 @@ protocol OrderRepositoryProtocol {
 class OrderRepository: OrderRepositoryProtocol {
     
     func createOrder(using urlRequest: URLRequest) -> AnyPublisher<OrderResponse, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
     func getOrderById(using urlRequest: URLRequest) -> AnyPublisher<Order, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
 }

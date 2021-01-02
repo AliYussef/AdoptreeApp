@@ -84,10 +84,10 @@ struct ContentView: View {
                 }
             }
             .onAppear {
-                if userViewModel.isAuthenticated {
+                if userViewModel.isAuthenticated && userViewModel.userShared.id != nil {
                     if treeViewModel.trees.isEmpty {
                         // add user ID here later
-                        treeViewModel.getAdoptedTrees(of: 1) { result in
+                        treeViewModel.getAdoptedTrees(of: userViewModel.userShared.id!) { result in
                             switch (result) {
                                 case .failure(_):
                                     break
@@ -105,20 +105,25 @@ struct ContentView: View {
                                             }
                                         })
                                     }
-                                    
+
                                     if timelineViewModel.datesFilter.isEmpty {
                                         timelineViewModel.createTimelineTreeObject(trees: treeViewModel.trees)
                                         timelineViewModel.createTimelineDateFilter(trees: treeViewModel.trees)
                                     }
                                     
+//                                    if !timelineViewModel.telemetries.isEmpty {
+//                                        timelineViewModel.generateTimelineData(images: nil)
+//                                    }
+
                             }
                         }
                     }
-                    
-                    if newsViewModel.contents.isEmpty {
-                        // add user ID here later
-                        newsViewModel.getNewsViewData(of: 1)
-                    }
+
+//                    if newsViewModel.contents.isEmpty {
+//                        // add user ID here later
+//                        newsViewModel.getNewsViewData(of: userViewModel.userShared.id!)
+//                    }
+
                 }
             }
         }

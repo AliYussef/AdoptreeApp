@@ -17,11 +17,12 @@ class ViewRouter: ObservableObject {
             currentPage = "onboardingView"
         } else {
             
-            if UserViewModel.shared.isAuthenticated {
-                currentPage = "contentView"
-            } else {
-                currentPage = "startingView"
-            }
+//            if UserViewModel.shared.isAuthenticated {
+//                currentPage = "contentView"
+//            } else {
+//                currentPage = "startingView"
+//            }
+            currentPage = "startingView"
         }
     }
 }

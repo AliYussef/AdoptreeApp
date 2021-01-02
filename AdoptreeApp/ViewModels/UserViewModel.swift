@@ -18,10 +18,13 @@ class UserViewModel: ObservableObject {
     private let keyChain = Keychain()
     private let userDefaults: UserDefaults
     private var accessTokenKey = "accessToken"
+    private var refreshTokenKey = "refreshToken"
+    private var authenDateKey = "authenDateKey"
     @Published var userShared: UserShared
     private var userKey = "userObject"
     private var cancellables = Set<AnyCancellable>()
     private let userRepository: UserRepositoryProtocol
+    @Published var authRequired: Bool = false
     
     private init(userRepository: UserRepositoryProtocol) {
         self.userRepository = userRepository
@@ -34,6 +37,21 @@ class UserViewModel: ObservableObject {
 }
 
 extension UserViewModel {
+    func checkTokenValidity() -> Bool {
+        var dateDiff = DateComponents()
+        
+        if let authenticationTimeString = authenDate {
+            if let authenticationTime = Double(authenticationTimeString) {
+                dateDiff = Calendar.current.dateComponents([.minute], from: Date(timeIntervalSince1970: authenticationTime), to: Date())
+            }
+        }
+        
+        guard dateDiff.minute != nil else {
+            return false
+        }
+        
+        return dateDiff.minute! >= 9 ? false : true
+    }
     
     var accessToken: String? {
         get {
@@ -50,6 +68,32 @@ extension UserViewModel {
             }
             try? keyChain.set(accessToken, key: accessTokenKey)
             isAuthenticated = true
+        }
+    }
+    
+    var refreshToken: String? {
+        get {
+            try? keyChain.get(refreshTokenKey)
+        }
+        set(newValue) {
+            guard let refreshToken = newValue else {
+                try? keyChain.remove(refreshTokenKey)
+                return
+            }
+            try? keyChain.set(refreshToken, key: refreshTokenKey)
+        }
+    }
+    
+    var authenDate: String? {
+        get {
+            try? keyChain.get(authenDateKey)
+        }
+        set(newValue) {
+            guard let authenDate = newValue else {
+                try? keyChain.remove(authenDateKey)
+                return
+            }
+            try? keyChain.set(authenDate, key: authenDateKey)
         }
     }
     
@@ -80,7 +124,7 @@ extension UserViewModel {
         
         do {
             
-            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .user, using: .post, withParams: user)
+            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .register, using: .post, withParams: user)
             
             userRepository.registerUser(using: urlRequest)
                 .sink(receiveCompletion: {result in
@@ -113,7 +157,7 @@ extension UserViewModel {
         
         do {
             
-            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .user, using: .post, withParams: user)
+            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .login, using: .post, withParams: user)
             
             userRepository.login(using: urlRequest)
                 .sink(receiveCompletion: {result in
@@ -130,7 +174,9 @@ extension UserViewModel {
                                     completion(.failure(.genericError(error)))
                             }
                     }
-                }, receiveValue: {result in
+                }, receiveValue: { result in
+                    self.authenDate = String(Date().timeIntervalSince1970)
+                    print(self.authenDate)
                     completion(.success(result))
                 })
                 .store(in: &cancellables)
@@ -142,8 +188,79 @@ extension UserViewModel {
         }
     }
     
+    func refreshToken(completion: @escaping (Result<RefreshTokenResponse, RequestError>) -> Void) {
+        let fullUrl = BaseURL.url + ApiEndPoint.refreshToken.description
+        let url = URL(string: fullUrl)!
+        var urlRequest = URLRequest(url: url)
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        if let refreshToken = UserViewModel.shared.refreshToken {
+            urlRequest.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
+        }
+        urlRequest.httpMethod = RequestMethod.post.rawValue
+        
+        userRepository.refreshToken(using: urlRequest)
+            .sink(receiveCompletion: {result in
+                switch result {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        switch error {
+                            case let urlError as URLError:
+                                self.accessToken = nil
+                                completion(.failure(.urlError(urlError)))
+                            case let decodingError as DecodingError:
+                                self.accessToken = nil
+                                completion(.failure(.decodingError(decodingError)))
+                            default:
+                                self.accessToken = nil
+                                completion(.failure(.genericError(error)))
+                        }
+                }
+            }, receiveValue: {result in
+                self.authenDate = String(Date().timeIntervalSince1970)
+                self.accessToken = result.accessToken
+                self.refreshToken = result.refreshToken
+                completion(.success(result))
+            })
+            .store(in: &cancellables)
+    }
+    
     func logout() {
         accessToken = nil
+    }
+}
+
+extension UserViewModel {
+    
+    func getUserById(for userId: Int64, completion: @escaping(Result<User, RequestError>) -> Void) {
+       
+        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .userById(userId), using: .get)
+        
+        userRepository.getUserById(using: urlRequest)
+            .sink(receiveCompletion: {result in
+                switch result {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        switch error {
+                            case let urlError as URLError:
+                                print(urlError)
+                                completion(.failure(.urlError(urlError)))
+                            case let decodingError as DecodingError:
+                                print(decodingError)
+                                completion(.failure(.decodingError(decodingError)))
+                            default:
+                                print(error)
+                                completion(.failure(.genericError(error)))
+                        }
+                }
+            }, receiveValue: {result in
+                self.userShared = UserShared(id: result.id, firstname: result.firstname, lastname: result.lastname, username: result.username, email: result.email)
+                self.saveUserSharedObject()
+                print(self.userShared)
+                completion(.success(result))
+            })
+            .store(in: &cancellables)
     }
 }
 

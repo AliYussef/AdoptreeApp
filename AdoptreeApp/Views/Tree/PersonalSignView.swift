@@ -9,7 +9,7 @@ import SwiftUI
 import PencilKit
 
 struct PersonalSignView: View {
-    @ObservedObject var treeViewModel: TreeViewModel
+    @StateObject var treeViewModel: TreeViewModel
     @EnvironmentObject var orderViewModel: OrderViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var treeSign = ""

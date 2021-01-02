@@ -19,27 +19,27 @@ protocol TreeRepositoryProtocol {
 
 class TreeRepository: TreeRepositoryProtocol {
     func getAllTrees(using urlRequest: URLRequest) -> AnyPublisher<[Tree], Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
     func getATree(using urlRequest: URLRequest) -> AnyPublisher<Tree, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
     func getTreeImages(using urlRequest: URLRequest) -> AnyPublisher<Result<TreeImage, RequestError>, Never> {
-        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
     func personalizeTree(using urlRequest: URLRequest) -> AnyPublisher<AssignedTree, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
     func renewTreeContract(using urlRequest: URLRequest) -> AnyPublisher<AssignedTree, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
     func getTreeSequestraion(using urlRequest: URLRequest) -> AnyPublisher<Result<[Double], RequestError>, Never> {
-        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
     

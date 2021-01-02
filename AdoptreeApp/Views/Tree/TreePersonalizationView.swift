@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TreePersonalizationView: View {
-    @ObservedObject var treeViewModel: TreeViewModel
+    @StateObject var treeViewModel: TreeViewModel
     @State var tree: Tree
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var treeName = ""

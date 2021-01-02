@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AdoptedTreesView: View {
-    @ObservedObject var treeViewModel: TreeViewModel
+    @StateObject var treeViewModel: TreeViewModel
     
     var body: some View {
         ZStack {
@@ -26,7 +26,7 @@ struct AdoptedTreesView: View {
 
 struct AdoptedTreesCell: View {
     @EnvironmentObject var orderViewModel: OrderViewModel
-    @ObservedObject var treeViewModel: TreeViewModel
+    @StateObject var treeViewModel: TreeViewModel
     @State private var showingAlert = false
     @State private var showingAlertConfirm = false
     @State private var message = ""

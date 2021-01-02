@@ -49,6 +49,7 @@ extension NewsViewModel {
                         }
                         
                     case .success(let contents):
+                        //print(contents)
                         self.contents = contents.sorted(by: {$0.createdOn > $1.createdOn})
                         self.createContentData()
                 }
@@ -65,6 +66,7 @@ extension NewsViewModel {
                         }
                         
                     case .success(let tours):
+                        print(tours)
                         self.tours = tours
                 }
                 
@@ -80,6 +82,7 @@ extension NewsViewModel {
                         }
                         
                     case .success(let bookedTours):
+                        print(bookedTours)
                         self.bookedTours = bookedTours
                 }
             })
@@ -104,10 +107,9 @@ extension NewsViewModel {
 
 extension NewsViewModel {
     
-    func bookTour(using tour: Tour, completion: @escaping (Result<BookedTour, RequestError>) -> Void) {
+    func bookTour(using tour: BookedTour, completion: @escaping (Result<BookedTour, RequestError>) -> Void) {
         do {
-            let bookedTour = BookedTour(id: nil, tourId: tour.id, userId: 1, userName: "", userEmail: "", bookedDateTime: nil)
-            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .bookedtour, using: .post, withParams: bookedTour)
+            let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .bookedtour, using: .post, withParams: tour)
             
             tourRepository.bookTour(using: urlRequest)
                 .sink(receiveCompletion: {result in

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct TourBookingView: View {
-    @ObservedObject var newsViewModel: NewsViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
+    @StateObject var newsViewModel: NewsViewModel
     let tour: Tour
     @State var bookedTour: BookedTour?
     @State private var fullName = ""
@@ -77,20 +78,23 @@ struct TourBookingView: View {
                     Button(action: {
                         if validateInput() {
                             isTryingToBook.toggle()
-                            self.newsViewModel.bookTour(using: tour) { result in
-                                switch (result) {
-                                    case .failure(_):
-                                        self.message = "An error occurred"
-                                        self.showingAlert.toggle()
-                                    case .success(let result):
-                                        self.bookedTour = result
-                                        self.message = "Great! Your tour has been booked"
-                                        self.showingAlert.toggle()
+                            if let userId = userViewModel.userShared.id {
+                                let bookedTour = BookedTour(id: nil, tourId: tour.id, userId: userId, userName: fullName, userEmail: email, bookedDateTime: nil)
+                                self.newsViewModel.bookTour(using: bookedTour) { result in
+                                    switch (result) {
+                                        case .failure(_):
+                                            self.message = "An error occurred"
+                                            self.showingAlert.toggle()
+                                        case .success(let result):
+                                            self.bookedTour = result
+                                            self.message = "Great! Your tour has been booked"
+                                            self.showingAlert.toggle()
+                                    }
+                                    
+                                    isTryingToBook.toggle()
                                 }
-                                
-                                isTryingToBook.toggle()
                             }
-                        }
+                            }
                     }, label: {
                         Text("Confirm")
                             .font(.subheadline)
@@ -113,6 +117,17 @@ struct TourBookingView: View {
                     ProgressView("Booking is in progress...")
                 }
             }
+            .onAppear {
+                if let firstName = userViewModel.userShared.firstname {
+                    if let lastName = userViewModel.userShared.lastname {
+                        if let email = userViewModel.userShared.email {
+                            fullName = "\(firstName) \(lastName)"
+                            self.email = email
+                        }
+                    }
+                }
+            }
+            
         } else {
             if let bookedTour = bookedTour {
                 BookedTourOverviewView(newsViewModel: newsViewModel, bookedTour: bookedTour, tour: tour)

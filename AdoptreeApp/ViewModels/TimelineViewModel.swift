@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 class TimelineViewModel: ObservableObject {
+    @Published var reports: [Timeline] = []
     @Published var telemetries: [Telemetry] = []
     @Published var sequestrations: [Sequestration] = []
     @Published var timelineTreeDic: [Int64: TimelineTree] = [:]
@@ -79,6 +80,44 @@ extension TimelineViewModel {
 }
 
 extension TimelineViewModel {
+    
+    func generateTimelineData(images: [TreeImage]?) {
+        let images = [
+            TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1606828056))]),
+            TreeImage(tree_id: 2, images: [ImageDetail(id: 2, tree_id: 2, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
+        ]
+        
+        var reports:[Timeline] = []
+        telemetries.forEach({ telemetry in
+            var index = 0
+            telemetry.reports.forEach({ report in
+                if index < (sequestrations.filter({$0.treeId == Int64(telemetry.treeId)}).first?.sequestration.count)! {
+                    
+                    reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: sequestrations.filter({$0.treeId == Int64(telemetry.treeId)}).first?.sequestration[index], image_blobname: nil))
+                    
+                } else {
+                    reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: nil, image_blobname: nil))
+                }
+                
+                index += 1
+            })
+        })
+        
+        timelineTreeDic.forEach({ tree in
+            reports.append(Timeline(treeId: tree.key, type: "tree", reportedOn: tree.value.adoptedDate, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: nil))
+        })
+        
+        
+        images.forEach({ image in
+            image.images.forEach({ imageDetail in
+                reports.append(Timeline(treeId: imageDetail.tree_id, type: "image", reportedOn: imageDetail.createdAt, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: imageDetail.image_blobname))
+            })
+        })
+        
+        let reportsSorted = reports.sorted(by: {$0.reportedOn > $1.reportedOn})
+        self.reports = reportsSorted
+        print(self.reports)
+    }
     
     func createTimelineTreeObject(trees: [Tree]) {
 //        let trees = [

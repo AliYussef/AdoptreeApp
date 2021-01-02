@@ -37,7 +37,7 @@ class TreeViewModel: ObservableObject {
 extension TreeViewModel {
     
     func getAdoptedTrees(of userId:Int64 ,completion: @escaping (Result<[Tree], RequestError>) -> Void) {
-        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .trees(1), using: .get)
+        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .trees(userId), using: .get)
         
         userRepository.getAdoptedTrees(using: urlRequest)
             .sink(receiveCompletion: {result in
@@ -47,7 +47,12 @@ extension TreeViewModel {
                     case .failure(let error):
                         switch error {
                             case let urlError as URLError:
-                                print(urlError)
+                                if urlError.code == .userAuthenticationRequired {
+                                    print("User authentication required")
+                                    //self.getAdoptedTrees(of: userId){_ in}
+                                } else {
+                                    print(urlError)
+                                }
                                 completion(.failure(.urlError(urlError)))
                             case let decodingError as DecodingError:
                                 print(decodingError)

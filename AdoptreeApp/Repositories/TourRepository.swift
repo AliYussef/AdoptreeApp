@@ -24,19 +24,19 @@ class TourRepository: TourRepositoryProtocol {
     }
     
     func getTours(using urlRequest: URLRequest) -> AnyPublisher<Result<[Tour], RequestError>, Never> {
-        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
     func bookTour(using urlRequest: URLRequest) -> AnyPublisher<BookedTour, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
     func updateBookedTour(using urlRequest: URLRequest) -> AnyPublisher<BookedTour, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
     func getBookedToursByUser(using urlRequest: URLRequest) -> AnyPublisher<Result<[BookedTour], RequestError>, Never> {
-        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
 }

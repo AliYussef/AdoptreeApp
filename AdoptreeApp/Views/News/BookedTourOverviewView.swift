@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BookedTourOverviewView: View {
-    @ObservedObject var newsViewModel: NewsViewModel
+    @StateObject var newsViewModel: NewsViewModel
     let bookedTour: BookedTour
     let tour: Tour
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>

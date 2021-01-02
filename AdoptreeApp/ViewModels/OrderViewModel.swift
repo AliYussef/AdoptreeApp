@@ -31,10 +31,43 @@ class OrderViewModel: ObservableObject {
 
 extension OrderViewModel {
     
+//    func getProductsAndCategories() {
+//        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .product, using: .get)
+//
+//        productRepository.getProducts(using: urlRequest)
+//            .sink(receiveCompletion: {result in
+//                switch result {
+//                    case .finished:
+//                        break
+//                    case .failure(let error):
+//                        switch error {
+//                            case let urlError as URLError:
+//                                if urlError.code == .userAuthenticationRequired {
+//                                    print("User authentication required")
+//                                    //self.getAdoptedTrees(of: userId){_ in}
+//                                } else {
+//                                    print(urlError)
+//                                }
+//                                //completion(.failure(.urlError(urlError)))
+//                            case let decodingError as DecodingError:
+//                                print(decodingError)
+//                                //completion(.failure(.decodingError(decodingError)))
+//                            default:
+//                                print(error)
+//                                //completion(.failure(.genericError(error)))
+//                        }
+//                }
+//
+//            }, receiveValue: {result in
+//                self.availableProducts = result
+//            })
+//            .store(in: &cancellables)
+//    }
+    
     func getProductsAndCategories() {
         let productUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .product, using: .get)
         let categoryUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .category, using: .get)
-        
+
         Publishers.CombineLatest(productRepository.getProducts(using: productUrlRequest), categoryRepository.getCategories(using: categoryUrlRequest))
             .sink(receiveValue: { products, categories in
                 switch(products) {
@@ -47,12 +80,12 @@ extension OrderViewModel {
                             default:
                                 print(error)
                         }
-                        
+
                     case .success(let products):
                         self.availableProducts = products
                         self.getTreeSignProduct()
                 }
-                
+
                 switch(categories) {
                     case .failure(let error):
                         switch error {
@@ -63,7 +96,7 @@ extension OrderViewModel {
                             default:
                                 print(error)
                         }
-                        
+
                     case .success(let categories):
                         self.categories = categories
                         self.createCategoriesDictionary()

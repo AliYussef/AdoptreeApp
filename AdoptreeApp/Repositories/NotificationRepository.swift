@@ -16,10 +16,10 @@ protocol NotificationRepositoryProtocol {
 class NotificationRepository: NotificationRepositoryProtocol {
     
     func createNotificationDevice(using urlRequest: URLRequest) -> AnyPublisher<NotificationDevice, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
     func updateNotificationDevice(using urlRequest: URLRequest) -> AnyPublisher<NotificationDevice, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
 }

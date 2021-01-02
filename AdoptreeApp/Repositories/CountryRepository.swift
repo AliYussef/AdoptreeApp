@@ -15,7 +15,7 @@ protocol CountryRepositoryProtocol {
 class CountryRepository: CountryRepositoryProtocol {
     
     func getCountries(using urlRequest: URLRequest) -> AnyPublisher<Result<[Country], RequestError>, Never> {
-        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
 }

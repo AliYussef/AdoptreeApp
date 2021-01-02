@@ -16,10 +16,10 @@ protocol TreeSignRepositoryProtocol {
 class TreeSignRepository: TreeSignRepositoryProtocol {
     
     func createTreeSign(using urlRequest: URLRequest) -> AnyPublisher<TreeSign, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
     func getTreeSignByTree(using urlRequest: URLRequest) -> AnyPublisher<TreeSign, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
 }

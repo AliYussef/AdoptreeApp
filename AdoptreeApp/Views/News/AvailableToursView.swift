@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AvailableToursView: View {
-    @ObservedObject var newsViewModel: NewsViewModel
+    @StateObject var newsViewModel: NewsViewModel
     
     var body: some View {
         ZStack {

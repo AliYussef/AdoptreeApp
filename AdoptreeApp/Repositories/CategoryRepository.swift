@@ -15,7 +15,7 @@ protocol CategoryRepositoryProtocol {
 class CategoryRepository: CategoryRepositoryProtocol {
     
     func getCategories(using urlRequest: URLRequest) -> AnyPublisher<Result<[Category], RequestError>, Never> {
-        return ApiClient.sharedApiClient.executeRequestsWithResponseBody(using: urlRequest)
+        return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
 }
