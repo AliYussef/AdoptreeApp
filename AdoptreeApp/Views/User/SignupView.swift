@@ -14,6 +14,7 @@ struct SignupView: View {
     @State var isSaveDisabled = true
     @State private var showingAlert = false
     @State private var message = ""
+    @State var isTryingToAdopt: Bool = false
     
     var body: some View {
         ZStack {
@@ -63,6 +64,7 @@ struct SignupView: View {
                 .padding(.top, 50)
                 
                 Button(action: {
+                    isTryingToAdopt.toggle()
                     if userViewModel.userShared.id == nil {
                         signupAndPay()
                     } else {
@@ -84,6 +86,20 @@ struct SignupView: View {
                     Alert(title: Text("Signup"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
                 }
                 
+                if isTryingToAdopt {
+                    withAnimation(.linear) {
+                        ZStack {
+                            Image("tree")
+                                .resizable()
+                                .scaledToFill()
+                                .opacity(0.0)
+                                .background(Blur(style: .systemUltraThinMaterial))
+                                .edgesIgnoringSafeArea(.all)
+                            
+                            ProgressView("Aopting...")
+                        }
+                    }
+                }
             }
         }
     }
@@ -101,9 +117,6 @@ extension SignupView {
                     showingAlert.toggle()
                 case .success(_):
                     login()
-//                    userViewModel.userShared = UserShared(id: user.id, firstname: user.firstname, lastname: user.lastname, username: user.username, email: user.email)
-//                    userViewModel.saveUserSharedObject()
-              
             }
         }
     }
@@ -152,6 +165,7 @@ extension SignupView {
                         }
                     }
             }
+            isTryingToAdopt.toggle()
         }
     }
 }

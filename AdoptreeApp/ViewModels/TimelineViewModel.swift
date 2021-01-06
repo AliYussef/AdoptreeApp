@@ -76,8 +76,8 @@ extension TimelineViewModel {
     
     func generateTimelineData(images: [TreeImage]?) {
         let images = [
-            TreeImage(tree_id: 14, images: [ImageDetail(id: 1, tree_id: 14, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1612444545))]),
-            TreeImage(tree_id: 12, images: [ImageDetail(id: 2, tree_id: 12, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1612530945))])
+            TreeImage(tree_id: 19, images: [ImageDetail(id: 1, tree_id: 19, image_blobname: "0", alt: "", createdAt: Date(timeIntervalSince1970: 1612444545))]),
+            TreeImage(tree_id: 20, images: [ImageDetail(id: 2, tree_id: 20, image_blobname: "1", alt: "", createdAt: Date(timeIntervalSince1970: 1612530945))])
         ]
         
         var reports:[Timeline] = []

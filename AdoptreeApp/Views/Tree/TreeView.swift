@@ -44,6 +44,7 @@ struct TreeHealthSection: View {
                         .foregroundColor(.init("color_font_primary"))
                     
                     Spacer(minLength: 10)
+                    
                     Text("Healthy")
                         .font(.body)
                         .foregroundColor(.init("color_font_primary"))
@@ -214,18 +215,25 @@ struct TreeGallerySection: View {
                     }
                     
                     TabView {
-                        if let treeImages = treeImage?.images {
-                            ForEach (treeImages) { image in
-                                Image(uiImage: getImage(using: image.image_blobname))
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            }
-                        } else {
-                            Image(uiImage: UIImage(named: "happy_tree")!)
+                        // for now use mock images as API does not have any images
+                        ForEach((0...1), id: \.self) {
+                            Image("\($0)")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: 200, height: 200)
                         }
+                        // actual implementaion
+//                        if let treeImages = treeImage?.images {
+//                            ForEach (treeImages) { image in
+//                                Image(uiImage: getImage(using: image.image_blobname))
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fill)
+//                            }
+//                        } else {
+//                            Image(uiImage: UIImage(named: "happy_tree")!)
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fill)
+//                                .frame(width: 200, height: 200)
+//                        }
                     }.tabViewStyle(PageTabViewStyle())
                     .cornerRadius(12.0)
                     

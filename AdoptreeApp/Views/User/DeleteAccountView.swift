@@ -37,8 +37,9 @@ struct DeleteAccountView: View {
                             .keyboardType(.default)
                             .autocapitalization(.none)
                         
-                        Text("You can only selete your account if you do not have any valid adoption contract")
+                        Text("You can only delete your account if you do not have a valid adoption contract")
                             .font(.footnote)
+                            .foregroundColor(.init("color_font_secondary"))
                         
                     }.background(Color.init("color_background"))
                     .padding(.top, 50)
@@ -71,7 +72,22 @@ struct DeleteAccountView: View {
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Password reset"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    Alert(title: Text("Account deletion"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                }
+                
+                if isTryingToDeleteAccount {
+                    withAnimation(.linear) {
+                        ZStack {
+                            Image("tree")
+                                .resizable()
+                                .scaledToFill()
+                                .opacity(0.0)
+                                .background(Blur(style: .systemUltraThinMaterial))
+                                .edgesIgnoringSafeArea(.all)
+                            
+                            ProgressView("Deleting account...")
+                        }
+                    }
                 }
                 
             }

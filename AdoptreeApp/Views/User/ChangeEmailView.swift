@@ -82,7 +82,18 @@ struct ChangeEmailView: View {
             }
             
             if isTryingToChangeEmail {
-                ProgressView("Changing email...")
+                withAnimation(.linear) {
+                    ZStack {
+                        Image("tree")
+                            .resizable()
+                            .scaledToFill()
+                            .opacity(0.0)
+                            .background(Blur(style: .systemUltraThinMaterial))
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView("Changing email...")
+                    }
+                }
             }
         }
     }

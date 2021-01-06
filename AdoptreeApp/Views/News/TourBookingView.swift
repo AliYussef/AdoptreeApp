@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct TourBookingView: View {
+    @ObservedObject var inputValidationViewModel = InputValidationViewModel()
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var newsViewModel: NewsViewModel
     let tour: Tour
     @State var bookedTour: BookedTour?
-    @State private var fullName = ""
-    @State private var email = ""
     @State private var availableSlotsIndex = 0
     @State private var showingAlert = false
     @State private var showingAlertInput = false
     @State private var message = ""
     @State var isTryingToBook: Bool = false
     @State var wasBookingSuccessfull: Bool = false
+    @State var isConfirmDisabled = true
     
     var body: some View {
         
@@ -49,8 +49,6 @@ struct TourBookingView: View {
                     .background(Color.white)
                     .cornerRadius(12.0)
                     
-                    
-                    
                     VStack {
                         Form {
                             Section(header: HStack {
@@ -59,10 +57,13 @@ struct TourBookingView: View {
                                 Text("Fill in your information")
                                     .foregroundColor(.init("color_font_primary"))
                             }, content: {
-                                TextField("First name", text: $fullName)
-                                TextField("Email", text: $email)
+                                TextField("Username", text: $inputValidationViewModel.username)
+                                    .validation(inputValidationViewModel.usernameValidation)
+                                TextField("Email", text: $inputValidationViewModel.email)
+                                    .validation(inputValidationViewModel.emailEmptyValidation)
+                                    .validation(inputValidationViewModel.emailValidation)
                                 Picker(selection: $availableSlotsIndex, label: Text("Number of guests (including you)").font(.subheadline)) {
-                                    ForEach(0 ..< Int(tour.slots)) { num in
+                                    ForEach(1 ..< Int(tour.slots)) { num in
                                         Text("\(num)")
                                     }
                                 }
@@ -73,25 +74,26 @@ struct TourBookingView: View {
                     .alert(isPresented: $showingAlertInput) {
                         Alert(title: Text("Tour booking"), message: Text("\(message)"), dismissButton: .default(Text("Ok")))
                     }
+                    .onReceive(inputValidationViewModel.requestResetPasswordValidation) { validation in
+                        isConfirmDisabled = !validation.isSuccess
+                    }
                     
                     Button(action: {
-                        if validateInput() {
-                            isTryingToBook.toggle()
-                            if let userId = userViewModel.userShared.id {
-                                let bookedTour = BookedTour(id: nil, tourId: tour.id, userId: userId, userName: fullName, userEmail: email, bookedDateTime: nil)
-                                self.newsViewModel.bookTour(using: bookedTour) { result in
-                                    switch (result) {
-                                        case .failure(_):
-                                            self.message = "An error occurred"
-                                            self.showingAlert.toggle()
-                                        case .success(let result):
-                                            self.bookedTour = result
-                                            self.message = "Great! Your tour has been booked"
-                                            self.showingAlert.toggle()
-                                    }
-                                    
-                                    isTryingToBook.toggle()
+                        isTryingToBook.toggle()
+                        if let userId = userViewModel.userShared.id {
+                            let bookedTour = BookedTour(id: nil, tourId: tour.id, userId: userId, userName: inputValidationViewModel.username, userEmail: inputValidationViewModel.email, bookedDateTime: nil)
+                            self.newsViewModel.bookTour(using: bookedTour) { result in
+                                switch (result) {
+                                    case .failure(_):
+                                        self.message = "An error occurred"
+                                        self.showingAlert.toggle()
+                                    case .success(let result):
+                                        self.bookedTour = result
+                                        self.message = "Great! Your tour has been booked"
+                                        self.showingAlert.toggle()
                                 }
+                                
+                                isTryingToBook.toggle()
                             }
                         }
                     }, label: {
@@ -99,6 +101,7 @@ struct TourBookingView: View {
                             .font(.subheadline)
                             .foregroundColor(.white)
                     })
+                    .disabled(isConfirmDisabled)
                     .frame(width: UIScreen.main.bounds.width * 0.5, height: 40, alignment: .center)
                     .background(Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
@@ -108,8 +111,6 @@ struct TourBookingView: View {
                             self.wasBookingSuccessfull.toggle()
                         })
                     }
-                    
-                    
                 }
                 
                 if isTryingToBook {
@@ -117,13 +118,11 @@ struct TourBookingView: View {
                 }
             }
             .onAppear {
-                if let firstName = userViewModel.userShared.firstname {
-                    if let lastName = userViewModel.userShared.lastname {
+                if let username = userViewModel.userShared.username {
                         if let email = userViewModel.userShared.email {
-                            fullName = "\(firstName) \(lastName)"
-                            self.email = email
+                            inputValidationViewModel.username = username
+                            inputValidationViewModel.email = email
                         }
-                    }
                 }
             }
             
@@ -135,15 +134,15 @@ struct TourBookingView: View {
     }
 }
 
-extension TourBookingView {
-    
-    func validateInput() -> Bool {
-        if fullName.count < 3 || email.count < 3 {
-            message = "Please fill in all fields!"
-            showingAlertInput.toggle()
-            return false
-        }
-        
-        return true
-    }
-}
+//extension TourBookingView {
+//
+//    func validateInput() -> Bool {
+//        if fullName.count < 3 || email.count < 3 {
+//            message = "Please fill in all fields!"
+//            showingAlertInput.toggle()
+//            return false
+//        }
+//
+//        return true
+//    }
+//}

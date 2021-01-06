@@ -15,6 +15,7 @@ struct BookedTourOverviewView: View {
     @State private var showingAlert = false
     @State private var showingAlertConfirm = false
     @State private var message = ""
+    @State var isTryingToCancel: Bool = false
     
     var body: some View {
         ZStack {
@@ -97,7 +98,7 @@ struct BookedTourOverviewView: View {
                 .background(Color.white)
                 .cornerRadius(12.0)
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Tour booking"), message: Text("\(message)"), dismissButton: .default(Text("Ok")) {
+                    Alert(title: Text("Tour canceling"), message: Text("\(message)"), dismissButton: .default(Text("Ok")) {
                         self.presentationMode.wrappedValue.dismiss()
                     })
                 }
@@ -107,7 +108,6 @@ struct BookedTourOverviewView: View {
                 Button(action: {
                     message = "Are you sure about canceling your tour?"
                     showingAlertConfirm.toggle()
-                    print(showingAlertConfirm)
                 }, label: {
                     Text("Cancel")
                         .font(.subheadline)
@@ -120,6 +120,7 @@ struct BookedTourOverviewView: View {
                 .alert(isPresented: $showingAlertConfirm) {
                     Alert(title: Text("Tour canceling"), message: Text("\(message)"), primaryButton: .default(Text("Yes")){
                         if let bookedTourId = bookedTour.id {
+                            isTryingToCancel.toggle()
                             newsViewModel.cancelBookedTour(using: bookedTourId) { result in
                                 switch (result) {
                                     case .failure(_):
@@ -129,12 +130,15 @@ struct BookedTourOverviewView: View {
                                         self.message = "Your tour has been canceled"
                                         self.showingAlert.toggle()
                                 }
+                                isTryingToCancel.toggle()
                             }
                         }
                     },secondaryButton: .cancel(Text("No")))
                 }
+            }
             
-                
+            if isTryingToCancel {
+                ProgressView("Canceling is in progress...")
             }
         }
     }

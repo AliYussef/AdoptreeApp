@@ -17,6 +17,7 @@ struct AdoptionLoginView: View {
     @Binding var isAdoptionFailed: Bool
     @State private var showingAlert = false
     @State private var message = ""
+    @State var isTryingToAdopt: Bool = false
     
     var body: some View {
         ZStack{
@@ -61,42 +62,9 @@ struct AdoptionLoginView: View {
                 Spacer()
                 
                 Button(action: {
+                    isTryingToAdopt.toggle()
                     loginAnyPay()
-//                    let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, salt: nil, forgetToken: nil, role: nil, createdAt: nil)
-//                    userViewModel.login(user: user) { result in
-//                        switch (result) {
-//                            case .failure(_):
-//                                message = "An error occurred. Please check your username and password!"
-//                                showingAlert.toggle()
-//                            case .success(let response):
-//                                userViewModel.accessToken = response.accessToken
-//                                userViewModel.refreshToken = response.refreshToken
-//
-//                                userViewModel.getLoggedinUser() { result in
-//                                    switch (result) {
-//                                        case .failure(_):
-//                                            message = "An error occurred. Please check your username and password!"
-//                                            showingAlert.toggle()
-//                                        case .success(let response):
-//                                            if let userId = response.id {
-//                                                let order = self.orderViewModel.createOrderObject(for: userId)
-//                                                self.orderViewModel.createOrder(order: order) { result in
-//                                                    switch (result) {
-//                                                        case .failure(_):
-//                                                            break // add message here as well
-//                                                        case .success(let success):
-//                                                            if let url = URL(string: success.paymentLink) {
-//                                                                if UIApplication.shared.canOpenURL(url) {
-//                                                                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-//                                                                }
-//                                                            }
-//                                                    }
-//                                                }
-//                                            }
-//                                    }
-//                                }
-//                        }
-//                    }
+                    
                 }, label: {
                     Text("Log in & pay")
                         .font(.subheadline)
@@ -110,43 +78,26 @@ struct AdoptionLoginView: View {
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Login"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
                 }
-//
-//                NavigationLink(destination: SuccessfullAdoptionView(), tag: 1, selection: $actionState) {
-//                    EmptyView()
-//                }
                 
+                if isTryingToAdopt {
+                    withAnimation(.linear) {
+                        ZStack {
+                            Image("tree")
+                                .resizable()
+                                .scaledToFill()
+                                .opacity(0.0)
+                                .background(Blur(style: .systemUltraThinMaterial))
+                                .edgesIgnoringSafeArea(.all)
+                            
+                            ProgressView("Aopting...")
+                        }
+                    }
+                }
             }
         }
         .onReceive(inputValidationViewModel.loginValidation) { validation in
             isSaveDisabled = !validation.isSuccess
         }
-//        .onOpenURL(perform: { url in
-//            if url.host == "payment-return" {
-//                if let orderId = orderViewModel.orderResponse?.id {
-//                    orderViewModel.getOrderById(using: orderId) { result in
-//                        switch (result) {
-//                            case .failure(_):
-//                                break
-//                            case .success(_):
-//                                //print(success)
-//                                if orderViewModel.order?.orderLines[0].productId != orderViewModel.treeSign?.id {
-//                                    if let paymentStatus = orderViewModel.order?.paymentStatus {
-//                                        if paymentStatus == PaymentStatus.paid.rawValue || paymentStatus == PaymentStatus.open.rawValue {
-//                                            orderViewModel.products.removeAll()
-//                                            //print("payment successfull")
-//                                            actionState = 1
-//                                        } else {
-//                                            // print("payment unsuccessfull")
-//                                            self.isAdoptionFailed.toggle()
-//                                        }
-//                                    }
-//                                }
-//                        }
-//                    }
-//                }
-//            }
-//        })
-        
     }
 }
 
@@ -196,6 +147,7 @@ extension AdoptionLoginView {
                         }
                     }
             }
+            isTryingToAdopt.toggle()
         }
     }
     

@@ -116,7 +116,7 @@ struct TimelineView: View {
                                 } else {
                                     VStack {
                                         Text("Your adopted trees have not been planted yet. Once they are planted you will be able to follow their storis.")
-                                            .font(.body)
+                                            .font(.subheadline)
                                             .multilineTextAlignment(.center)
                                     }
                                     .padding()
@@ -262,10 +262,12 @@ struct TimelineDetailView: View {
                 if item.type == TimelineEntryType.report {
                     TreeDataSectionTimeline(item: item)
                 } else if item.type == TimelineEntryType.image  {
-                    Image("gree_idea_header")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: UIScreen.main.bounds.width, height: .none)
+                    if let imageName = item.image_blobname {
+                        Image("\(imageName)")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: UIScreen.main.bounds.width, height: .none)
+                    }
                 }
             }
         }

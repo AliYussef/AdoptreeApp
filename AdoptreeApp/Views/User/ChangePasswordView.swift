@@ -82,7 +82,18 @@ struct ChangePasswordView: View {
             }
             
             if isTryingToChangePassword {
-                ProgressView("Changing password...")
+                withAnimation(.linear) {
+                    ZStack {
+                        Image("tree")
+                            .resizable()
+                            .scaledToFill()
+                            .opacity(0.0)
+                            .background(Blur(style: .systemUltraThinMaterial))
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView("Changing password...")
+                    }
+                }
             }
         }
     }

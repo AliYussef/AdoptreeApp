@@ -28,7 +28,7 @@ struct HomeView: View {
                             } else {
                                 VStack {
                                     Text("Your adopted trees have not been planted yet. Once they are planted you will be able to monitor their status.")
-                                        .font(.body)
+                                        .font(.subheadline)
                                         .multilineTextAlignment(.center)
                                 }
                                 .padding()
@@ -38,6 +38,8 @@ struct HomeView: View {
                                 .padding(.bottom, 10)
                             }
                         } else {
+                            
+                            TotalCo2Redcution()
                             
                             if !treeViewModel.isExpanded.isEmpty {
                                 ForEach(Array(zip(treeViewModel.trees.indices, treeViewModel.trees)), id: \.0) { index, tree in
@@ -82,6 +84,52 @@ struct HomeView: View {
                 GuestHomeView()
             }
         }
+    }
+}
+
+struct TotalCo2Redcution: View {
+    @EnvironmentObject var timelineViewModel: TimelineViewModel
+    
+    var body: some View {
+        
+        VStack(alignment: .center) {
+            Text("Total CO2 Reduced")
+                .font(.title3)
+                .multilineTextAlignment(.leading)
+                .foregroundColor(.init("color_font_primary"))
+            
+            HStack {
+                Image("co2")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 100, height: 100, alignment: .center)
+                
+                Text("\(String(format: "%.4f", calculateTotalSequestrations()))kg")
+                    .font(.title)
+                    .bold()
+                    .foregroundColor(.init("color_font_primary"))
+                    .padding(.bottom, 30)
+            }
+        }
+        .padding()
+        .frame(width: UIScreen.main.bounds.width - 20, height: .none)
+        .background(Color.white)
+        .cornerRadius(12.0)
+        .padding(.bottom, 10)
+    }
+}
+
+extension TotalCo2Redcution {
+    
+    func calculateTotalSequestrations() -> Double {
+        var result = 0.0
+        
+        timelineViewModel.sequestrations.forEach({ sequestration in
+            result += sequestration.sequestration.reduce(0, +)
+        })
+        
+        let totalInGrams = Measurement(value: result, unit: UnitMass.grams)
+        return totalInGrams.converted(to: .kilograms).value
     }
 }
 

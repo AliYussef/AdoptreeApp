@@ -14,6 +14,7 @@ struct ForgotPasswordView: View {
     @State var isSaveDisabled = true
     @State private var showingAlert = false
     @State private var message = ""
+    @State var isTryingToChangePassword: Bool = false
     
     var body: some View {
         ZStack{
@@ -45,6 +46,7 @@ struct ForgotPasswordView: View {
                         .padding()
                     
                     Button(action: {
+                        isTryingToChangePassword.toggle()
                         userViewModel.resetPassword(resetPasswordBody: ResetPasswordBody(user_id: nil, token: self.userViewModel.forgetPasswordToken, created_at: nil, valid_until: nil, password: inputValidationViewModel.password, validate_password: inputValidationViewModel.confirmPassword)) {result in
                             switch (result) {
                                 case .failure(_):
@@ -55,6 +57,7 @@ struct ForgotPasswordView: View {
                                     showingAlert.toggle()
                                     self.presentationMode.wrappedValue.dismiss()
                             }
+                            isTryingToChangePassword.toggle()
                         }
                     }, label: {
                         Text("Reset my password")
@@ -68,6 +71,21 @@ struct ForgotPasswordView: View {
                     .padding()
                     .alert(isPresented: $showingAlert) {
                         Alert(title: Text("Reset password"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    }
+                    
+                    if isTryingToChangePassword {
+                        withAnimation(.linear) {
+                            ZStack {
+                                Image("tree")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .opacity(0.0)
+                                    .background(Blur(style: .systemUltraThinMaterial))
+                                    .edgesIgnoringSafeArea(.all)
+                                
+                                ProgressView("Changing password...")
+                            }
+                        }
                     }
                 }
             }
@@ -86,6 +104,7 @@ struct RequestPasswordChangeView: View {
     @State var isSaveDisabled = true
     @State private var showingAlert = false
     @State private var message = ""
+    @State var isTryingToChangePassword: Bool = false
     
     var body: some View {
         TextField("Email Address", text: $inputValidationViewModel.email)
@@ -108,16 +127,16 @@ struct RequestPasswordChangeView: View {
             .padding()
         
         Button(action: {
-            userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: inputValidationViewModel.username, email: inputValidationViewModel.username)) {result in
+            isTryingToChangePassword.toggle()
+            userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: inputValidationViewModel.username, email: inputValidationViewModel.username)) { result in
                 switch (result) {
                     case .failure(_):
                         message = "An error has occurred. Please check your username and email!"
                         showingAlert.toggle()
                     case .success(_):
                         break
-                    //message = "Password has been reset"
-                    //showingAlert.toggle()
                 }
+                isTryingToChangePassword.toggle()
             }
         }, label: {
             Text("Request password change")
@@ -134,6 +153,21 @@ struct RequestPasswordChangeView: View {
         }
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Reset password"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+        }
+        
+        if isTryingToChangePassword {
+            withAnimation(.linear) {
+                ZStack {
+                    Image("tree")
+                        .resizable()
+                        .scaledToFill()
+                        .opacity(0.0)
+                        .background(Blur(style: .systemUltraThinMaterial))
+                        .edgesIgnoringSafeArea(.all)
+                    
+                    ProgressView("Request password change...")
+                }
+            }
         }
     }
 }

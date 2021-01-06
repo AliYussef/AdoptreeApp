@@ -52,23 +52,23 @@ struct AdoptedTreesCell: View {
                         Alert(title: Text("Contract renewal"), message: Text("\(message)"), primaryButton: .default(Text("Yes")){
                             //might add payment as well
                             if let tree = tree.assignedTree {
-//                                treeViewModel.renewTreeContract(for: tree) { result in
-//                                    switch (result) {
-//                                        case .failure(_):
-//                                            message = "An Error has occurred. Please try again!"
-//                                            showingAlert.toggle()
-//                                        case .success(_):
-//                                            message = "Congratulations􀎸 your adoption has been extended by 1 year"
-//                                            showingAlert.toggle()
-//                                    }
-//                                }
+                                treeViewModel.renewTreeContract(for: tree) { result in
+                                    switch (result) {
+                                        case .failure(_):
+                                            message = "An Error has occurred. Please try again!"
+                                            showingAlert.toggle()
+                                        case .success(_):
+                                            message = "Congratulations􀎸 your adoption has been extended by 1 year"
+                                            showingAlert.toggle()
+                                    }
+                                }
                             }
                         },secondaryButton: .cancel(Text("No")))
                     }
                 
                 Spacer()
                 
-                if isTreeUpForRenewal() {
+                if isTreeUpForRenewal(expiredDate: calculateTreeExpiredDate()) {
                     Button(action: {
                         message = "Are you sure you want to extend your adoption?"
                         showingAlertConfirm.toggle()
@@ -132,7 +132,7 @@ struct AdoptedTreesCell: View {
                         HStack {
                             Text("End date")
                             Spacer()
-                            Text(getHumanReadableDate(date: tree.assignedTree?.expire_date ?? Date()))
+                            Text(getHumanReadableDate(date: calculateTreeExpiredDate()))
                                 .foregroundColor(.init("color_font_secondary"))
                         }
                     }).padding(.bottom)
@@ -142,13 +142,11 @@ struct AdoptedTreesCell: View {
 
 extension AdoptedTreesCell {
     
-    func isTreeUpForRenewal() -> Bool {
+    func isTreeUpForRenewal(expiredDate: Date) -> Bool {
         var dateDiff = DateComponents()
         
         if let from = tree.assignedTree?.created_at {
-            if let to = tree.assignedTree?.expire_date {
-                dateDiff = Calendar.current.dateComponents([.day], from: from, to: to)
-            }
+            dateDiff = Calendar.current.dateComponents([.day], from: from, to: expiredDate)
         }
         
         guard dateDiff.day != nil else {
@@ -156,6 +154,17 @@ extension AdoptedTreesCell {
         }
         
         return dateDiff.day! < 30
+    }
+    
+    func calculateTreeExpiredDate() -> Date {
+        if let tree = tree.assignedTree {
+            let timeInterval = DateComponents(year: 1)
+            let expiredDate = Calendar.current.date(byAdding: timeInterval, to: tree.created_at)
+            if let expiredDate = expiredDate {
+                return expiredDate
+            }
+        }
+        return Date()
     }
     
     func getHumanReadableDate(date: Date) -> String {
