@@ -17,8 +17,7 @@ struct TreeTypeView: View {
             .frame(width: UIScreen.main.bounds.width * 0.9, height: 160, alignment: .leading)
             .overlay(
                 HStack {
-                    
-                    Image("\(orderViewModel.categoriesDic[treeProduct.categoryId]?.lowercased() == "tree" ? "tree" : "sapling")")
+                    Image("\(orderViewModel.categoriesDic[treeProduct.categoryId]?.lowercased() == TreeType.tree.rawValue ? TreeType.tree.rawValue : TreeType.sapling.rawValue)")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100, alignment: .leading)

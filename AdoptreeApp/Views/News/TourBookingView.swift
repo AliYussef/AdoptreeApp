@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TourBookingView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @StateObject var newsViewModel: NewsViewModel
+    @EnvironmentObject var newsViewModel: NewsViewModel
     let tour: Tour
     @State var bookedTour: BookedTour?
     @State private var fullName = ""
@@ -74,7 +74,6 @@ struct TourBookingView: View {
                         Alert(title: Text("Tour booking"), message: Text("\(message)"), dismissButton: .default(Text("Ok")))
                     }
                     
-                    // should lead to BookedTourOverviewView()
                     Button(action: {
                         if validateInput() {
                             isTryingToBook.toggle()
@@ -94,7 +93,7 @@ struct TourBookingView: View {
                                     isTryingToBook.toggle()
                                 }
                             }
-                            }
+                        }
                     }, label: {
                         Text("Confirm")
                             .font(.subheadline)
@@ -109,7 +108,7 @@ struct TourBookingView: View {
                             self.wasBookingSuccessfull.toggle()
                         })
                     }
-                  
+                    
                     
                 }
                 
@@ -130,7 +129,7 @@ struct TourBookingView: View {
             
         } else {
             if let bookedTour = bookedTour {
-                BookedTourOverviewView(newsViewModel: newsViewModel, bookedTour: bookedTour, tour: tour)
+                BookedTourOverviewView(bookedTour: bookedTour, tour: tour)
             }
         }
     }

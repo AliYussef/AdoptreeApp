@@ -29,12 +29,13 @@ class NewsViewModel: ObservableObject {
 
 extension NewsViewModel {
     
-    func getNewsViewData(of userId: Int64) {
+    func getNewsViewData() {
         let contentUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .content, using: .get)
         let tourUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .tour, using: .get)
-        let bookedTourUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .bookedtourById(userId), using: .get)
+        let bookedTourUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .bookedtourByUser, using: .get)
         
         Publishers.CombineLatest3(contentRepository.getContents(using: contentUrlRequest), tourRepository.getTours(using: tourUrlRequest), userRepository.getBookedToursByUser(using: bookedTourUrlRequest))
+            .delay(for: 2, scheduler: DispatchQueue.main)
             .sink(receiveValue: {contents, tours, bookedTours in
                 
                 switch(contents) {
@@ -49,7 +50,6 @@ extension NewsViewModel {
                         }
                         
                     case .success(let contents):
-                        //print(contents)
                         self.contents = contents.sorted(by: {$0.createdOn > $1.createdOn})
                         self.createContentData()
                 }
@@ -66,7 +66,6 @@ extension NewsViewModel {
                         }
                         
                     case .success(let tours):
-                        print(tours)
                         self.tours = tours
                 }
                 
@@ -88,6 +87,31 @@ extension NewsViewModel {
             })
             .store(in: &cancellables)
     }
+    
+    func getContent(completion: @escaping (Result<[Content], RequestError>) -> Void) {
+        let contentUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .content, using: .get)
+        
+        contentRepository.getContentForGuest(using: contentUrlRequest)
+            .sink(receiveCompletion: { result in
+                switch result {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        switch error {
+                            case let urlError as URLError:
+                                completion(.failure(.urlError(urlError)))
+                            case let decodingError as DecodingError:
+                                completion(.failure(.decodingError(decodingError)))
+                            default:
+                                completion(.failure(.genericError(error)))
+                        }
+                }
+            }, receiveValue: { contents in
+                self.contents = contents.sorted(by: {$0.createdOn > $1.createdOn})
+                self.createContentData()
+            })
+            .store(in: &cancellables)
+    }
 }
 
 extension NewsViewModel {
@@ -105,7 +129,7 @@ extension NewsViewModel {
     }
 }
 
-extension NewsViewModel {
+extension NewsViewModel { 
     
     func bookTour(using tour: BookedTour, completion: @escaping (Result<BookedTour, RequestError>) -> Void) {
         do {
@@ -119,13 +143,10 @@ extension NewsViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
-                                    print(urlError)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
-                                    print(decodingError)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
-                                    print(error)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -144,7 +165,7 @@ extension NewsViewModel {
     }
     
     
-    func cancelBookedTour(using bookedTourId: Int64, completion: @escaping (Result<HTTPURLResponse, RequestError>) -> Void) {
+    func cancelBookedTour(using bookedTourId: Int64, completion: @escaping (Result<Data, RequestError>) -> Void) {
         
         let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .bookedtourByIdDelete(bookedTourId), using: .delete)
         
@@ -155,8 +176,10 @@ extension NewsViewModel {
                         break
                     case .failure(let error):
                         switch error {
-                            case let urlError:
+                            case let urlError as URLError:
                                 completion(.failure(.urlError(urlError)))
+                            default:
+                                completion(.failure(.genericError(error)))
                         }
                 }
             }, receiveValue: {result in

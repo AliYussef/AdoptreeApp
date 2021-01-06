@@ -17,10 +17,11 @@ class OrderViewModel: ObservableObject {
     @Published var totalPrice: Double = 0.0
     @Published var orderResponse: OrderResponse?
     @Published var order: Order?
-    private var cancellables = Set<AnyCancellable>()
+    private let initialTreeSignPrice = 5.0
     private let orderRepository: OrderRepositoryProtocol
     private let productRepository: ProductRepositoryProtocol
     private let categoryRepository: CategoryRepositoryProtocol
+    private var cancellables = Set<AnyCancellable>()
     
     init(orderRepository: OrderRepositoryProtocol, productRepository: ProductRepositoryProtocol, categoryRepository: CategoryRepositoryProtocol) {
         self.orderRepository = orderRepository
@@ -31,44 +32,11 @@ class OrderViewModel: ObservableObject {
 
 extension OrderViewModel {
     
-//    func getProductsAndCategories() {
-//        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .product, using: .get)
-//
-//        productRepository.getProducts(using: urlRequest)
-//            .sink(receiveCompletion: {result in
-//                switch result {
-//                    case .finished:
-//                        break
-//                    case .failure(let error):
-//                        switch error {
-//                            case let urlError as URLError:
-//                                if urlError.code == .userAuthenticationRequired {
-//                                    print("User authentication required")
-//                                    //self.getAdoptedTrees(of: userId){_ in}
-//                                } else {
-//                                    print(urlError)
-//                                }
-//                                //completion(.failure(.urlError(urlError)))
-//                            case let decodingError as DecodingError:
-//                                print(decodingError)
-//                                //completion(.failure(.decodingError(decodingError)))
-//                            default:
-//                                print(error)
-//                                //completion(.failure(.genericError(error)))
-//                        }
-//                }
-//
-//            }, receiveValue: {result in
-//                self.availableProducts = result
-//            })
-//            .store(in: &cancellables)
-//    }
-    
     func getProductsAndCategories() {
         let productUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .product, using: .get)
         let categoryUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .category, using: .get)
-
-        Publishers.CombineLatest(productRepository.getProducts(using: productUrlRequest), categoryRepository.getCategories(using: categoryUrlRequest))
+        
+        Publishers.Zip(productRepository.getProducts(using: productUrlRequest), categoryRepository.getCategories(using: categoryUrlRequest))
             .sink(receiveValue: { products, categories in
                 switch(products) {
                     case .failure(let error):
@@ -80,12 +48,11 @@ extension OrderViewModel {
                             default:
                                 print(error)
                         }
-
+                        
                     case .success(let products):
                         self.availableProducts = products
-                        self.getTreeSignProduct()
                 }
-
+                
                 switch(categories) {
                     case .failure(let error):
                         switch error {
@@ -96,7 +63,7 @@ extension OrderViewModel {
                             default:
                                 print(error)
                         }
-
+                        
                     case .success(let categories):
                         self.categories = categories
                         self.createCategoriesDictionary()
@@ -130,8 +97,8 @@ extension OrderViewModel {
                     }
                     
                 }, receiveValue: {result in
-                    completion(.success(result))
                     self.orderResponse = result
+                    completion(.success(result))
                 })
                 .store(in: &cancellables)
             
@@ -154,13 +121,10 @@ extension OrderViewModel {
                     case .failure(let error):
                         switch error {
                             case let urlError as URLError:
-                                print(urlError)
                                 completion(.failure(.urlError(urlError)))
                             case let decodingError as DecodingError:
-                                print(decodingError)
                                 completion(.failure(.decodingError(decodingError)))
                             default:
-                                print(error)
                                 completion(.failure(.genericError(error)))
                         }
                 }
@@ -213,7 +177,7 @@ extension OrderViewModel {
             orderLines.append(OrderLine(id: nil, orderId: nil, productId: orderProduct.product.id, price: nil, vat: nil, quantity: orderProduct.quantity))
         })
         
-        return Order(id: nil, paymentRedirectLink: "mollie-app://payment-return", paymentStatus: nil, orderStatus: nil, userId: userID, createdAt: nil, orderLines: orderLines)
+        return Order(id: nil, paymentRedirectLink: PaymentURL.url, paymentStatus: nil, orderStatus: nil, userId: userID, createdAt: nil, orderLines: orderLines)
     }
     
     func calculateTotal() {
@@ -222,7 +186,7 @@ extension OrderViewModel {
         products.forEach({ product in
             total += product.product.price * Double(product.quantity)
             if product.isSignActivated {
-                total += treeSign?.price ?? 5.0
+                total += treeSign?.price ?? initialTreeSignPrice
             }
         })
         
@@ -236,6 +200,7 @@ extension OrderViewModel {
         categories.forEach({ cat in
             categoriesDic[cat.id] = cat.name
         })
+        getTreeSignProduct()
     }
 }
 
@@ -262,6 +227,6 @@ extension OrderViewModel {
             orderLines.append(OrderLine(id: nil, orderId: nil, productId: treeSign.id, price: nil, vat: nil, quantity: 1))
         }
         
-        return Order(id: nil, paymentRedirectLink: "mollie-app://payment-return", paymentStatus: nil, orderStatus: nil, userId: userID, createdAt: nil, orderLines: orderLines)
+        return Order(id: nil, paymentRedirectLink: PaymentURL.url, paymentStatus: nil, orderStatus: nil, userId: userID, createdAt: nil, orderLines: orderLines)
     }
 }

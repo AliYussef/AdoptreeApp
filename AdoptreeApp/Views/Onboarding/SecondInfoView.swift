@@ -73,9 +73,3 @@ struct SecondInfoView: View {
         }
     }
 }
-
-struct SecondInfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        SecondInfoView(currentIndex: .constant(1))
-    }
-}

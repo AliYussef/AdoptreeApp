@@ -10,18 +10,14 @@ import Combine
 
 class Authenticator {
     private let session: NetworkSession
-    //private var currentToken: Token? = Token(isValid: false)
-    
     private let queue = DispatchQueue(label: "Autenticator.\(UUID().uuidString)")
-    
-    // this publisher is shared amongst all calls that request a token refresh
     private var refreshPublisher: AnyPublisher<RefreshTokenResponse, Error>?
     
     init(session: NetworkSession = URLSession.shared) {
         self.session = session
     }
     
-    func validToken(forceRefresh: Bool = false) -> AnyPublisher<RefreshTokenResponse, Error> {
+    func checkTokenValidity(forceRefresh: Bool = false) -> AnyPublisher<RefreshTokenResponse, Error> {
         return queue.sync { [weak self] in
             // scenario 1: we're already loading a new token
             if let publisher = self?.refreshPublisher {
@@ -52,7 +48,6 @@ class Authenticator {
             urlRequest.httpMethod = RequestMethod.post.rawValue
 
             guard let refreshToken = UserViewModel.shared.refreshToken else {
-                //replace with login. if we do not have refresh token then we need to login
                 return Fail(error: AuthenticationError.loginRequired)
                     .eraseToAnyPublisher()
             }
@@ -62,7 +57,6 @@ class Authenticator {
                 .share()
                 .decode(type: RefreshTokenResponse.self, decoder: JSONDecoder())
                 .handleEvents(receiveOutput: { refreshTokenResponse in
-                    // self?.currentToken = token
                     print("Update")
                     UserViewModel.shared.authenDate = String(Date().timeIntervalSince1970)
                     UserViewModel.shared.accessToken = refreshTokenResponse.accessToken
@@ -73,16 +67,11 @@ class Authenticator {
                         self?.refreshPublisher = nil
                     }
                 })
-                //.receive(on: DispatchQueue.global(qos: .userInitiated))
                 .eraseToAnyPublisher()
             
             self?.refreshPublisher = publisher
             return publisher
         }
     }
-    
-//    func refreshToken() -> AnyPublisher<RefreshTokenResponse, Error> {
-//
-//    }
 }
 

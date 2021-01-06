@@ -10,7 +10,7 @@ import Foundation
 struct Timeline: Codable, Identifiable {
     var id = UUID()
     let treeId: Int64
-    let type: String
+    let type: TimelineEntryType
     let reportedOn: Date
     let temperature: Int8?
     let humidity: Int8?
@@ -21,12 +21,16 @@ struct Timeline: Codable, Identifiable {
 }
 
 struct TimelineTree {
-    let treeName: String
-    let treeColor: String
+    var treeName: String
+    var treeColor: String
     let adoptedDate: Date
 }
 
 struct TimelineFilter {
     let treeId: Int64
-    let treeName: String
+    var treeName: String
+}
+
+enum TimelineEntryType: String, Codable {
+    case report, tree, image
 }

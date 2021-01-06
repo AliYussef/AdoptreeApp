@@ -18,7 +18,7 @@ struct FailedAdoptionView: View {
             VStack {
                 Spacer()
                 
-                Text("Your adoption has failed")
+                Text("Something went wrong! Your adoption has failed")
                     .font(.title2)
                     .bold()
                     .foregroundColor(.init("color_font_primary"))

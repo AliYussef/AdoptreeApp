@@ -49,11 +49,8 @@ struct LoginView: View {
                     
                     Button(action: {
                         isTryingToLogin.toggle()
-//                        withAnimation {
-//                            self.userViewModel.isAuthenticated.toggle()
-//                        }
-                        
-                        let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, salt: nil, forgetToken: nil, role: nil, createdAt: nil)
+
+                        let user = UserLogin(username:inputValidationViewModel.username, password:inputValidationViewModel.password)
                         userViewModel.login(user: user) { result in
                             switch (result) {
                                 case .failure(_):
@@ -62,11 +59,12 @@ struct LoginView: View {
                                 case .success(let response):
                                     userViewModel.accessToken = response.accessToken
                                     userViewModel.refreshToken = response.refreshToken
-                                    if let userId = Int64(response.userId) {
-                                        userViewModel.getUserById(for: userId) {_ in}
+                                    if userViewModel.accessToken != nil {
+                                        userViewModel.isAuthenticated = true
                                     }
-                                    //break
+                                    userViewModel.getLoggedinUser() {_ in}
                             }
+                            
                             isTryingToLogin.toggle()
                         }
                     }, label: {

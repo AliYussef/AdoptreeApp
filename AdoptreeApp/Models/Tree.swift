@@ -20,6 +20,13 @@ struct Tree: Codable, Identifiable {
     let longitude: String
 }
 
+extension Tree {
+    
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: Double(latitude) ?? 0, longitude: Double(longitude) ?? 0)
+    }
+}
+
 struct AssignedTree: Codable {
     let user_id: Int64
     let tree_id: Int64
@@ -35,9 +42,6 @@ struct TreeLocation {
     let forest: String
 }
 
-extension Tree {
-    
-    var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: Double(latitude) ?? 0, longitude: Double(longitude) ?? 0)
-    }
+enum TreeType: String {
+    case tree, sapling
 }

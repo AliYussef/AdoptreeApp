@@ -22,7 +22,7 @@ struct TreeTypesView: View {
                     } else {
                         
                         ForEach(orderViewModel.availableProducts) { treeProduct in
-                            if orderViewModel.categoriesDic[treeProduct.categoryId]?.lowercased() == "sapling" {
+                            if orderViewModel.categoriesDic[treeProduct.categoryId]?.lowercased() == TreeType.sapling.rawValue {
                                 
                                 RoundedRectangle(cornerRadius: 12.0)
                                     .fill(Color.white)
@@ -72,11 +72,5 @@ struct TreeTypesView: View {
                 orderViewModel.getProductsAndCategories()
             }
         }
-    }
-}
-
-struct TreeTypesView_Previews: PreviewProvider {
-    static var previews: some View {
-        TreeTypesView()
     }
 }

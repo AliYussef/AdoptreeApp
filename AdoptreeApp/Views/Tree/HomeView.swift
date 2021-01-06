@@ -10,18 +10,12 @@ import MapKit
 
 struct HomeView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @StateObject var treeViewModel: TreeViewModel
-    @StateObject var timelineViewModel: TimelineViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var timelineViewModel: TimelineViewModel
     
-//    var telemetry = [
-//        Telemetry(id: "1", treeId: "1", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1111795200), temperature: -3, humidity: 90, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1113004800), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
-//        Telemetry(id: "2", treeId: "2", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)]),
-//        Telemetry(id: "3", treeId: "3", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1112400000), temperature: 22, humidity: 80, treeLength: 22, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1115424000), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
-//    ]
-//
     var body: some View {
         
-        ZStack{
+        ZStack {
             Color.init("color_background")
                 .edgesIgnoringSafeArea(.all)
             
@@ -29,33 +23,44 @@ struct HomeView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack {
                         if treeViewModel.trees.isEmpty {
-                            ProgressView("Loading your trees...")
-                            //                            .onAppear {
-                            //                                userViewModel.getAdoptedTrees() {_ in}
-                            //                            }
-                            
+                            if treeViewModel.isThereAgoptedTrees {
+                                ProgressView("Loading your trees...")
+                            } else {
+                                VStack {
+                                    Text("Your adopted trees have not been planted yet. Once they are planted you will be able to monitor their status.")
+                                        .font(.body)
+                                        .multilineTextAlignment(.center)
+                                }
+                                .padding()
+                                .frame(width: UIScreen.main.bounds.width - 20, height: .none)
+                                .background(Color.white)
+                                .cornerRadius(12.0)
+                                .padding(.bottom, 10)
+                            }
                         } else {
                             
-                            ForEach(Array(zip(treeViewModel.trees.indices, treeViewModel.trees)), id: \.0) { index, tree in
-                                
-                                DisclosureGroup(
-                                    isExpanded: $treeViewModel.isExpanded[index],
-                                    content: {
-                                        if let treeId = tree.assignedTree?.tree_id {
-                                            TreeView(tree: tree, telemetry: timelineViewModel.telemetries.filter({Int64($0.treeId)! == treeId}).first?.reports.first ?? nil, sequestration: timelineViewModel.sequestrations.filter({$0.treeId == treeId}).first?.sequestration, treeImage: treeViewModel.treeImages.filter({$0.tree_id == treeId}).first, wildlife: treeViewModel.wildlifes.filter({$0.forestId == tree.forestId}).first?.wildlife)
-                                        }
-                                    },
-                                    label: {
-                                        
-                                        TreeHeader(treeViewModel: treeViewModel, tree: tree)
-                                            .frame(width: .none, height: .none)
-                                    })
-                                    .padding()
-                                    .frame(width: UIScreen.main.bounds.width - 20, height: .none)
-                                    .background(Color.white)
-                                    .cornerRadius(12.0)
-                                    .padding(.bottom, 10)
-                                
+                            if !treeViewModel.isExpanded.isEmpty {
+                                ForEach(Array(zip(treeViewModel.trees.indices, treeViewModel.trees)), id: \.0) { index, tree in
+                                    
+                                    DisclosureGroup(
+                                        isExpanded: $treeViewModel.isExpanded[index],
+                                        content: {
+                                            if let treeId = tree.assignedTree?.tree_id {
+                                                TreeView(tree: tree, telemetry: timelineViewModel.telemetries.filter({Int64($0.treeId)! == treeId}).first?.reports.first ?? nil, sequestration: timelineViewModel.sequestrations.filter({$0.treeId == treeId}).first?.sequestration, treeImage: treeViewModel.treeImages.filter({$0.tree_id == treeId}).first, wildlife: treeViewModel.wildlifes.filter({$0.forestId == tree.forestId}).first?.wildlife)
+                                            }
+                                        },
+                                        label: {
+                                            
+                                            TreeHeader(treeViewModel: treeViewModel, tree: tree)
+                                                .frame(width: .none, height: .none)
+                                        })
+                                        .padding()
+                                        .frame(width: UIScreen.main.bounds.width - 20, height: .none)
+                                        .background(Color.white)
+                                        .cornerRadius(12.0)
+                                        .padding(.bottom, 10)
+                                    
+                                }
                             }
                         }
                         
@@ -72,6 +77,7 @@ struct HomeView: View {
                     }
                     .padding()
                 }
+                
             } else {
                 GuestHomeView()
             }
@@ -84,19 +90,16 @@ struct TreeHeader: View {
     @State private var isActive = false
     @State private var navigateTo: AnyView = AnyView(EmptyView())
     let tree: Tree
-
+    
     var body: some View {
-        //tree header
-        HStack {
       
-            //if let treeColor = tree.assignedTree?.tree_color {
-                Image("tree")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 70, height: 70, alignment: .leading)
-                    .foregroundColor(Color.init(UIColor.init(hex: tree.assignedTree?.tree_color ?? "#87B62C") ?? UIColor.init(Color.init("color_primary_accent"))))
-
-            //}
+        HStack {
+            
+            Image("tree")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 70, height: 70, alignment: .leading)
+                .foregroundColor(Color.init(UIColor.init(hex: tree.assignedTree?.tree_color ?? "#87B62C") ?? UIColor.init(Color.init("color_primary_accent"))))
             
             VStack (alignment: .leading) {
                 if let tree = tree.assignedTree {
@@ -119,23 +122,23 @@ struct TreeHeader: View {
             
             Menu {
                 Button(action: {
-                    self.navigateTo = AnyView(TreePersonalizationView(treeViewModel: treeViewModel, tree: tree))
+                    self.navigateTo = AnyView(TreePersonalizationView(tree: tree))
                     self.isActive = true
                 }, label: {
                     Label(
                         title: { Text("Edit tree") },
                         icon: { Image(systemName: "square.and.pencil") })
                 })
-
+                
                 Button(action: {
-                    self.navigateTo = AnyView(PersonalSignView(treeViewModel: treeViewModel, tree: tree))
+                    self.navigateTo = AnyView(PersonalSignView(tree: tree))
                     self.isActive = true
                 }, label: {
                     Label(
                         title: { Text("Add sign") },
                         icon: { Image(systemName: "plus") })
                 })
-
+                
                 Button(action: {actionSheet()}, label: {
                     Label(
                         title: { Text("Share your tree") },
@@ -167,7 +170,7 @@ extension TreeHeader {
     }
     
     func calculateTreeAge() -> DateComponents {
-
+        
         if let tree = tree.assignedTree {
             return Calendar.current.dateComponents([.year, .day], from: tree.created_at, to: Date())
         }
@@ -177,7 +180,14 @@ extension TreeHeader {
     func calculateRemainingAdoptionPeriod() -> DateComponents {
         
         if let tree = tree.assignedTree {
-            return Calendar.current.dateComponents([.day], from: tree.created_at, to: tree.expire_date)
+            //if tree.created_at == tree.expire_date {
+                let timeInterval = DateComponents(year: 1)
+                let expiredDate = Calendar.current.date(byAdding: timeInterval, to: tree.created_at)
+                if let expiredDate = expiredDate {
+                    return Calendar.current.dateComponents([.day], from: tree.created_at, to: expiredDate)
+                }
+           // }
+            //return Calendar.current.dateComponents([.day], from: tree.created_at, to: tree.expire_date)
         }
         return DateComponents()
     }

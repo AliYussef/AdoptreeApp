@@ -32,7 +32,7 @@ struct ThirdInfoView: View {
                 }
             }
             .padding(.leading)
-            .frame(width: 354, height: 134, alignment: .leading) //change it to dynamically stretch//
+            .frame(width: 354, height: 134, alignment: .leading)
             .background(Color.init(.white))
             .cornerRadius(12.0)
             .padding()
@@ -142,11 +142,5 @@ struct CellView: View {
         .frame(width: 165, height: 153, alignment: .center)
         .background(Color.init(.white))
         .cornerRadius(12.0)
-    }
-}
-
-struct ThirdInfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        ThirdInfoView(showStartingView: .constant(true), currentIndex: .constant(2))
     }
 }

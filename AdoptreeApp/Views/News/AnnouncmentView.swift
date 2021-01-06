@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AnnouncmentView: View {
-    @ObservedObject var newsViewModel: NewsViewModel
+    @EnvironmentObject var newsViewModel: NewsViewModel
     
     var body: some View {
         ZStack {

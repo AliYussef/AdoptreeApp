@@ -63,31 +63,11 @@ struct SignupView: View {
                 .padding(.top, 50)
                 
                 Button(action: {
-                    //register here
-                    let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, salt: nil, forgetToken: nil, role: nil, createdAt: nil)
-                    userViewModel.registerUser(user: user) { result in
-                        switch (result) {
-                            case .failure(_):
-                                message = "Somthing went wrong. Please try again!"
-                                showingAlert.toggle()
-                            case .success(let user):
-                                userViewModel.userShared = UserShared(id: user.id, firstname: user.firstname, lastname: user.lastname, username: user.username, email: user.email)
-                                userViewModel.saveUserSharedObject()
-                                if let userId = user.id {
-                                    let order = self.orderViewModel.createOrderObject(for: userId)
-                                    self.orderViewModel.createOrder(order: order) { result in
-                                        switch (result) {
-                                            case .failure(_):
-                                                break // add message here as well
-                                            case .success(let success):
-                                                if let url = URL(string: success.paymentLink) {
-                                                    if UIApplication.shared.canOpenURL(url) {
-                                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                                                    }
-                                                }
-                                        }
-                                    }
-                                }
+                    if userViewModel.userShared.id == nil {
+                        signupAndPay()
+                    } else {
+                        if let userId = userViewModel.userShared.id {
+                            createOrders(for: userId)
                         }
                     }
                 }, label: {
@@ -109,8 +89,69 @@ struct SignupView: View {
     }
 }
 
-struct SignupView_Previews: PreviewProvider {
-    static var previews: some View {
-        SignupView()
+extension SignupView {
+    
+    func signupAndPay() {
+        let user = User(id: nil, firstname: inputValidationViewModel.firstName, lastname: inputValidationViewModel.lastName, username: inputValidationViewModel.username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, salt: nil, forgetToken: nil, role: nil, createdAt: nil)
+        
+        userViewModel.registerUser(user: user) { result in
+            switch (result) {
+                case .failure(_):
+                    message = "Somthing went wrong. Please try again!"
+                    showingAlert.toggle()
+                case .success(_):
+                    login()
+//                    userViewModel.userShared = UserShared(id: user.id, firstname: user.firstname, lastname: user.lastname, username: user.username, email: user.email)
+//                    userViewModel.saveUserSharedObject()
+              
+            }
+        }
+    }
+    
+    func login() {
+        let user = UserLogin(username: inputValidationViewModel.username, password: inputValidationViewModel.password)
+        
+        userViewModel.login(user: user) { result in
+            switch (result) {
+                case .failure(_):
+                    message = "An error occurred. Please check your username and password!"
+                    showingAlert.toggle()
+                case .success(let response):
+                    userViewModel.accessToken = response.accessToken
+                    userViewModel.refreshToken = response.refreshToken
+                    getUser()
+            }
+        }
+    }
+    
+    func getUser() {
+        userViewModel.getLoggedinUser() { result in
+            switch (result) {
+                case .failure(_):
+                    message = "An error occurred. Please check your username and password!"
+                    showingAlert.toggle()
+                case .success(let response):
+                    if let userId = response.id {
+                        createOrders(for: userId)
+                    }
+            }
+        }
+    }
+    
+    func createOrders(for userId: Int64) {
+        let order = self.orderViewModel.createOrderObject(for: userId)
+        self.orderViewModel.createOrder(order: order) { result in
+            switch (result) {
+                case .failure(_):
+                    message = "An error occurred. Please click Sign up & pay button again!"
+                    showingAlert.toggle()
+                case .success(let success):
+                    if let url = URL(string: success.paymentLink) {
+                        if UIApplication.shared.canOpenURL(url) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        }
+                    }
+            }
+        }
     }
 }

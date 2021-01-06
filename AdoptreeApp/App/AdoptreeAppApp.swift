@@ -15,6 +15,9 @@ struct AdoptreeAppApp: App {
     var notificationViewModel: NotificationViewModel
     var userViewModel: UserViewModel
     var orderViewModel: OrderViewModel
+    var treeViewModel: TreeViewModel
+    var timelineViewModel: TimelineViewModel
+    var newsViewModel: NewsViewModel
     var viewRouter: ViewRouter
     private let viewModelFactory: ViewModelFactory
     
@@ -26,6 +29,9 @@ struct AdoptreeAppApp: App {
         notificationViewModel = NotificationViewModel.shared
         userViewModel = UserViewModel.shared
         orderViewModel = viewModelFactory.makeOrderViewModel()
+        treeViewModel = viewModelFactory.makeTreeViewModel()
+        timelineViewModel = viewModelFactory.makeTimelineViewModel()
+        newsViewModel = viewModelFactory.makeNewsViewModel()
         viewRouter = ViewRouter()
     }
     
@@ -36,12 +42,7 @@ struct AdoptreeAppApp: App {
                     .edgesIgnoringSafeArea(.all)
                 
                 RootView().environmentObject(viewRouter).environmentObject(orderViewModel)
-                    .environmentObject(notificationViewModel).environmentObject(userViewModel)
-//                NavigationView {
-//                    ContractView(treeViewModel: viewModelFactory.makeTreeViewModel())
-//                        .environmentObject(userViewModel)
-//                }
-                
+                    .environmentObject(notificationViewModel).environmentObject(userViewModel).environmentObject(treeViewModel).environmentObject(timelineViewModel).environmentObject(newsViewModel)
             }
             .accentColor(.init("color_primary_accent"))
         }

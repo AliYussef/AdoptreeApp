@@ -64,9 +64,3 @@ struct FirstInfoView: View {
         }
     }
 }
-
-struct FirstInfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        FirstInfoView(currentIndex: .constant(0))
-    }
-}

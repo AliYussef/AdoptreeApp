@@ -25,7 +25,6 @@ struct TreeView: View {
             TreeLocationSection(tree: tree)
         }
     }
-    
 }
 
 struct TreeHealthSection: View {
@@ -34,7 +33,6 @@ struct TreeHealthSection: View {
     
     var body: some View {
         
-        //overall health
         RoundedRectangle(cornerRadius: 12.0)
             .fill(Color.init("color_gray"))
             .frame(width: .none, height: 110, alignment: .leading)
@@ -89,11 +87,8 @@ extension TreeHealthSection {
 struct TreeDataSection: View {
     let telemetry: Report?
     let sequestration: [Double]?
-   // var sequestrationsMock: [Double]? = [0.989273, 0.7126873, 0.827817, 0.2812727]
-    
+
     var body: some View {
-        // monitoring factors
-//        if let telemetry = telemetry {
             HStack() {
                 RoundedRectangle(cornerRadius: 12.0)
                     .fill(Color.init("color_gray"))
@@ -104,7 +99,7 @@ struct TreeDataSection: View {
                                 .font(.title3)
                                 .foregroundColor(Color.init("color_font_primary"))
                                 .padding(.bottom, 30)
-                            //Double(round(1000*x)/1000)
+                            
                             Text("\(String(format: "%.4f", getSequestration()))kg")
                                 .font(.title)
                                 .fontWeight(.semibold)
@@ -168,8 +163,6 @@ struct TreeDataSection: View {
                                 .padding(.bottom, 50)})
                     .offset(x: 0, y: 0)
             }.padding(.bottom, 5)
-//        }
-        
     }
 }
 
@@ -203,11 +196,9 @@ extension TreeDataSection {
 
 struct TreeGallerySection: View {
     let treeImage: TreeImage?
-    var images = TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555)), ImageDetail(id: 2, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
     
     var body: some View {
-        
-        //tree galery
+
         RoundedRectangle(cornerRadius: 12.0)
             .fill(Color.init("color_gray"))
             .frame(width: .none, height: 300, alignment: .leading)
@@ -220,7 +211,6 @@ struct TreeGallerySection: View {
                         Text("Tree Gallery")
                             .foregroundColor(.init("color_font_primary"))
                             .font(.title3)
-                        
                     }
                     
                     TabView {
@@ -256,10 +246,9 @@ extension TreeGallerySection {
 
 struct TreeWildlifeSection: View {
     let wildlife: [Wildlife]?
-    var wildlifeMock = [Wildlife(id: 1, name: "Eurasian red squirrel", description: "Eurasian red squirrel"), Wildlife(id: 2, name: "Red squirrel", description: "Eurasian red squirrel"), Wildlife(id: 3, name: "Eurasian", description: "Eurasian red squirrel")]
-    
+
     var body: some View {
-        //wildlife
+        
         VStack {
             VStack (alignment: .leading) {
                 HStack {
@@ -297,7 +286,6 @@ struct TreeWildlifeSection: View {
                         .font(.body)
                         .padding(.bottom, 5.0)
                 }
-                
             }
         }
         .padding()
@@ -330,7 +318,7 @@ struct TreeLocationSection: View {
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
     
     var body: some View {
-        //location
+
         RoundedRectangle(cornerRadius: 12.0)
             .fill(Color.init("color_gray"))
             .frame(width: .none, height: 250, alignment: .leading)
@@ -343,7 +331,6 @@ struct TreeLocationSection: View {
                         Text("Tree Location")
                             .foregroundColor(.init("color_font_primary"))
                             .font(.title3)
-                        
                     }
                     
                     Spacer()

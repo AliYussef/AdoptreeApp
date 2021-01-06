@@ -14,10 +14,9 @@ protocol UserRepositoryProtocol {
     func forgetPassword(using urlRequest: URLRequest) -> AnyPublisher<String, Error>
     func resetPassword(using urlRequest: URLRequest) -> AnyPublisher<User, Error>
     func updateUserAccount(using urlRequest: URLRequest) -> AnyPublisher<User, Error>
-    func deleteUserAccount(using urlRequest: URLRequest) -> AnyPublisher<HTTPURLResponse, URLError>
+    func deleteUserAccount(using urlRequest: URLRequest) -> AnyPublisher<Data, Error>
     func getBookedToursByUser(using urlRequest: URLRequest) -> AnyPublisher<Result<[BookedTour], RequestError>, Never>
-    func getUserById(using urlRequest: URLRequest) -> AnyPublisher<User, Error>
-    func refreshToken(using urlRequest: URLRequest) -> AnyPublisher<RefreshTokenResponse, Error>
+    func getLoggedinUser(using urlRequest: URLRequest) -> AnyPublisher<User, Error>
 }
 
 class UserRepository : UserRepositoryProtocol {
@@ -46,20 +45,17 @@ class UserRepository : UserRepositoryProtocol {
         return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
-    func deleteUserAccount(using urlRequest: URLRequest) -> AnyPublisher<HTTPURLResponse, URLError> {
-        return ApiClient.sharedApiClient.executeRequestWithoutResponseBody(using: urlRequest)
+    func deleteUserAccount(using urlRequest: URLRequest) -> AnyPublisher<Data, Error> {
+        return NetworkManager.sharedNetworkManager.executeRequestWithoutResponseBody(using: urlRequest)
     }
     
     func getBookedToursByUser(using urlRequest: URLRequest) -> AnyPublisher<Result<[BookedTour], RequestError>, Never> {
         return NetworkManager.sharedNetworkManager.executeRequestsWithResponseBody(using: urlRequest)
     }
     
-    func getUserById(using urlRequest: URLRequest) -> AnyPublisher<User, Error> {
+    func getLoggedinUser(using urlRequest: URLRequest) -> AnyPublisher<User, Error> {
         return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
-    func refreshToken(using urlRequest: URLRequest) -> AnyPublisher<RefreshTokenResponse, Error> {
-        return ApiClient.sharedApiClient.executeRequestWithResponseBodyRefresh(using: urlRequest)
-    }
 }
 

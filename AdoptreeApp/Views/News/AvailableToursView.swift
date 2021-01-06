@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AvailableToursView: View {
-    @StateObject var newsViewModel: NewsViewModel
+    @EnvironmentObject var newsViewModel: NewsViewModel
     
     var body: some View {
         ZStack {
@@ -28,7 +28,7 @@ struct AvailableToursView: View {
                         
                         ForEach(newsViewModel.tours) { tour in
                             NavigationLink(
-                                destination: TourBookingView(newsViewModel: newsViewModel, tour: tour),
+                                destination: TourBookingView(tour: tour),
                                 label: {
                                     TourCellView(tour: tour)
                                 })

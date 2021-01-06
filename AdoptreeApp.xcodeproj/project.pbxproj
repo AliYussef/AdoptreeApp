@@ -14,7 +14,7 @@
 		894513E725850712004ACB28 /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894513E625850712004ACB28 /* Timeline.swift */; };
 		895D7A17257FCFA8009FF641 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */; };
 		898074F12591610A00645676 /* AdoptedTreesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898074F02591610A00645676 /* AdoptedTreesView.swift */; };
-		89817C84259FE24A00DE3AF7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89817C83259FE24A00DE3AF7 /* Auth.swift */; };
+		8984833625A1FF9E00443D57 /* AppUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8984833525A1FF9E00443D57 /* AppUrl.swift */; };
 		8985E3FB257FF4C8006C2DA4 /* NotificationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8985E3FA257FF4C8006C2DA4 /* NotificationRepository.swift */; };
 		8985E3FE257FF627006C2DA4 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */; };
 		8985E406257FF9C1006C2DA4 /* NotificationObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8985E405257FF9C1006C2DA4 /* NotificationObject.swift */; };
@@ -122,7 +122,7 @@
 		894513E625850712004ACB28 /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
 		895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		898074F02591610A00645676 /* AdoptedTreesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptedTreesView.swift; sourceTree = "<group>"; };
-		89817C83259FE24A00DE3AF7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
+		8984833525A1FF9E00443D57 /* AppUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUrl.swift; sourceTree = "<group>"; };
 		8985E3FA257FF4C8006C2DA4 /* NotificationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRepository.swift; sourceTree = "<group>"; };
 		8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		8985E405257FF9C1006C2DA4 /* NotificationObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationObject.swift; sourceTree = "<group>"; };
@@ -406,7 +406,6 @@
 			isa = PBXGroup;
 			children = (
 				89DE88212575BFCC006B9011 /* ApiClient.swift */,
-				89817C83259FE24A00DE3AF7 /* Auth.swift */,
 				89A04A3625A0AD4E00B1AB66 /* Authenticator.swift */,
 				89A04A3925A0AD9200B1AB66 /* NetworkManager.swift */,
 				89A04A3C25A0AE0400B1AB66 /* NetworkSession.swift */,
@@ -449,6 +448,7 @@
 				89DE88242575BFE5006B9011 /* ApiEndPoint.swift */,
 				89A04A2F25A0ACCD00B1AB66 /* RequestMethod.swift */,
 				89A04A3325A0ACEA00B1AB66 /* RequestError.swift */,
+				8984833525A1FF9E00443D57 /* AppUrl.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -464,8 +464,8 @@
 				898E39502576658600A17A00 /* Guest */,
 				89DE88002575BCD4006B9011 /* ContentView.swift */,
 				898E39AA25766A2600A17A00 /* StartingView.swift */,
-				8918D3C3257C06AF00141DD9 /* ViewRouter.swift */,
 				8918D3C6257C113400141DD9 /* RootView.swift */,
+				8918D3C3257C06AF00141DD9 /* ViewRouter.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -477,8 +477,8 @@
 				898E393B2576643000A17A00 /* TreeViewModel.swift */,
 				898E39E125768EA800A17A00 /* TimelineViewModel.swift */,
 				898E39412576644800A17A00 /* OrderViewModel.swift */,
-				8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */,
 				89A65CE62582A55600A77407 /* NewsViewModel.swift */,
+				8985E3FD257FF627006C2DA4 /* NotificationViewModel.swift */,
 				891CFA6725901B2700FA0738 /* InputValidationViewModel.swift */,
 				898E39472576646200A17A00 /* ViewModelFactory.swift */,
 			);
@@ -679,7 +679,6 @@
 				898E39A5257669C700A17A00 /* SuccessfullAdoptionView.swift in Sources */,
 				898E39002576617500A17A00 /* User.swift in Sources */,
 				898E39CD2576891200A17A00 /* ContentRepository.swift in Sources */,
-				89817C84259FE24A00DE3AF7 /* Auth.swift in Sources */,
 				898E3924257662AC00A17A00 /* Wildlife.swift in Sources */,
 				898E399C2576699600A17A00 /* TreeTypeView.swift in Sources */,
 				898E3990257667ED00A17A00 /* ProfileView.swift in Sources */,
@@ -709,6 +708,7 @@
 				898E39CA2576890700A17A00 /* CategoryRepository.swift in Sources */,
 				898E3906257661B200A17A00 /* TreeSign.swift in Sources */,
 				898E39572576662900A17A00 /* FirstInfoView.swift in Sources */,
+				8984833625A1FF9E00443D57 /* AppUrl.swift in Sources */,
 				89DE88252575BFE5006B9011 /* ApiEndPoint.swift in Sources */,
 				89A04A3425A0ACEA00B1AB66 /* RequestError.swift in Sources */,
 				898E3984257667A600A17A00 /* LoginView.swift in Sources */,

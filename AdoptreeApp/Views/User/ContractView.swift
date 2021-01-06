@@ -10,7 +10,7 @@ import SwiftUI
 struct ContractView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var orderViewModel: OrderViewModel
-    @ObservedObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
     
     var body: some View {
         ZStack {
@@ -32,7 +32,7 @@ struct ContractView: View {
                     }
                     
                     NavigationLink(
-                        destination: AdoptedTreesView(treeViewModel: treeViewModel),
+                        destination: AdoptedTreesView(),
                         label: {
                             Text("Adopted trees")
                                 .foregroundColor(.black)

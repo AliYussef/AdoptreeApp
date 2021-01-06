@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AdoptedTreesView: View {
-    @StateObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
     
     var body: some View {
         ZStack {
@@ -16,7 +16,7 @@ struct AdoptedTreesView: View {
                 .edgesIgnoringSafeArea(.all)
             ScrollView(.vertical, showsIndicators: false) {
                 ForEach(treeViewModel.trees) { tree in
-                    AdoptedTreesCell(treeViewModel: treeViewModel, tree: tree)
+                    AdoptedTreesCell(tree: tree)
                 }
             }
             .padding(.top)
@@ -26,7 +26,7 @@ struct AdoptedTreesView: View {
 
 struct AdoptedTreesCell: View {
     @EnvironmentObject var orderViewModel: OrderViewModel
-    @StateObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
     @State private var showingAlert = false
     @State private var showingAlertConfirm = false
     @State private var message = ""

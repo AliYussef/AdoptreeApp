@@ -9,24 +9,12 @@ import SwiftUI
 
 struct TimelineView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @StateObject var timelineViewModel: TimelineViewModel
-    @StateObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var timelineViewModel: TimelineViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
     @State private var selectedTree = 0
     @State private var selectedDate = 0
     @State private var selectedTreeLabel = ""
     @State private var selectedDateLabel = ""
-    
-//    var sequestrationsMock: [Sequestration]? = [Sequestration(treeId: 1, sequestration: [0.989273]), Sequestration(treeId: 2, sequestration: [0.989273, 0.7126873])]
-//
-//    var telemetries = [
-//        Telemetry(id: "1", treeId: "1", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1606828056), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1605186555), temperature: 23, humidity: 80, treeLength: 20, treeDiameter: 20)]),
-//        Telemetry(id: "2", treeId: "2", reports: [Report(reportedOn: Date(timeIntervalSince1970: 1602508155), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20), Report(reportedOn: Date(timeIntervalSince1970: 1607778456), temperature: 21, humidity: 80, treeLength: 20, treeDiameter: 20)])
-//    ]
-    
-//    var images = [
-//        TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1606828056))]),
-//        TreeImage(tree_id: 2, images: [ImageDetail(id: 2, tree_id: 2, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
-//    ]
     
     var body: some View {
         ZStack {
@@ -100,7 +88,6 @@ struct TimelineView: View {
                                     
                                     return true
                                 }).enumerated()), id: \.1.id){ index, report in
-                                    //var currentDate = report.reportedOn
                                     
                                     if index > 0 {
                                         if Calendar.current.dateComponents([.year, .month], from: report.reportedOn) != Calendar.current.dateComponents([.year, .month], from: timelineViewModel.reports[index - 1].reportedOn) {
@@ -112,21 +99,33 @@ struct TimelineView: View {
                                             .padding(.top)
                                     }
                                     
-                                    if report.type == "report" {
+                                    if report.type == TimelineEntryType.report {
                                         TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getTreeColor(treeId: report.treeId))
-                                    } else if report.type == "tree" {
+                                    } else if report.type == TimelineEntryType.tree {
                                         TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Adopted \(timelineViewModel.timelineTreeDic[report.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: report.treeId))
-                                    } else if report.type == "image" {
+                                    } else if report.type == TimelineEntryType.image {
                                         TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "New tree image", icon: Image(systemName: "photo"), treeColor: getTreeColor(treeId: report.treeId))
                                     }
                                     
                                     
                                 }
                             } else {
-                                ProgressView("Loading timeline...")
-                                generateTimelineCellViews()
+                                if treeViewModel.isThereAgoptedTrees {
+                                    ProgressView("Loading timeline...")
+                                    generateTimelineCellViews()
+                                } else {
+                                    VStack {
+                                        Text("Your adopted trees have not been planted yet. Once they are planted you will be able to follow their storis.")
+                                            .font(.body)
+                                            .multilineTextAlignment(.center)
+                                    }
+                                    .padding()
+                                    .frame(width: UIScreen.main.bounds.width - 20, height: .none)
+                                    .background(Color.white)
+                                    .cornerRadius(12.0)
+                                    .padding(.bottom, 10)
+                                }
                             }
-                            
                         }
                     }
                 }
@@ -143,41 +142,13 @@ extension TimelineView {
     
     func generateTimelineCellViews() -> AnyView {
         
+        if !timelineViewModel.telemetries.isEmpty {
+            timelineViewModel.createTimelineTreeObject(trees: treeViewModel.trees)
+            timelineViewModel.createTimelineDateFilter(trees: treeViewModel.trees)
+        }
+        
         if !timelineViewModel.telemetries.isEmpty && !timelineViewModel.sequestrations.isEmpty {
-            let images = [
-                TreeImage(tree_id: 1, images: [ImageDetail(id: 1, tree_id: 1, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1606828056))]),
-                TreeImage(tree_id: 2, images: [ImageDetail(id: 2, tree_id: 2, image_blobname: "", alt: "", createdAt: Date(timeIntervalSince1970: 1605186555))])
-            ]
-            
-            var reports:[Timeline] = []
-            timelineViewModel.telemetries.forEach({ telemetry in
-                var index = 0
-                telemetry.reports.forEach({ report in
-                    if index < (timelineViewModel.sequestrations.filter({$0.treeId == Int64(telemetry.treeId)}).first?.sequestration.count)! {
-                        
-                        reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: timelineViewModel.sequestrations.filter({$0.treeId == Int64(telemetry.treeId)}).first?.sequestration[index], image_blobname: nil))
-                        
-                    } else {
-                        reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: "report", reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: nil, image_blobname: nil))
-                    }
-                    
-                    index += 1
-                })
-            })
-            
-            timelineViewModel.timelineTreeDic.forEach({ tree in
-                reports.append(Timeline(treeId: tree.key, type: "tree", reportedOn: tree.value.adoptedDate, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: nil))
-            })
-            
-            
-            images.forEach({ image in
-                image.images.forEach({ imageDetail in
-                    reports.append(Timeline(treeId: imageDetail.tree_id, type: "image", reportedOn: imageDetail.createdAt, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: imageDetail.image_blobname))
-                })
-            })
-            
-            let reportsSorted = reports.sorted(by: {$0.reportedOn > $1.reportedOn})
-            timelineViewModel.reports = reportsSorted
+            timelineViewModel.generateTimelineData(images: nil)
         }
        
         return AnyView(EmptyView())
@@ -257,7 +228,7 @@ struct TimelineCell: View {
                 
                 if let icon = icon {
                     Button(action: {
-                        if item.type != "tree" {
+                        if item.type != TimelineEntryType.tree {
                             self.isPresented.toggle()
                         }
                     }, label: {
@@ -288,9 +259,9 @@ struct TimelineDetailView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-                if item.type == "report" {
+                if item.type == TimelineEntryType.report {
                     TreeDataSectionTimeline(item: item)
-                } else if item.type == "image" {
+                } else if item.type == TimelineEntryType.image  {
                     Image("gree_idea_header")
                         .resizable()
                         .aspectRatio(contentMode: .fit)

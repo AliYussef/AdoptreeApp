@@ -87,9 +87,3 @@ struct ChangeEmailView: View {
         }
     }
 }
-
-struct ChangeEmailView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChangeEmailView()
-    }
-}

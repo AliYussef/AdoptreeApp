@@ -26,7 +26,6 @@ struct SettingView: View {
             
             VStack {
                 
-                // notifications
                 Form {
                     Section(header: HStack {
                         Text("notifications")
@@ -53,7 +52,6 @@ struct SettingView: View {
                         
                     })//.disabled(!userViewModel.isAuthenticated)
                     
-                    //general
                     Section(header: HStack {
                         Text("general")
                             .foregroundColor(.init("color_font_secondary"))
@@ -65,7 +63,6 @@ struct SettingView: View {
                         }
                     })
                     
-                    //information
                     Section(header: HStack {
                         Text("information")
                             .foregroundColor(.init("color_font_secondary"))
@@ -106,7 +103,6 @@ struct SettingView: View {
                             })
                     })
                     
-                    //logo
                     Section(header: HStack {
                         Spacer()
                         
@@ -138,8 +134,3 @@ extension SettingView {
     }
 }
 
-struct SettingView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingView()
-    }
-}

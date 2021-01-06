@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GreenIdeaView: View {
-    @StateObject var newsViewModel: NewsViewModel
+    @EnvironmentObject var newsViewModel: NewsViewModel
     
     var body: some View {
         ZStack {

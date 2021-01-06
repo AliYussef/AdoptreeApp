@@ -16,7 +16,6 @@ struct DeleteAccountView: View {
     @State private var message = ""
     @State var isTryingToDeleteAccount: Bool = false
     @State private var reasonsIndex = 0
-    
     var reasons = ["Not interested anymore", "Not convinced", "Too expensive", "Others"]
     
     var body: some View {
@@ -37,6 +36,9 @@ struct DeleteAccountView: View {
                             .validation(inputValidationViewModel.passwordValidation)
                             .keyboardType(.default)
                             .autocapitalization(.none)
+                        
+                        Text("You can only selete your account if you do not have any valid adoption contract")
+                            .font(.footnote)
                         
                     }.background(Color.init("color_background"))
                     .padding(.top, 50)

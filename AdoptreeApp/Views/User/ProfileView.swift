@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @ObservedObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
     
     var body: some View {
         ZStack {
@@ -36,7 +36,7 @@ struct ProfileView: View {
                     
                     List {
                         NavigationLink(
-                            destination: ContractView(treeViewModel: treeViewModel),
+                            destination: ContractView(),
                             label: {
                                 Text("Your contract")
                             })
@@ -62,7 +62,6 @@ struct ProfileView: View {
                         
                         Button(action: {
                             self.userViewModel.logout()
-                            //self.userViewModel.isAuthenticated = false // this will removed later
                         }, label: {
                             Text("Log out")
                         })
@@ -75,9 +74,3 @@ struct ProfileView: View {
         }
     }
 }
-
-//struct ProfileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ProfileView()
-//    }
-//}

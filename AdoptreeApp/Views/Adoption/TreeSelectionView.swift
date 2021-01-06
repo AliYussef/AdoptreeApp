@@ -55,7 +55,7 @@ struct TreeSelectionView: View {
                         } else {
                             ForEach(orderViewModel.availableProducts) { treeProduct in
                                 
-                                if orderViewModel.categoriesDic[treeProduct.categoryId] == "Tree" || orderViewModel.categoriesDic[treeProduct.categoryId] == "Sapling"{
+                                if orderViewModel.categoriesDic[treeProduct.categoryId]?.lowercased() == TreeType.tree.rawValue || orderViewModel.categoriesDic[treeProduct.categoryId]?.lowercased() == TreeType.sapling.rawValue{
                                     
                                     TreeTypeView(treeProduct: treeProduct)
                                     
@@ -77,8 +77,3 @@ struct TreeSelectionView: View {
     }
 }
 
-struct TreeSelectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        TreeSelectionView()
-    }
-}

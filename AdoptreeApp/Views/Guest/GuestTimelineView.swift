@@ -26,9 +26,3 @@ struct GuestTimelineView: View {
         .padding()
     }
 }
-
-struct GuestTimelineView_Previews: PreviewProvider {
-    static var previews: some View {
-        GuestTimelineView()
-    }
-}

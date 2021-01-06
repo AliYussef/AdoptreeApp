@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class InputValidationViewModel: ObservableObject {
-    let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+    private let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
     @Published var firstName = ""
     @Published var lastName = ""
     @Published var email = ""
@@ -66,10 +66,6 @@ class InputValidationViewModel: ObservableObject {
             emailValidation,
             emailEmptyValidation
         ).map { v1, v2, v3, v4 in
-            // print("firstNameValidation: \(v1)")
-            // print("lastNameValidation: \(v2)")
-            //print("emailValidation: \(v3)")
-            //print("emailEmptyValidation: \(v4)")
             return [v1, v2, v3, v4].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
         }.eraseToAnyPublisher()
     }()
@@ -81,10 +77,6 @@ class InputValidationViewModel: ObservableObject {
             confirmPasswordValidation,
             confirmPasswordMatchingValidation
         ).map { v1, v2, v3, v4 in
-            // print("usernameValidation: \(v1)")
-            //print("passwordValidation: \(v2)")
-            // print("confirmPasswordValidation: \(v3)")
-            //print("confirmPasswordMatchingValidation: \(v4)")
             return [v1, v2, v3, v4].allSatisfy {
                 $0.isSuccess } ? .success : .failure(message: "")
         }.eraseToAnyPublisher()

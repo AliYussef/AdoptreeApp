@@ -35,16 +35,14 @@ struct ResetPasswordBody: Codable {
     let validate_password: String
 }
 
+struct UserLogin: Codable {
+    let username: String
+    let password: String
+}
+
 struct LoginResponse: Decodable {
     let accessToken: String
     let refreshToken: String
-    let userId: String
-    
-    enum CodingKeys: String, CodingKey {
-        case accessToken = "Access key"
-        case refreshToken = "Refresh token"
-        case userId = "UserId"
-    }
 }
 
 struct RefreshTokenResponse: Decodable {

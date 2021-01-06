@@ -12,10 +12,13 @@ struct AdoptionOverviewView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var isAdoptionFailed = false
+    @State private var actionState: Int? = 0
+    @State private var showingAlert = false
+    @State private var message = ""
     
     var body: some View {
         if !isAdoptionFailed {
-            ZStack{
+            ZStack {
                 Color.init("color_background")
                     .edgesIgnoringSafeArea(.all)
                 VStack {
@@ -66,6 +69,10 @@ struct AdoptionOverviewView: View {
                     
                     Spacer()
                     
+                    NavigationLink(destination: SuccessfullAdoptionView(), tag: 1, selection: $actionState) {
+                        EmptyView()
+                    }
+                    
                     HStack {
                         Button(action: { presentationMode.wrappedValue.dismiss() }, label: {
                             Text("Adopt more")
@@ -79,21 +86,7 @@ struct AdoptionOverviewView: View {
                         
                         if userViewModel.isAuthenticated {
                             Button(action: {
-                                //if let userId = userViewModel.userShared.id {
-                                let order = self.orderViewModel.createOrderObject(for: 1)
-                                self.orderViewModel.createOrder(order: order) { result in
-                                    switch (result) {
-                                        case .failure(_):
-                                            break
-                                        case .success(let success):
-                                            if let url = URL(string: success.paymentLink) {
-                                                if UIApplication.shared.canOpenURL(url) {
-                                                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                                                }
-                                            }
-                                    }
-                                }
-                                // }
+                                createOrder()
                             }, label: {
                                 Text("Pay")
                                     .font(.subheadline)
@@ -121,10 +114,63 @@ struct AdoptionOverviewView: View {
                         }
                     }
                 }
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text("Login"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                }
+                .onOpenURL(perform: { url in
+                    if url.host == "payment-return" {
+                        checkOrderStatus()
+                    }
+                })
             }
             .navigationBarHidden(false)
+            
         } else {
             FailedAdoptionView(isAdoptionFailed: $isAdoptionFailed)
+        }
+    }
+}
+
+extension AdoptionOverviewView {
+    
+    func createOrder() {
+        if let userId = userViewModel.userShared.id {
+            let order = orderViewModel.createOrderObject(for: userId)
+            orderViewModel.createOrder(order: order) { result in
+                switch (result) {
+                    case .failure(_):
+                        message = "An error occurred. Please click Pay button again!"
+                        showingAlert.toggle()
+                    case .success(let success):
+                        if let url = URL(string: success.paymentLink) {
+                            if UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            }
+                        }
+                }
+            }
+        }
+    }
+    
+    func checkOrderStatus() {
+        if let orderId = orderViewModel.orderResponse?.id {
+            orderViewModel.getOrderById(using: orderId) { result in
+                switch (result) {
+                    case .failure(_):
+                        break
+                    case .success(_):
+                        if orderViewModel.order?.orderLines[0].productId != orderViewModel.treeSign?.id {
+                            if let paymentStatus = orderViewModel.order?.paymentStatus {
+                                if paymentStatus == PaymentStatus.paid.rawValue || paymentStatus == PaymentStatus.open.rawValue {
+                                    orderViewModel.products.removeAll()
+                                    actionState = 1
+                                } else {
+                                    self.isAdoptionFailed.toggle()
+                                }
+                            }
+                        }
+                }
+            }
         }
     }
 }
@@ -135,15 +181,6 @@ struct OverviewCellView: View {
     @State private var isChecked:Bool = false
     @State private var personalSign = ""
     
-    // move to view model
-    func deactivateTreeSign() -> EmptyView {
-        isChecked.toggle()
-        orderViewModel.activateTreeSign(is: isChecked, for: orderProduct.product)
-        orderViewModel.calculateTotal()
-        
-        return EmptyView()
-    }
-    
     var body: some View {
         
         RoundedRectangle(cornerRadius: 12.0)
@@ -152,8 +189,9 @@ struct OverviewCellView: View {
             .overlay(
                 VStack {
                     HStack(alignment: .top) {
-                        Image("\(orderViewModel.categoriesDic[orderProduct.product.categoryId]?.lowercased() == "tree" ? "tree" : "sapling")")
+                        Image("\(orderViewModel.categoriesDic[orderProduct.product.categoryId]?.lowercased() == TreeType.tree.rawValue ? TreeType.tree.rawValue : TreeType.sapling.rawValue)")
                             .resizable()
+                            .aspectRatio(contentMode: .fill)
                             .frame(width: 40, height: 50, alignment: .leading)
                             .foregroundColor(.init("color_primary_accent"))
                         
@@ -176,7 +214,7 @@ struct OverviewCellView: View {
                             }
                         }
                         
-                        CustomStepper(orderProduct: orderProduct, value: self.$orderProduct.quantity.animation(), isChecked: $isChecked)
+                        CustomStepper(value: self.$orderProduct.quantity.animation(), isChecked: $isChecked, orderProduct: orderProduct)
                             .padding(.trailing)
                         
                         Button(action: {
@@ -241,11 +279,23 @@ struct OverviewCellView: View {
     }
 }
 
+extension OverviewCellView {
+    
+    func deactivateTreeSign() -> EmptyView {
+        isChecked.toggle()
+        orderViewModel.activateTreeSign(is: isChecked, for: orderProduct.product)
+        orderViewModel.calculateTotal()
+        
+        return EmptyView()
+    }
+    
+}
+
 struct CustomStepper : View {
     @EnvironmentObject var orderViewModel: OrderViewModel
-    let orderProduct: OrderProduct
     @Binding var value: Int
     @Binding var isChecked: Bool
+    let orderProduct: OrderProduct
     var step = 1
     
     var body: some View {

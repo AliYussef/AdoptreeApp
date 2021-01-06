@@ -14,8 +14,6 @@ struct RootView: View {
         
         if viewRouter.currentPage == "onboardingView" {
             OnboardingView()
-        } else if viewRouter.currentPage == "contentView" {
-            ContentView()
         } else if viewRouter.currentPage == "startingView" {
             StartingView()
         }

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct TreePersonalizationView: View {
-    @StateObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var timelineViewModel: TimelineViewModel
     @State var tree: Tree
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var treeName = ""
@@ -45,7 +46,17 @@ struct TreePersonalizationView: View {
                                 case .failure(_):
                                     self.message = "An error occurred. Please try again!"
                                     self.showingAlert.toggle()
-                                case .success(_):
+                                case .success(let tree):
+                                    if let treeColor = tree.tree_color {
+                                        if let treeName = tree.tree_name {
+                                            timelineViewModel.timelineTreeDic[tree.tree_id]?.treeName = treeName
+                                            timelineViewModel.timelineTreeDic[tree.tree_id]?.treeColor = treeColor
+                                            
+                                            if let index = timelineViewModel.treeTypeFilter.firstIndex(where: {$0.treeId == tree.tree_id}) {
+                                                timelineViewModel.treeTypeFilter[index].treeName = treeName
+                                            }
+                                        }
+                                    }
                                     self.message = "Successfully edited"
                                     self.showingAlert.toggle()
                                     presentationMode.wrappedValue.dismiss()

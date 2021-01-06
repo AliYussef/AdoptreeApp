@@ -9,8 +9,9 @@ import SwiftUI
 import PencilKit
 
 struct PersonalSignView: View {
-    @StateObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
     @EnvironmentObject var orderViewModel: OrderViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var treeSign = ""
     @State private var showingAlert = false
@@ -55,17 +56,19 @@ struct PersonalSignView: View {
                         self.showingAlert.toggle()
                         
                     } else {
-                        let order = self.orderViewModel.createTreeSignOrder(for: 1)
-                        self.orderViewModel.createOrder(order: order) { result in
-                            switch (result) {
-                                case .failure(_):
-                                    break
-                                case .success(let success):
-                                    if let url = URL(string: success.paymentLink) {
-                                        if UIApplication.shared.canOpenURL(url) {
-                                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        if let userId = userViewModel.userShared.id {
+                            let order = orderViewModel.createTreeSignOrder(for: userId)
+                            orderViewModel.createOrder(order: order) { result in
+                                switch (result) {
+                                    case .failure(_):
+                                        break
+                                    case .success(let success):
+                                        if let url = URL(string: success.paymentLink) {
+                                            if UIApplication.shared.canOpenURL(url) {
+                                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                            }
                                         }
-                                    }
+                                }
                             }
                         }
                     }
@@ -81,7 +84,7 @@ struct PersonalSignView: View {
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Personal sign"), message: Text("\(message)"), dismissButton: .default(Text("Ok")))
                 }
-                .disabled(treeViewModel.treeSign != nil)
+                //.disabled(treeViewModel.treeSign != nil)
                 
             }
             .padding()
@@ -101,6 +104,7 @@ struct PersonalSignView: View {
             if orderViewModel.availableProducts.isEmpty {
                 orderViewModel.getProductsAndCategories()
             }
+            
         }.onOpenURL(perform: { url in
             if url.host == "payment-return" {
                 if let orderId = orderViewModel.orderResponse?.id {
@@ -109,7 +113,6 @@ struct PersonalSignView: View {
                             case .failure(_):
                                 break
                             case .success(_):
-                                //print(success)
                                 if orderViewModel.order?.orderLines[0].productId == orderViewModel.treeSign?.id {
                                     if let paymentStatus = orderViewModel.order?.paymentStatus {
                                         if paymentStatus == PaymentStatus.paid.rawValue || paymentStatus == PaymentStatus.open.rawValue {
@@ -117,7 +120,7 @@ struct PersonalSignView: View {
                                             if let treeSignProduct = orderViewModel.treeSign {
                                                 if let orderId = orderViewModel.orderResponse?.id {
                                                     let treeSign = treeViewModel.createTreeSignObject(tree: tree, treeSignProduct: treeSignProduct, signText: self.treeSign, orderId: orderId)
-                                                    
+                                                    //print(treeSign)
                                                     if let treeSign = treeSign {
                                                         treeViewModel.createTreeSign(treeSign: treeSign) {  result in
                                                             switch (result) {

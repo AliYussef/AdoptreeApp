@@ -37,11 +37,6 @@ struct GuestProfileView: View {
                     Text("Log in")
                 })
                 
-                NavigationLink(
-                    destination: TreeSelectionView(),
-                    label: {
-                        Text("Adopt now")
-                    })
             }
             .listStyle(PlainListStyle())
             

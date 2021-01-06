@@ -9,18 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @ObservedObject var treeViewModel: TreeViewModel
-    @ObservedObject var timelineViewModel: TimelineViewModel
-    @ObservedObject var newsViewModel: NewsViewModel
-    private let viewModelFactory: ViewModelFactory
-    
-    init() {
-        viewModelFactory = ViewModelFactory()
-        treeViewModel = viewModelFactory.makeTreeViewModel()
-        timelineViewModel = viewModelFactory.makeTimelineViewModel()
-        newsViewModel = viewModelFactory.makeNewsViewModel()
-    }
-    
+    @EnvironmentObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var timelineViewModel: TimelineViewModel
+    @EnvironmentObject var newsViewModel: NewsViewModel
+
     var body: some View {
         
         ZStack{
@@ -29,7 +21,7 @@ struct ContentView: View {
             
             TabView {
                 NavigationView {
-                    HomeView(treeViewModel: treeViewModel, timelineViewModel: timelineViewModel)
+                    HomeView()
                         .navigationBarTitle("HOME", displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                         
@@ -40,7 +32,7 @@ struct ContentView: View {
                 }
                 
                 NavigationView {
-                    TimelineView(timelineViewModel: timelineViewModel, treeViewModel: treeViewModel)
+                    TimelineView()
                         .navigationBarTitle("TIMELINE", displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     
@@ -51,7 +43,7 @@ struct ContentView: View {
                 }
                 
                 NavigationView {
-                    NewsView(newsViewModel: newsViewModel)
+                    NewsView()
                         .navigationBarTitle("NEWS", displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     
@@ -62,7 +54,7 @@ struct ContentView: View {
                 }
                 
                 NavigationView {
-                    ProfileView(treeViewModel: treeViewModel)
+                    ProfileView()
                         .navigationBarTitle("PROFILE", displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     
@@ -84,20 +76,12 @@ struct ContentView: View {
                 }
             }
             .onAppear {
-                if userViewModel.isAuthenticated && userViewModel.userShared.id != nil {
-                    if treeViewModel.trees.isEmpty {
-                        // add user ID here later
-                        treeViewModel.getAdoptedTrees(of: userViewModel.userShared.id!) { result in
+                if userViewModel.isAuthenticated && treeViewModel.trees.isEmpty {
+                        treeViewModel.getAdoptedTrees() { result in
                             switch (result) {
                                 case .failure(_):
                                     break
-                                case .success(let success):
-                                    //print("success")
-                                    treeViewModel.trees = success
-                                    for _ in treeViewModel.trees.indices {
-                                        treeViewModel.isExpanded.append(false)
-                                    }
-                                    //timelineViewModel.getTimeLineData(using: 1)
+                                case .success(_):
                                     if timelineViewModel.telemetries.isEmpty {
                                         treeViewModel.trees.forEach({ tree in
                                             if let treeId = tree.assignedTree?.tree_id {
@@ -105,25 +89,16 @@ struct ContentView: View {
                                             }
                                         })
                                     }
-
-                                    if timelineViewModel.datesFilter.isEmpty {
-                                        timelineViewModel.createTimelineTreeObject(trees: treeViewModel.trees)
-                                        timelineViewModel.createTimelineDateFilter(trees: treeViewModel.trees)
-                                    }
-                                    
-//                                    if !timelineViewModel.telemetries.isEmpty {
-//                                        timelineViewModel.generateTimelineData(images: nil)
-//                                    }
-
                             }
                         }
+                    
+                    if newsViewModel.contents.isEmpty {
+                        newsViewModel.getNewsViewData()
                     }
-
-//                    if newsViewModel.contents.isEmpty {
-//                        // add user ID here later
-//                        newsViewModel.getNewsViewData(of: userViewModel.userShared.id!)
-//                    }
-
+                }
+                
+                if !userViewModel.isAuthenticated {
+                    newsViewModel.getContent() {_ in}
                 }
             }
         }

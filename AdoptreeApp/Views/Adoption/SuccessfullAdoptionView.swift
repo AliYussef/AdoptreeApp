@@ -24,7 +24,7 @@ struct SuccessfullAdoptionView: View {
                     .bold()
                     .foregroundColor(.init("color_font_primary"))
                 
-                Text("With your contribution CO2 emissions can be reduced and wildlife and biodiversity will further thrive.")
+                Text("With your contribution CO2 emissions can be reduced and wildlife and biodiversity will further thrive. Once your tree/s are planted you will be able to track their status.")
                     .multilineTextAlignment(.center)
                     .padding()
                     
@@ -37,9 +37,7 @@ struct SuccessfullAdoptionView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: HomeView(treeViewModel: ViewModelFactory().makeTreeViewModel(), timelineViewModel: ViewModelFactory().makeTimelineViewModel())
-                                .navigationBarTitle("HOME", displayMode: .inline)
-                                .navigationBarBackButtonHidden(true)
+                NavigationLink(destination: ContentView()
                                , tag: 1, selection: $actionState) {
                     EmptyView()
                 }
@@ -47,13 +45,15 @@ struct SuccessfullAdoptionView: View {
                 Button(action: {
                     if userViewModel.isGuest {
                         userViewModel.isGuest.toggle()
-                        //userViewModel.accessToken = userViewModel.tempAccessToken
-                        userViewModel.isAuthenticated = true //this should be removed once authentication is set up
+                        if userViewModel.accessToken != nil {
+                            userViewModel.isAuthenticated = true
+                        }
                     } else if userViewModel.isAuthenticated {
                         actionState = 1
                     } else {
-                        //userViewModel.accessToken = userViewModel.tempAccessToken
-                        userViewModel.isAuthenticated = true //this should be removed once authentication is set up
+                        if userViewModel.accessToken != nil {
+                            userViewModel.isAuthenticated = true
+                        }
                     }
                     
                 }, label: {
@@ -69,11 +69,5 @@ struct SuccessfullAdoptionView: View {
             }
         }
         .navigationBarHidden(true)
-    }
-}
-
-struct SuccessfullAdoptionView_Previews: PreviewProvider {
-    static var previews: some View {
-        SuccessfullAdoptionView()
     }
 }

@@ -17,6 +17,7 @@ class TreeViewModel: ObservableObject {
     @Published var forests: [Forest] = []
     @Published var isExpanded: [Bool] = [true]
     @Published var treeLocationDic: [Int64: TreeLocation] = [:]
+    @Published var isThereAgoptedTrees: Bool = true
     private let treeRepository: TreeRepositoryProtocol
     private let userRepository: UserRepositoryProtocol
     private let countryRepository: CountryRepositoryProtocol
@@ -30,14 +31,13 @@ class TreeViewModel: ObservableObject {
         self.countryRepository = countryRepository
         self.forestRepository = forestRepository
         self.treeSignRepository = treeSignRepository
-        //getAdoptedTrees(of: 1) {_ in}
     }
 }
 
 extension TreeViewModel {
     
-    func getAdoptedTrees(of userId:Int64 ,completion: @escaping (Result<[Tree], RequestError>) -> Void) {
-        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .trees(userId), using: .get)
+    func getAdoptedTrees(completion: @escaping (Result<[Tree], RequestError>) -> Void) {
+        let urlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .treesByUser, using: .get)
         
         userRepository.getAdoptedTrees(using: urlRequest)
             .sink(receiveCompletion: {result in
@@ -47,36 +47,26 @@ extension TreeViewModel {
                     case .failure(let error):
                         switch error {
                             case let urlError as URLError:
-                                if urlError.code == .userAuthenticationRequired {
-                                    print("User authentication required")
-                                    //self.getAdoptedTrees(of: userId){_ in}
-                                } else {
-                                    print(urlError)
-                                }
+                                self.isThereAgoptedTrees = false
                                 completion(.failure(.urlError(urlError)))
                             case let decodingError as DecodingError:
-                                print(decodingError)
                                 completion(.failure(.decodingError(decodingError)))
                             default:
-                                print(error)
                                 completion(.failure(.genericError(error)))
                         }
                 }
                 
             }, receiveValue: {result in
-                
-                completion(.success(result))
-                // to be called later
+                self.trees = result
+                for _ in self.trees.indices {
+                    self.isExpanded.append(false)
+                }
                 self.trees.forEach({ tree in
                     if let treeId = tree.assignedTree?.tree_id {
                         self.getTreeImagesAndWildlife(from: tree.forestId, of: treeId)
                     }
                 })
-                //below is already called in content view
-                //                self.trees = result
-                //                for _ in self.trees.indices {
-                //                    self.isExpanded.append(false)
-                //                }
+                completion(.success(result))
             })
             .store(in: &cancellables)
     }
@@ -144,13 +134,10 @@ extension TreeViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
-                                    print(urlError)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
-                                    print(decodingError)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
-                                    print(error)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -189,13 +176,10 @@ extension TreeViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
-                                    print(urlError)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
-                                    print(decodingError)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
-                                    print(error)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -224,13 +208,10 @@ extension TreeViewModel {
                     case .failure(let error):
                         switch error {
                             case let urlError as URLError:
-                                print(urlError)
                                 completion(.failure(.urlError(urlError)))
                             case let decodingError as DecodingError:
-                                print(decodingError)
                                 completion(.failure(.decodingError(decodingError)))
                             default:
-                                print(error)
                                 completion(.failure(.genericError(error)))
                         }
                 }
@@ -245,9 +226,7 @@ extension TreeViewModel {
     func createTreeSignObject(tree: Tree, treeSignProduct: Product, signText: String, orderId: Int64) -> TreeSign? {
         var treeSign: TreeSign?
         if let treeId = tree.assignedTree?.tree_id {
-            //if let productId = treeSign?.id {
             treeSign = TreeSign(id: nil, tree_id: treeId, product_id: treeSignProduct.id, sign_text: signText, order_id: orderId, createdAt: nil, deletedAt: nil)
-            //}
         }
         return treeSign
     }
@@ -303,14 +282,13 @@ extension TreeViewModel {
         forests.forEach({ forest in
             forestDic[forest.id] = forest.countryId
         })
-        //print(forestDic)
+
         trees.forEach({ tree in
             if let treeId = tree.assignedTree?.tree_id {
                 
                 treeLocationDic[treeId] = TreeLocation(country: countries.first(where: {$0.id == forestDic[tree.forestId]})?.name ?? "Unknown", forest: forests.first(where: {$0.id == tree.forestId})?.name ?? "Unknown")
             }
         })
-        //print(treeLocationDic)
     }
     
 }

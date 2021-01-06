@@ -58,34 +58,10 @@ final class NetworkManager {
 
 extension NetworkManager {
     
-//    func getRefreshRequest() -> URLRequest? {
-//        let fullUrl = BaseURL.url + ApiEndPoint.refreshToken.description
-//        let url = URL(string: fullUrl)!
-//        var urlRequest = URLRequest(url: url)
-//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        if let refreshToken = UserViewModel.shared.refreshToken {
-//            urlRequest.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
-//        }
-//        urlRequest.httpMethod = RequestMethod.post.rawValue
-//
-//        if let refreshToken = UserViewModel.shared.refreshToken {
-//            urlRequest.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authentication")
-//            return urlRequest
-//        }
-//
-//      return nil
-//    }
-    
     func executeRequestWithResponseBody<ResponseType: Decodable>(using request: URLRequest) -> AnyPublisher<ResponseType, Error> {
        
-//        var urlRequest = request
-//        if let accessToken = UserViewModel.shared.accessToken {
-//            urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-//        }
-        
-        return authenticator.validToken()
+        return authenticator.checkTokenValidity()
             .flatMap({ token in
-                // we can now use this token to authenticate the request
                 self.session.publisher(for: request, token: token.accessToken)
             })
             .tryCatch({ error -> AnyPublisher<Data, Error> in
@@ -97,17 +73,17 @@ extension NetworkManager {
                         
                         if UserViewModel.shared.accessToken != nil {
                             UserViewModel.shared.accessToken = nil
+                            UserViewModel.shared.refreshToken = nil
+                            UserViewModel.shared.isAuthenticated = false
                             throw error
                         }
-                        
                         return self.session.publisher(for: request, token: nil).eraseToAnyPublisher()
                     }
                     throw error
                 }
                 
-                return self.authenticator.validToken(forceRefresh: true)
+                return self.authenticator.checkTokenValidity(forceRefresh: true)
                     .flatMap({ token in
-                        // we can now use this new token to authenticate the second attempt at making this request
                         self.session.publisher(for: request, token: token.accessToken)
                     })
                     .eraseToAnyPublisher()
@@ -119,14 +95,8 @@ extension NetworkManager {
     
     func executeRequestsWithResponseBody<ResponseType: Decodable>(using request: URLRequest) -> AnyPublisher<Result<ResponseType, RequestError>, Never> {
         
-//        var urlRequest = request
-//        if let accessToken = UserViewModel.shared.accessToken {
-//            urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-//        }
-        
-        return authenticator.validToken()
+        return authenticator.checkTokenValidity()
             .flatMap({ token in
-                // we can now use this token to authenticate the request
                 self.session.publisher(for: request, token: token.accessToken)
             })
             .tryCatch({ error -> AnyPublisher<Data, Error> in
@@ -146,9 +116,8 @@ extension NetworkManager {
                     throw error
                 }
                 
-                return self.authenticator.validToken(forceRefresh: true)
+                return self.authenticator.checkTokenValidity(forceRefresh: true)
                     .flatMap({ token in
-                        // we can now use this new token to authenticate the second attempt at making this request
                         self.session.publisher(for: request, token: token.accessToken)
                     })
                     .eraseToAnyPublisher()
@@ -172,15 +141,9 @@ extension NetworkManager {
     }
     
     func executeRequestWithoutResponseBody(using request: URLRequest) -> AnyPublisher<Data, Error> {
-        
-//        var urlRequest = request
-//        if let accessToken = UserViewModel.shared.accessToken {
-//            urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-//        }
-        
-        return authenticator.validToken()
+
+        return authenticator.checkTokenValidity()
             .flatMap({ token in
-                // we can now use this token to authenticate the request
                 self.session.publisher(for: request, token: token.accessToken)
             })
             .tryCatch({ error -> AnyPublisher<Data, Error> in
@@ -200,22 +163,14 @@ extension NetworkManager {
                     throw error
                 }
                 
-                return self.authenticator.validToken(forceRefresh: true)
+                return self.authenticator.checkTokenValidity(forceRefresh: true)
                     .flatMap({ token in
-                        // we can now use this new token to authenticate the second attempt at making this request
                         self.session.publisher(for: request, token: token.accessToken)
                     })
                     .eraseToAnyPublisher()
             })
-            //.decode(type: ResponseType.self, decoder: self.decoder)
-            //.compactMap {$0.response as? HTTPURLResponse}
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
-        
-        //        URLSession.shared.dataTaskPublisher(for: request)
-        //            .compactMap { $0.response as? HTTPURLResponse }
-        //            .receive(on: DispatchQueue.main)
-        //            .eraseToAnyPublisher()
     }
     
 }

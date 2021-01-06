@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewsView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @StateObject var newsViewModel: NewsViewModel
+    @EnvironmentObject var newsViewModel: NewsViewModel
     
     var body: some View {
         ZStack {
@@ -37,7 +37,7 @@ struct NewsView: View {
                                         Spacer()
                                         
                                         NavigationLink(
-                                            destination: AvailableToursView(newsViewModel: newsViewModel),
+                                            destination: AvailableToursView(),
                                             label: {
                                                 Image(systemName: "plus")
                                                     .foregroundColor(.init("color_primary_accent"))
@@ -81,7 +81,7 @@ struct NewsView: View {
                                         ForEach(newsViewModel.tours) { tour in
                                             if tour.id == bookedTour.tourId {
                                                 NavigationLink(
-                                                    destination: BookedTourOverviewView(newsViewModel: newsViewModel, bookedTour: bookedTour, tour: tour),
+                                                    destination: BookedTourOverviewView(bookedTour: bookedTour, tour: tour),
                                                     label: {
                                                         VStack(alignment: .leading) {
                                                             Text(getTourDate(date: tour.dateTime))
@@ -114,7 +114,6 @@ struct NewsView: View {
                             .foregroundColor(.init("color_font_primary"))
                             .padding()
                         
-                       // if !newsViewModel.informativeContents.isEmpty {
                             VStack {
                                 if let greenIdea = newsViewModel.informativeContents.first {
                                     NavigationLink(
@@ -146,14 +145,13 @@ struct NewsView: View {
                             .background(Color.white)
                             .cornerRadius(12.0)
                             .padding(.bottom, 5)
-                        //}
                         
                         HStack {
                             
                             Spacer()
                             
                             NavigationLink(
-                                destination: GreenIdeaView(newsViewModel: newsViewModel),
+                                destination: GreenIdeaView(),
                                 label: {
                                     Label("Explore more", systemImage: "arrow.right")
                                         .foregroundColor(.init("color_font_primary"))
@@ -207,7 +205,7 @@ struct NewsView: View {
                             Spacer()
                             
                             NavigationLink(
-                                destination: AnnouncmentView(newsViewModel: newsViewModel),
+                                destination: AnnouncmentView(),
                                 label: {
                                     Label("Explore more", systemImage: "arrow.right")
                                         .foregroundColor(.init("color_font_primary"))
@@ -219,14 +217,6 @@ struct NewsView: View {
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
                     
                 }
-            }
-        }
-        .onAppear {
-            if userViewModel.isAuthenticated && userViewModel.userShared.id != nil {
-//                if newsViewModel.contents.isEmpty {
-//                    // add user ID here later
-//                    newsViewModel.getNewsViewData(of: userViewModel.userShared.id!)
-//                }
             }
         }
     }
