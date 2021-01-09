@@ -59,11 +59,11 @@ struct TourCellView: View {
                         .padding(.bottom, 5)
                     
                     HStack {
-                        Text(getTourTime(date: tour.dateTime))
+                        Text("\(getTourTime(date: tour.dateTime)).")
                             .font(.caption)
                             .foregroundColor(.init("color_font_secondary"))
                         
-                        Text("\(tour.language)")
+                        Text("\(tour.language).")
                             .font(.caption)
                             .foregroundColor(.init("color_font_secondary"))
                         
