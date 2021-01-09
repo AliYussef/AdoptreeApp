@@ -23,7 +23,7 @@ struct GuestProfileView: View {
                 )
                 .padding()
             
-            Text("HELLO YOU!")
+            Text(Localization.profileGuestName)
                 .font(.title2)
                 .foregroundColor(.init("color_font_primary"))
                 .padding(.bottom, 50)
@@ -34,7 +34,7 @@ struct GuestProfileView: View {
                 Button(action: {
                     self.userViewModel.isGuest.toggle()
                 }, label: {
-                    Text("Log in")
+                    Text(Localization.loginBtn)
                 })
                 
             }

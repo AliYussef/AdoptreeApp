@@ -16,7 +16,7 @@ struct AdoptionLoginView: View {
     @State private var actionState: Int? = 0
     @Binding var isAdoptionFailed: Bool
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     @State var isTryingToAdopt: Bool = false
     
     var body: some View {
@@ -26,7 +26,7 @@ struct AdoptionLoginView: View {
             
             VStack {
                 Spacer()
-                TextField("Username", text: $inputValidationViewModel.username)
+                TextField(Localization.usernameField, text: $inputValidationViewModel.username)
                     .validation(inputValidationViewModel.usernameValidation)
                     .padding()
                     .background(Color.init("color_textfield"))
@@ -35,7 +35,7 @@ struct AdoptionLoginView: View {
                     .autocapitalization(.none)
                     .padding()
                 
-                SecureField("Password", text: $inputValidationViewModel.password)
+                SecureField(Localization.passwordField, text: $inputValidationViewModel.password)
                     .validation(inputValidationViewModel.passwordValidation)
                     .padding()
                     .background(Color.init("color_textfield"))
@@ -45,13 +45,13 @@ struct AdoptionLoginView: View {
                     .padding()
                 
                 HStack {
-                    Text("No account yet?")
+                    Text(Localization.loginNoAccount)
                         .font(.subheadline)
                         .foregroundColor(.init("color_font_primary"))
                     
                     NavigationLink(destination: SignupView())
                     {
-                        Text("Sign up")
+                        Text(Localization.signupBtn)
                             .font(.subheadline)
                             .bold()
                             .foregroundColor(.init("color_font_primary"))
@@ -66,7 +66,7 @@ struct AdoptionLoginView: View {
                     loginAnyPay()
                     
                 }, label: {
-                    Text("Log in & pay")
+                    Text(Localization.loginPayBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
@@ -76,7 +76,7 @@ struct AdoptionLoginView: View {
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Login"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    Alert(title: Text(Localization.loginAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
                 
                 if isTryingToAdopt {
@@ -89,7 +89,7 @@ struct AdoptionLoginView: View {
                                 .background(Blur(style: .systemUltraThinMaterial))
                                 .edgesIgnoringSafeArea(.all)
                             
-                            ProgressView("Aopting...")
+                            ProgressView(Localization.loginAdoptingProgress)
                         }
                     }
                 }
@@ -109,7 +109,7 @@ extension AdoptionLoginView {
         userViewModel.login(user: user) { result in
             switch (result) {
                 case .failure(_):
-                    message = "An error occurred. Please check your username and password!"
+                    message = Localization.loginError
                     showingAlert.toggle()
                 case .success(let response):
                     userViewModel.accessToken = response.accessToken
@@ -123,7 +123,7 @@ extension AdoptionLoginView {
         userViewModel.getLoggedinUser() { result in
             switch (result) {
                 case .failure(_):
-                    message = "An error occurred. Please check your username and password!"
+                    message = Localization.loginError
                     showingAlert.toggle()
                 case .success(let response):
                     if let userId = response.id {
@@ -138,7 +138,7 @@ extension AdoptionLoginView {
         self.orderViewModel.createOrder(order: order) { result in
             switch (result) {
                 case .failure(_):
-                    message = "An error occurred. Please click Log in & pay button again!"
+                    message = Localization.adoptionLoginPurchaseError
                     showingAlert.toggle()
                 case .success(let success):
                     if let url = URL(string: success.paymentLink) {

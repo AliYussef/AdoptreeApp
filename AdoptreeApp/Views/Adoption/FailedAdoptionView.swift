@@ -18,7 +18,7 @@ struct FailedAdoptionView: View {
             VStack {
                 Spacer()
                 
-                Text("Something went wrong! Your adoption has failed")
+                Text(Localization.failedAdoptionText)
                     .font(.title2)
                     .bold()
                     .foregroundColor(.init("color_font_primary"))
@@ -35,7 +35,7 @@ struct FailedAdoptionView: View {
                         self.isAdoptionFailed.toggle()
                     }
                 }, label: {
-                    Text("Go back")
+                    Text(Localization.goBackBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })

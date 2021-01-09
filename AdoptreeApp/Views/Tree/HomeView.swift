@@ -24,10 +24,10 @@ struct HomeView: View {
                     VStack {
                         if treeViewModel.trees.isEmpty {
                             if treeViewModel.isThereAgoptedTrees {
-                                ProgressView("Loading your trees...")
+                                ProgressView(Localization.homeLoadingTrees)
                             } else {
                                 VStack {
-                                    Text("Your adopted trees have not been planted yet. Once they are planted you will be able to monitor their status.")
+                                    Text(Localization.homeTressNotPlantedYet)
                                         .font(.subheadline)
                                         .multilineTextAlignment(.center)
                                 }
@@ -68,7 +68,7 @@ struct HomeView: View {
                         
                         NavigationLink(destination: TreeSelectionView())
                         {
-                            Text("Adopt more trees")
+                            Text(Localization.homeAdoptMoreTreesBtn)
                                 .bold()
                                 .foregroundColor(.white)
                         }
@@ -93,7 +93,7 @@ struct TotalCo2Redcution: View {
     var body: some View {
         
         VStack(alignment: .center) {
-            Text("Total CO2 Reduced")
+            Text(Localization.homeTotalCo2Reduced)
                 .font(.title3)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.init("color_font_primary"))
@@ -140,7 +140,7 @@ struct TreeHeader: View {
     let tree: Tree
     
     var body: some View {
-      
+        
         HStack {
             
             Image("tree")
@@ -152,7 +152,7 @@ struct TreeHeader: View {
             VStack (alignment: .leading) {
                 if let tree = tree.assignedTree {
                     if let treeName = tree.tree_name {
-                        Text(treeName.isEmpty ? "Tree" : treeName)
+                        Text(treeName.isEmpty ? "\(Localization.homeTree)" : treeName)
                             .font(.title2)
                             .foregroundColor(.init("color_font_primary"))
                     }
@@ -174,7 +174,7 @@ struct TreeHeader: View {
                     self.isActive = true
                 }, label: {
                     Label(
-                        title: { Text("Edit tree") },
+                        title: { Text(Localization.homeEditTreeBtn) },
                         icon: { Image(systemName: "square.and.pencil") })
                 })
                 
@@ -183,13 +183,13 @@ struct TreeHeader: View {
                     self.isActive = true
                 }, label: {
                     Label(
-                        title: { Text("Add sign") },
+                        title: { Text(Localization.homeAddSignBtn) },
                         icon: { Image(systemName: "plus") })
                 })
                 
                 Button(action: {actionSheet()}, label: {
                     Label(
-                        title: { Text("Share your tree") },
+                        title: { Text(Localization.homeShareTreeBtn) },
                         icon: { Image(systemName: "square.and.arrow.up") })
                 })
             } label: {
@@ -229,12 +229,12 @@ extension TreeHeader {
         
         if let tree = tree.assignedTree {
             //if tree.created_at == tree.expire_date {
-                let timeInterval = DateComponents(year: 1)
-                let expiredDate = Calendar.current.date(byAdding: timeInterval, to: tree.created_at)
-                if let expiredDate = expiredDate {
-                    return Calendar.current.dateComponents([.day], from: tree.created_at, to: expiredDate)
-                }
-           // }
+            let timeInterval = DateComponents(year: 1)
+            let expiredDate = Calendar.current.date(byAdding: timeInterval, to: tree.created_at)
+            if let expiredDate = expiredDate {
+                return Calendar.current.dateComponents([.day], from: Date(), to: expiredDate)
+            }
+            // }
             //return Calendar.current.dateComponents([.day], from: tree.created_at, to: tree.expire_date)
         }
         return DateComponents()

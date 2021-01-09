@@ -14,7 +14,7 @@ struct SecondInfoView: View {
         VStack {
             Spacer()
             
-            Text("While your tree grows not only your CO2 footprint will reduce, but Wildlife will thrive, air will be fresher and water will be cleaner")
+            Text(Localization.secondInfoText)
                 .font(.title2)
                 .foregroundColor(.init("color_font_primary"))
                 .multilineTextAlignment(.center)
@@ -30,7 +30,7 @@ struct SecondInfoView: View {
             HStack {
                 Button(action: {
                     withAnimation(.linear){
-                    self.currentIndex -= 1
+                        self.currentIndex -= 1
                     }
                 }, label: {
                     Image(systemName: "arrow.backward.circle.fill")
@@ -38,7 +38,7 @@ struct SecondInfoView: View {
                         .frame(width: 28, height: 28, alignment: .trailing)
                         .foregroundColor(.white)
                     
-                    Text("Previous")
+                    Text(Localization.prevBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
@@ -51,10 +51,10 @@ struct SecondInfoView: View {
                 
                 Button(action: {
                     withAnimation(.linear){
-                    self.currentIndex += 1
+                        self.currentIndex += 1
                     }
                 }, label: {
-                    Text("Next")
+                    Text(Localization.nextBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                     

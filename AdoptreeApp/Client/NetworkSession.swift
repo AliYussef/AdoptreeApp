@@ -25,7 +25,7 @@ extension URLSession: NetworkSession {
             .tryMap { data, response -> Data in
                 guard let httpResponse = response as? HTTPURLResponse,
                       200...299 ~= httpResponse.statusCode else {
-                    print("request: \(urlRequest), response: \(response)")
+                    print("request: \(urlRequest), response: \(response), data: \(String(data: data, encoding: .utf8)!.components(separatedBy: .newlines))")
                     switch (response as! HTTPURLResponse).statusCode {
                         case 401:
                             throw RequestError.invalidToken
@@ -35,7 +35,6 @@ extension URLSession: NetworkSession {
                             throw URLError(.badServerResponse)
                     }
                 }
-                print("request: \(urlRequest), response: \(response)")
                 return data
             }
             .eraseToAnyPublisher()

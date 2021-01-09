@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-struct SuccessfullAdoptionView: View {
+struct SuccessfulAdoptionView: View {
     @EnvironmentObject var userViewModel: UserViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var timelineViewModel: TimelineViewModel
     @State private var actionState: Int? = 0
     
     var body: some View {
@@ -19,12 +21,12 @@ struct SuccessfullAdoptionView: View {
             VStack {
                 Spacer()
                 
-                Text("Thank you for your adoption")
+                Text(Localization.successfulAdoptionTitle)
                     .font(.title2)
                     .bold()
                     .foregroundColor(.init("color_font_primary"))
                 
-                Text("With your contribution CO2 emissions can be reduced and wildlife and biodiversity will further thrive. Once your tree/s are planted you will be able to track their status.")
+                Text(Localization.successfulAdoptionText)
                     .multilineTextAlignment(.center)
                     .padding()
                     
@@ -38,6 +40,24 @@ struct SuccessfullAdoptionView: View {
                 Spacer()
                 
                 NavigationLink(destination: ContentView()
+                                .onAppear {
+                                    if userViewModel.isAuthenticated && treeViewModel.trees.isEmpty {
+                                        treeViewModel.getAdoptedTrees() { result in
+                                            switch (result) {
+                                                case .failure(_):
+                                                    break
+                                                case .success(_):
+                                                    if timelineViewModel.telemetries.isEmpty {
+                                                        treeViewModel.trees.forEach({ tree in
+                                                            if let treeId = tree.assignedTree?.tree_id {
+                                                                timelineViewModel.getTimeLineData(using: treeId)
+                                                            }
+                                                        })
+                                                    }
+                                            }
+                                        }
+                                    }
+                                }
                                , tag: 1, selection: $actionState) {
                     EmptyView()
                 }
@@ -57,7 +77,7 @@ struct SuccessfullAdoptionView: View {
                     }
                     
                 }, label: {
-                    Text("Follow your tree")
+                    Text(Localization.followTreeBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })

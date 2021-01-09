@@ -18,7 +18,7 @@ struct GreenIdeaView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 
                 VStack(alignment: .leading) {
-                    Text("GREEN IDEAS")
+                    Text(Localization.newsGreenIdeas)
                         .font(.title2)
                         .foregroundColor(.init("color_font_primary"))
                         .padding()

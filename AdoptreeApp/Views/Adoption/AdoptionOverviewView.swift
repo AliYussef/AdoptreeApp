@@ -22,7 +22,7 @@ struct AdoptionOverviewView: View {
                 Color.init("color_background")
                     .edgesIgnoringSafeArea(.all)
                 VStack {
-                    Text("Overview")
+                    Text(Localization.adoptionOverViewTitle)
                         .font(.title2)
                         .bold()
                         .foregroundColor(.init("color_font_primary"))
@@ -36,7 +36,7 @@ struct AdoptionOverviewView: View {
                             
                             if orderViewModel.products.count > 0 {
                                 HStack {
-                                    Text("Total:")
+                                    Text(Localization.adoptionOverViewTotalPrice)
                                         .font(.footnote)
                                         .foregroundColor(.init("color_font_secondary"))
                                     
@@ -56,7 +56,7 @@ struct AdoptionOverviewView: View {
                                     .fill(Color.white)
                                     .frame(width: UIScreen.main.bounds.width * 0.9, height: 100, alignment: .center)
                                     .overlay(
-                                        Text("Cart is empty , go back to add some trees")
+                                        Text(Localization.adoptionOverViewCartEmpty)
                                             .font(.subheadline)
                                             .foregroundColor(.init("color_font_secondary"))
                                             .multilineTextAlignment(.center)
@@ -69,13 +69,13 @@ struct AdoptionOverviewView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: SuccessfullAdoptionView(), tag: 1, selection: $actionState) {
+                    NavigationLink(destination: SuccessfulAdoptionView(), tag: 1, selection: $actionState) {
                         EmptyView()
                     }
                     
                     HStack {
                         Button(action: { presentationMode.wrappedValue.dismiss() }, label: {
-                            Text("Adopt more")
+                            Text(Localization.addMoreBtn)
                                 .font(.subheadline)
                                 .foregroundColor(.white)
                         })
@@ -88,7 +88,7 @@ struct AdoptionOverviewView: View {
                             Button(action: {
                                 createOrder()
                             }, label: {
-                                Text("Pay")
+                                Text(Localization.payBtn)
                                     .font(.subheadline)
                                     .foregroundColor(.white)
                             })
@@ -102,7 +102,7 @@ struct AdoptionOverviewView: View {
                             
                             NavigationLink(destination: AdoptionLoginView(isAdoptionFailed: $isAdoptionFailed))
                             {
-                                Text("Proceed")
+                                Text(Localization.proceedBtn)
                                     .font(.subheadline)
                                     .foregroundColor(.white)
                             }
@@ -115,7 +115,7 @@ struct AdoptionOverviewView: View {
                     }
                 }
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Login"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    Alert(title: Text(Localization.loginAlertTitle), message: Text("\(message)"), dismissButton: .default(Text(Localization.okBtn)))
                 }
                 .onOpenURL(perform: { url in
                     if url.host == "payment-return" {
@@ -139,7 +139,7 @@ extension AdoptionOverviewView {
             orderViewModel.createOrder(order: order) { result in
                 switch (result) {
                     case .failure(_):
-                        message = "An error occurred. Please click Pay button again!"
+                        message = "\(Localization.errorOccurred)"
                         showingAlert.toggle()
                     case .success(let success):
                         if let url = URL(string: success.paymentLink) {
@@ -231,16 +231,16 @@ struct OverviewCellView: View {
                     Divider()
                     
                     if self.orderViewModel.products.count > 1 || orderProduct.quantity > 1 {
-                        Text("Adding a personal sign for multiple trees is not possible yet. You can still add one for each tree after the adoption.")
+                        Text(Localization.adoptionOverViewPersonalSignNote)
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_secondary"))
                     } else {
                         HStack {
                             VStack (alignment: .leading) {
-                                Text("Personal sign")
+                                Text(Localization.personalSignText)
                                     .font(.subheadline)
                                     .foregroundColor(.init("color_font_secondary"))
-                                TextField("Type personal sign and tick the circle", text: $personalSign)
+                                TextField(Localization.adoptionOverViewPersonalSignAddNote, text: $personalSign)
                                     .font(.subheadline)
                                 
                             }
@@ -263,7 +263,7 @@ struct OverviewCellView: View {
                         Divider()
                         
                         HStack {
-                            Text("Personal sign can be added later as well")
+                            Text(Localization.adoptionOverViewPersonalSignAddLaterNote)
                                 .font(.footnote)
                                 .foregroundColor(.init("color_font_secondary"))
                             Spacer()

@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import os
 
 class TimelineViewModel: ObservableObject {
     @Published var reports: [Timeline] = []
@@ -32,17 +33,16 @@ extension TimelineViewModel {
         let sequestrationUrlRequest = ViewModelHelper.buildUrlRequestWithoutParam(withEndpoint: .sequestration(treeId), using: .get)
         
         Publishers.CombineLatest(telemetryRepository.getTelemetryByTree(using: telemetryUrlRequest), treeRepository.getTreeSequestraion(using: sequestrationUrlRequest))
-            //.delay(for: 2, scheduler: DispatchQueue.main)
             .sink(receiveValue: { telemetries, sequestrations in
                 switch(telemetries) {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let telemetries):
@@ -55,11 +55,11 @@ extension TimelineViewModel {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let sequestrations):
@@ -112,7 +112,7 @@ extension TimelineViewModel {
     }
     
     func createTimelineTreeObject(trees: [Tree]) {
-
+        
         treeTypeFilter.append(TimelineFilter(treeId: 0, treeName: "All"))
         trees.forEach({ tree in
             if let treeId = tree.assignedTree?.tree_id {
@@ -152,4 +152,17 @@ extension TimelineViewModel {
         areFiltersDataReady = true
     }
     
+}
+
+extension TimelineViewModel {
+
+    func clearDataForLogout() {
+        reports.removeAll()
+        telemetries.removeAll()
+        sequestrations.removeAll()
+        timelineTreeDic.removeAll()
+        areFiltersDataReady = false
+        treeTypeFilter.removeAll()
+        datesFilter.removeAll()
+    }
 }

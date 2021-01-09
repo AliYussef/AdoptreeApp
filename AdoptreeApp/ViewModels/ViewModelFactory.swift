@@ -40,5 +40,5 @@ extension ViewModelFactory {
     func makeNewsViewModel() -> NewsViewModel {
         return NewsViewModel(contentRepository: contentRepository, tourRepository: tourRepository, userRepository: userRepository)
     }
-
+    
 }

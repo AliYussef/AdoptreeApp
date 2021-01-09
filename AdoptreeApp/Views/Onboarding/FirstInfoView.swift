@@ -14,13 +14,13 @@ struct FirstInfoView: View {
         VStack {
             Spacer()
             
-            Text("Let us green the planet")
+            Text(Localization.firstInfoTitle)
                 .font(.title)
                 .bold()
                 .foregroundColor(.init("color_font_primary"))
                 .padding()
             
-            Text("Reduce you CO2 footprint by adopting a tree")
+            Text(Localization.firstInfoText)
                 .font(.title2)
                 .foregroundColor(.init("color_font_primary"))
                 .multilineTextAlignment(.center)
@@ -45,7 +45,7 @@ struct FirstInfoView: View {
                         self.currentIndex += 1
                     }
                 }, label: {
-                    Text("Next")
+                    Text(Localization.nextBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                     

@@ -12,7 +12,7 @@ struct ChangePasswordView: View {
     @ObservedObject var inputValidationViewModel = InputValidationViewModel()
     @State var isConfirmDisabled = true
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     @State var isTryingToChangePassword: Bool = false
     
     var body: some View {
@@ -21,7 +21,7 @@ struct ChangePasswordView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-                SecureField("New password", text: $inputValidationViewModel.password)
+                SecureField(Localization.newPasswordField, text: $inputValidationViewModel.password)
                     .validation(inputValidationViewModel.passwordValidation)
                     .padding()
                     .background(Color.init("color_textfield"))
@@ -30,7 +30,7 @@ struct ChangePasswordView: View {
                     .autocapitalization(.none)
                     .padding()
                 
-                SecureField("Confirm password", text: $inputValidationViewModel.confirmPassword)
+                SecureField(Localization.confirmPasswordField, text: $inputValidationViewModel.confirmPassword)
                     .validation(inputValidationViewModel.confirmPasswordValidation)
                     .validation(inputValidationViewModel.confirmPasswordMatchingValidation)
                     .padding()
@@ -51,10 +51,10 @@ struct ChangePasswordView: View {
                                     userViewModel.updateUserAccount(user: user) { result in
                                         switch (result) {
                                             case .failure(_):
-                                                message = "An error occurred. Please check your password!"
+                                                message = Localization.errorOccurred
                                                 showingAlert.toggle()
                                             case .success(_):
-                                                message = "Password has been changed"
+                                                message = Localization.successfulPasswordChange
                                                 showingAlert.toggle()
                                         }
                                         isTryingToChangePassword.toggle()
@@ -64,7 +64,7 @@ struct ChangePasswordView: View {
                         }
                     }
                 }, label: {
-                    Text("Confirm")
+                    Text(Localization.confirmBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
@@ -74,7 +74,7 @@ struct ChangePasswordView: View {
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Password reset"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    Alert(title: Text(Localization.resetPasswordAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
             }
             .onReceive(inputValidationViewModel.resetPasswordValidation) { validation in
@@ -91,7 +91,7 @@ struct ChangePasswordView: View {
                             .background(Blur(style: .systemUltraThinMaterial))
                             .edgesIgnoringSafeArea(.all)
                         
-                        ProgressView("Changing password...")
+                        ProgressView(Localization.resetPasswordProgress)
                     }
                 }
             }

@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import os
 
 class NewsViewModel: ObservableObject {
     @Published var contents: [Content] = []
@@ -42,11 +43,11 @@ extension NewsViewModel {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let contents):
@@ -58,11 +59,11 @@ extension NewsViewModel {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let tours):
@@ -73,15 +74,14 @@ extension NewsViewModel {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let bookedTours):
-                        print(bookedTours)
                         self.bookedTours = bookedTours
                 }
             })
@@ -99,10 +99,13 @@ extension NewsViewModel {
                     case .failure(let error):
                         switch error {
                             case let urlError as URLError:
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                                 completion(.failure(.urlError(urlError)))
                             case let decodingError as DecodingError:
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                 completion(.failure(.decodingError(decodingError)))
                             default:
+                                os_log("Error", type: .error, error.localizedDescription)
                                 completion(.failure(.genericError(error)))
                         }
                 }
@@ -115,7 +118,7 @@ extension NewsViewModel {
 }
 
 extension NewsViewModel {
-
+    
     func createContentData() {
         contents.forEach({ content in
             if content.contentType == ContentType.informative.rawValue {
@@ -143,10 +146,13 @@ extension NewsViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    os_log("Url error", type: .error, urlError.localizedDescription)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    os_log("Error", type: .error, error.localizedDescription)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -158,12 +164,13 @@ extension NewsViewModel {
                 .store(in: &cancellables)
             
         }catch let encodingError as EncodingError{
+            os_log("Encoding error", type: .error, encodingError.localizedDescription)
             completion(.failure(.encodingError(encodingError)))
         }catch let error{
+            os_log("Error", type: .error, error.localizedDescription)
             completion(.failure(.genericError(error)))
         }
     }
-    
     
     func cancelBookedTour(using bookedTourId: Int64, completion: @escaping (Result<Data, RequestError>) -> Void) {
         
@@ -177,8 +184,10 @@ extension NewsViewModel {
                     case .failure(let error):
                         switch error {
                             case let urlError as URLError:
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                                 completion(.failure(.urlError(urlError)))
                             default:
+                                os_log("Error", type: .error, error.localizedDescription)
                                 completion(.failure(.genericError(error)))
                         }
                 }
@@ -187,5 +196,17 @@ extension NewsViewModel {
                 completion(.success(result))
             })
             .store(in: &cancellables)
+    }
+}
+
+extension NewsViewModel {
+
+    func clearDataForLogout() {
+        contents.removeAll()
+        aboutContents.removeAll()
+        informativeContents.removeAll()
+        anncouncmentContents.removeAll()
+        tours.removeAll()
+        bookedTours.removeAll()
     }
 }

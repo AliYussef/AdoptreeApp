@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import os
 
 class TreeViewModel: ObservableObject {
     @Published var trees:[Tree] = []
@@ -48,10 +49,13 @@ extension TreeViewModel {
                         switch error {
                             case let urlError as URLError:
                                 self.isThereAgoptedTrees = false
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                                 completion(.failure(.urlError(urlError)))
                             case let decodingError as DecodingError:
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                 completion(.failure(.decodingError(decodingError)))
                             default:
+                                os_log("Error", type: .error, error.localizedDescription)
                                 completion(.failure(.genericError(error)))
                         }
                 }
@@ -81,16 +85,16 @@ extension TreeViewModel {
         
         Publishers.CombineLatest(treeRepository.getTreeImages(using: imagesUrlRequest), forestRepository.getWildlife(using: wildlifeUrlRequest))
             .sink(receiveValue: { images, wildlife in
-            
+                
                 switch(images) {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let images):
@@ -101,11 +105,11 @@ extension TreeViewModel {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let wildlife):
@@ -134,10 +138,13 @@ extension TreeViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    os_log("Url error", type: .error, urlError.localizedDescription)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    os_log("Error", type: .error, error.localizedDescription)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -149,8 +156,10 @@ extension TreeViewModel {
                 .store(in: &cancellables)
             
         }catch let encodingError as EncodingError{
+            os_log("Encoding error", type: .error, encodingError.localizedDescription)
             completion(.failure(.encodingError(encodingError)))
         }catch let error{
+            os_log("Error", type: .error, error.localizedDescription)
             completion(.failure(.genericError(error)))
         }
     }
@@ -176,10 +185,13 @@ extension TreeViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    os_log("Url error", type: .error, urlError.localizedDescription)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    os_log("Error", type: .error, error.localizedDescription)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -191,8 +203,10 @@ extension TreeViewModel {
                 .store(in: &cancellables)
             
         } catch let encodingError as EncodingError{
+            os_log("Encoding error", type: .error, encodingError.localizedDescription)
             completion(.failure(.encodingError(encodingError)))
         } catch let error{
+            os_log("Error", type: .error, error.localizedDescription)
             completion(.failure(.genericError(error)))
         }
     }
@@ -208,10 +222,13 @@ extension TreeViewModel {
                     case .failure(let error):
                         switch error {
                             case let urlError as URLError:
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                                 completion(.failure(.urlError(urlError)))
                             case let decodingError as DecodingError:
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                 completion(.failure(.decodingError(decodingError)))
                             default:
+                                os_log("Error", type: .error, error.localizedDescription)
                                 completion(.failure(.genericError(error)))
                         }
                 }
@@ -246,11 +263,11 @@ extension TreeViewModel {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let results):
@@ -261,11 +278,11 @@ extension TreeViewModel {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let results):
@@ -282,7 +299,7 @@ extension TreeViewModel {
         forests.forEach({ forest in
             forestDic[forest.id] = forest.countryId
         })
-
+        
         trees.forEach({ tree in
             if let treeId = tree.assignedTree?.tree_id {
                 
@@ -291,6 +308,11 @@ extension TreeViewModel {
         })
     }
     
+    func getForestName(of forestId: Int64) -> String{
+        return forests.first(where: {
+            $0.id == forestId
+        })?.name ?? "Unknown location"
+    }
 }
 
 extension TreeViewModel {
@@ -307,10 +329,13 @@ extension TreeViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    os_log("Url error", type: .error, urlError.localizedDescription)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    os_log("Error", type: .error, error.localizedDescription)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -322,9 +347,25 @@ extension TreeViewModel {
                 .store(in: &cancellables)
             
         } catch let encodingError as EncodingError{
+            os_log("Encoding error", type: .error, encodingError.localizedDescription)
             completion(.failure(.encodingError(encodingError)))
         } catch let error{
+            os_log("Error", type: .error, error.localizedDescription)
             completion(.failure(.genericError(error)))
         }
+    }
+}
+
+extension TreeViewModel {
+
+    func clearDataForLogout() {
+        trees.removeAll()
+        treeImages.removeAll()
+        wildlifes.removeAll()
+        treeSign = nil
+        countries.removeAll()
+        forests.removeAll()
+        treeLocationDic.removeAll()
+        isThereAgoptedTrees = true
     }
 }

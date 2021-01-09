@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject var viewRouter: ViewRouter
+    @EnvironmentObject var notificationViewModel: NotificationViewModel
     
     var body: some View {
         

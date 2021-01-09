@@ -18,23 +18,23 @@ struct ContractView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack(alignment: .leading) {
-                Text("Contract")
+                Text(Localization.contractTitle)
                     .font(.title2)
                     .foregroundColor(.init("color_font_primary"))
                     .padding([.top, .leading])
                 
                 List {
                     HStack {
-                        Text("Name")
+                        Text(Localization.contractName)
                         Spacer()
-                        Text("\(userViewModel.userShared.firstname ?? "YOUR") \(userViewModel.userShared.lastname ?? "NAME")")
+                        Text("\(userViewModel.userShared.firstname ?? "\(Localization.profileYour)") \(userViewModel.userShared.lastname ?? "\(Localization.profileName)")")
                             .foregroundColor(.init("color_font_secondary"))
                     }
                     
                     NavigationLink(
                         destination: AdoptedTreesView(),
                         label: {
-                            Text("Adopted trees")
+                            Text(Localization.contractAdoptedTrees)
                                 .foregroundColor(.black)
                         })
                 }

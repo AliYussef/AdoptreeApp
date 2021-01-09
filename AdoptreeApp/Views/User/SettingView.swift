@@ -10,14 +10,7 @@ import SwiftUI
 struct SettingView: View {
     @EnvironmentObject var notificationViewModel: NotificationViewModel
     @EnvironmentObject var userViewModel: UserViewModel
-    @State private var languagesIndex = 0
-    var languages = ["English", "Dutch"]
-    @State var isGrowthOn = true 
-    @State var isHumidityOn = true
-    @State var isTemperatureOn = true
-    @State var isCO2ReductionOn = true
-    @State var isCO2RedutionTipsOn = true
-    @State var isEventsOn = false
+    var languages = [Localization.settingGeneralEnglishLanguage, Localization.settingGeneralDutchLanguage]
     
     var body: some View {
         ZStack {
@@ -28,35 +21,35 @@ struct SettingView: View {
                 
                 Form {
                     Section(header: HStack {
-                        Text("notifications")
+                        Text(Localization.settingNotification)
                             .foregroundColor(.init("color_font_secondary"))
                     }, content: {
                         Toggle(isOn: $notificationViewModel.notificationObject.growth.animation()) {
-                            Text("Growth")
+                            Text(Localization.treeGrowth)
                         }
                         Toggle(isOn: $notificationViewModel.notificationObject.humidity.animation()) {
-                            Text("Humidity")
+                            Text(Localization.treeHumidity)
                         }
                         Toggle(isOn: $notificationViewModel.notificationObject.temperature.animation()) {
-                            Text("Temperature")
+                            Text(Localization.treeTemperature)
                         }
                         Toggle(isOn: $notificationViewModel.notificationObject.co2Reduction.animation()) {
-                            Text("CO2 reduction")
+                            Text(Localization.treeCo2)
                         }
                         Toggle(isOn: $notificationViewModel.notificationObject.co2ReductionTip.animation()) {
-                            Text("CO2 redution tips")
+                            Text(Localization.settingNotificationCo2Tips)
                         }
                         Toggle(isOn: $notificationViewModel.notificationObject.event.animation()) {
-                            Text("Events")
+                            Text(Localization.settingNotificationEvents)
                         }
                         
-                    })//.disabled(!userViewModel.isAuthenticated)
+                    })
                     
                     Section(header: HStack {
-                        Text("general")
+                        Text(Localization.settingGeneral)
                             .foregroundColor(.init("color_font_secondary"))
                     }, content: {
-                        Picker(selection: $languagesIndex, label: Text("Choose language").font(.subheadline)) {
+                        Picker(selection: $notificationViewModel.languagesIndex, label: Text(Localization.settingGeneralLanguage).font(.subheadline)) {
                             ForEach(0 ..< languages.count) {
                                 Text(self.languages[$0])
                             }
@@ -64,41 +57,41 @@ struct SettingView: View {
                     })
                     
                     Section(header: HStack {
-                        Text("information")
+                        Text(Localization.settingInformation)
                             .foregroundColor(.init("color_font_secondary"))
                     }, content: {
                         
                         HStack {
-                            Text("Version")
+                            Text(Localization.settingInformationVersion)
                             Spacer()
                             Text("1.0")
                         }
                         NavigationLink(
                             destination: PrivacyPolicyView(),
                             label: {
-                                Text("Privacy policy")
+                                Text(Localization.settingInformationPrivacyPolicy)
                             })
                         NavigationLink(
                             destination: OverTheAppView(),
                             label: {
-                                Text("Over this app")
+                                Text(Localization.settingInformationOverTheApp)
                             })
                         Button(action: {
                             actionSheet()
                         }, label: {
-                            Text("Share this app")
+                            Text(Localization.settingInformationShareTheApp)
                                 .foregroundColor(.black)
                         })
                         NavigationLink(
                             destination: Text("Destination"),
                             label: {
-                                Text("Rate us")
+                                Text(Localization.settingInformationRateUs)
                                     .foregroundColor(.init("color_primary_accent"))
                             })
                         NavigationLink(
                             destination: Text("Destination"),
                             label: {
-                                Text("Contact")
+                                Text(Localization.settingInformationContact)
                                     .foregroundColor(.init("color_primary_accent"))
                             })
                     })

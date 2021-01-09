@@ -12,7 +12,7 @@ import UIKit
 struct AdoptreeAppApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.scenePhase) private var scenePhase
-    var notificationViewModel: NotificationViewModel
+    @ObservedObject var notificationViewModel: NotificationViewModel
     var userViewModel: UserViewModel
     var orderViewModel: OrderViewModel
     var treeViewModel: TreeViewModel
@@ -45,23 +45,8 @@ struct AdoptreeAppApp: App {
                     .environmentObject(notificationViewModel).environmentObject(userViewModel).environmentObject(treeViewModel).environmentObject(timelineViewModel).environmentObject(newsViewModel)
             }
             .accentColor(.init("color_primary_accent"))
+            .environment(\.locale, .init(identifier: notificationViewModel.languagesIndex == 0 ? "en" : "nl"))
         }
-        .onChange(of: scenePhase) { phase in
-            switch phase {
-                case .background:
-                    //print("background")
-                    break // moved to the background
-                case .inactive:
-                    //print("inactive")
-                    break // is on the foreground but not the active window/scene
-                case .active:
-                    //print("active")
-                    break // is on the foreground and active
-                @unknown default:
-                    break // ignore
-            }
-        }
-        
     }
 }
 

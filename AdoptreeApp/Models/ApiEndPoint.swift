@@ -60,7 +60,7 @@ enum ApiEndPoint: CustomStringConvertible {
     //case treespecies
     //case wildlifeById(Int64)
     //case wildlife
-   
+    
     var description: String {
         switch self {
             case .bookedtourByUser:
@@ -123,50 +123,50 @@ enum ApiEndPoint: CustomStringConvertible {
                 return "auth/logout"
             case .refreshToken:
                 return "auth/refreshToken"
-           // case .userById(let id):
+            // case .userById(let id):
             //                return "user/\(id)"
-//            case .categoryById(let id):
-//                return "category/\(id)"
-//            case .contentById(let id):
-//                return "content/\(id)"
-//            case .countryById(let id):
-//                return "country/\(id)"
-//            case .forestById(let id):
-//                return "forest/\(id)"
-//            case .imageById(let id):
-//                return "image/\(id)"
-//            case .image:
-//                return "image"
-//            case .productById(let id):
-//                return "product/\(id)"
-//            case .settingById(let id):
-//                return "setting/\(id)"
-//            case .setting:
-//                return "setting"
-//            case .telemetry:
-//                return "telemetry"
-//            case .tourById(let id):
-//                return "tour/\(id)"
-//            case .treeById(let id):
-//                return "tree/\(id)"
-//            case .tree:
-//                return "tree"
-//            case .treesignById(let id):
-//                return "treesign/\(id)"
-//            case .treespeciesById(let id):
-//                return "treespecies/\(id)"
-//            case .treespecies:
-//                return "treespecies"
-//            case .wildlifeById(let id):
-//                return "wildlife/\(id)"
-//            case .wildlife:
-//                return "wildlife"
-//            case .treesByForest(let id):
-//                return "forest/\(id)/trees"
-//            case .paymentStatus:
-//                return "order/paymentStatus"
-//            case .initializeTree:
-//                return "tree/initialize"
+            //            case .categoryById(let id):
+            //                return "category/\(id)"
+            //            case .contentById(let id):
+            //                return "content/\(id)"
+            //            case .countryById(let id):
+            //                return "country/\(id)"
+            //            case .forestById(let id):
+            //                return "forest/\(id)"
+            //            case .imageById(let id):
+            //                return "image/\(id)"
+            //            case .image:
+            //                return "image"
+            //            case .productById(let id):
+            //                return "product/\(id)"
+            //            case .settingById(let id):
+            //                return "setting/\(id)"
+            //            case .setting:
+            //                return "setting"
+            //            case .telemetry:
+            //                return "telemetry"
+            //            case .tourById(let id):
+            //                return "tour/\(id)"
+            //            case .treeById(let id):
+            //                return "tree/\(id)"
+            //            case .tree:
+            //                return "tree"
+            //            case .treesignById(let id):
+            //                return "treesign/\(id)"
+            //            case .treespeciesById(let id):
+            //                return "treespecies/\(id)"
+            //            case .treespecies:
+            //                return "treespecies"
+            //            case .wildlifeById(let id):
+            //                return "wildlife/\(id)"
+            //            case .wildlife:
+            //                return "wildlife"
+            //            case .treesByForest(let id):
+            //                return "forest/\(id)/trees"
+            //            case .paymentStatus:
+            //                return "order/paymentStatus"
+            //            case .initializeTree:
+            //                return "tree/initialize"
         }
     }
 }

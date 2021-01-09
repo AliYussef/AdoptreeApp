@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GuestTimelineView: View {
     var body: some View {
-
+        
         VStack {
             Image("timeline_tree")
                 .resizable()
@@ -17,7 +17,7 @@ struct GuestTimelineView: View {
                 .frame(width: 300, height: 300, alignment: .center)
                 .padding(.bottom)
             
-            Text("Login or adopt a tree to stay up to date with all your tree's achievments and milestones")
+            Text(Localization.timelineGuestText)
                 .font(.body)
                 .foregroundColor(.init("color_font_secondary"))
                 .multilineTextAlignment(.center)

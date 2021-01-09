@@ -102,7 +102,7 @@ struct TimelineView: View {
                                     if report.type == TimelineEntryType.report {
                                         TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getTreeColor(treeId: report.treeId))
                                     } else if report.type == TimelineEntryType.tree {
-                                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Adopted \(timelineViewModel.timelineTreeDic[report.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: report.treeId))
+                                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Tree \(timelineViewModel.timelineTreeDic[report.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: report.treeId))
                                     } else if report.type == TimelineEntryType.image {
                                         TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "New tree image", icon: Image(systemName: "photo"), treeColor: getTreeColor(treeId: report.treeId))
                                     }
@@ -111,11 +111,11 @@ struct TimelineView: View {
                                 }
                             } else {
                                 if treeViewModel.isThereAgoptedTrees {
-                                    ProgressView("Loading timeline...")
+                                    ProgressView(Localization.timelineLoading)
                                     generateTimelineCellViews()
                                 } else {
                                     VStack {
-                                        Text("Your adopted trees have not been planted yet. Once they are planted you will be able to follow their storis.")
+                                        Text(Localization.timelineTreeNotPlanted)
                                             .font(.subheadline)
                                             .multilineTextAlignment(.center)
                                     }
@@ -150,7 +150,7 @@ extension TimelineView {
         if !timelineViewModel.telemetries.isEmpty && !timelineViewModel.sequestrations.isEmpty {
             timelineViewModel.generateTimelineData(images: nil)
         }
-       
+        
         return AnyView(EmptyView())
     }
     
@@ -284,7 +284,7 @@ struct TreeDataSectionTimeline: View {
                 .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
                 .overlay(
                     VStack(alignment: .center)  {
-                        Text("CO2 Reduction")
+                        Text(Localization.treeCo2)
                             .font(.title3)
                             .foregroundColor(Color.init("color_font_primary"))
                             .padding(.bottom, 30)
@@ -300,7 +300,7 @@ struct TreeDataSectionTimeline: View {
                 .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
                 .overlay(
                     VStack(alignment: .center)  {
-                        Text("Growth")
+                        Text(Localization.treeGrowth)
                             .font(.title3)
                             .foregroundColor(Color.white)
                             .padding(.bottom, 30)
@@ -321,7 +321,7 @@ struct TreeDataSectionTimeline: View {
                 .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
                 .overlay(
                     VStack(alignment: .center)  {
-                        Text("Temperature")
+                        Text(Localization.treeTemperature)
                             .font(.title3)
                             .foregroundColor(Color.init("color_font_primary"))
                         
@@ -347,7 +347,7 @@ struct TreeDataSectionTimeline: View {
                 .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
                 .overlay(
                     VStack(alignment: .center)  {
-                        Text("Humidity")
+                        Text(Localization.treeHumidity)
                             .font(.title3)
                             .foregroundColor(Color.white)
                             .padding(.bottom, 30)

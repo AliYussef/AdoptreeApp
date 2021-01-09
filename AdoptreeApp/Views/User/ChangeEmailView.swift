@@ -12,7 +12,7 @@ struct ChangeEmailView: View {
     @ObservedObject var inputValidationViewModel = InputValidationViewModel()
     @State var isConfirmDisabled = true
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     @State var isTryingToChangeEmail: Bool = false
     
     var body: some View {
@@ -21,7 +21,7 @@ struct ChangeEmailView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-                TextField("New email address", text: $inputValidationViewModel.email)
+                TextField(Localization.changeEmailField, text: $inputValidationViewModel.email)
                     .validation(inputValidationViewModel.emailValidation)
                     .validation(inputValidationViewModel.emailEmptyValidation)
                     .padding()
@@ -31,7 +31,7 @@ struct ChangeEmailView: View {
                     .autocapitalization(.none)
                     .padding()
                 
-                SecureField("Password", text: $inputValidationViewModel.password)
+                SecureField(Localization.passwordField, text: $inputValidationViewModel.password)
                     .validation(inputValidationViewModel.passwordValidation)
                     .padding()
                     .background(Color.init("color_textfield"))
@@ -51,10 +51,10 @@ struct ChangeEmailView: View {
                                     userViewModel.updateUserAccount(user: user) { result in
                                         switch (result) {
                                             case .failure(_):
-                                                message = "An error occurred. Please check your password!"
+                                                message = Localization.errorOccurred
                                                 showingAlert.toggle()
                                             case .success(_):
-                                                message = "Email has been changed"
+                                                message = Localization.successfulEmailChange
                                                 showingAlert.toggle()
                                         }
                                         isTryingToChangeEmail.toggle()
@@ -64,7 +64,7 @@ struct ChangeEmailView: View {
                         }
                     }
                 }, label: {
-                    Text("Confirm")
+                    Text(Localization.confirmBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
@@ -74,7 +74,7 @@ struct ChangeEmailView: View {
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Email reset"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    Alert(title: Text(Localization.changeEmailAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
             }
             .onReceive(inputValidationViewModel.changeEmailValidation) { validation in
@@ -91,7 +91,7 @@ struct ChangeEmailView: View {
                             .background(Blur(style: .systemUltraThinMaterial))
                             .edgesIgnoringSafeArea(.all)
                         
-                        ProgressView("Changing email...")
+                        ProgressView(Localization.changeEmailProgress)
                     }
                 }
             }

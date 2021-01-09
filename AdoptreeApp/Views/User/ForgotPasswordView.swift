@@ -13,7 +13,7 @@ struct ForgotPasswordView: View {
     @ObservedObject var inputValidationViewModel = InputValidationViewModel()
     @State var isSaveDisabled = true
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     @State var isTryingToChangePassword: Bool = false
     
     var body: some View {
@@ -22,11 +22,26 @@ struct ForgotPasswordView: View {
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 
-                if userViewModel.forgetPasswordToken.isEmpty {
+                if !userViewModel.isforgetPasswordTokenSent {
                     RequestPasswordChangeView(inputValidationViewModel: inputValidationViewModel)
                 } else {
                     
-                    SecureField("Password", text: $inputValidationViewModel.password)
+                    Text(Localization.forgotPasswordNote)
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.init("color_font_primary"))
+                        .padding()
+                    
+                    TextField("Reset token", text: $inputValidationViewModel.token)
+                        .validation(inputValidationViewModel.tokenValidation)
+                        .padding()
+                        .background(Color.init("color_textfield"))
+                        .cornerRadius(8.0)
+                        .keyboardType(.default)
+                        .autocapitalization(.none)
+                        .padding()
+                    
+                    SecureField(Localization.passwordField, text: $inputValidationViewModel.password)
                         .validation(inputValidationViewModel.passwordValidation)
                         .padding()
                         .background(Color.init("color_textfield"))
@@ -35,7 +50,7 @@ struct ForgotPasswordView: View {
                         .autocapitalization(.none)
                         .padding()
                     
-                    SecureField("Confirm password", text: $inputValidationViewModel.confirmPassword)
+                    SecureField(Localization.confirmPasswordField, text: $inputValidationViewModel.confirmPassword)
                         .validation(inputValidationViewModel.confirmPasswordValidation)
                         .validation(inputValidationViewModel.confirmPasswordMatchingValidation)
                         .padding()
@@ -47,20 +62,20 @@ struct ForgotPasswordView: View {
                     
                     Button(action: {
                         isTryingToChangePassword.toggle()
-                        userViewModel.resetPassword(resetPasswordBody: ResetPasswordBody(user_id: nil, token: self.userViewModel.forgetPasswordToken, created_at: nil, valid_until: nil, password: inputValidationViewModel.password, validate_password: inputValidationViewModel.confirmPassword)) {result in
+                        userViewModel.resetPassword(resetPasswordBody: ResetPasswordBody(user_id: nil, token: inputValidationViewModel.token, created_at: nil, valid_until: nil, password: inputValidationViewModel.password, validate_password: inputValidationViewModel.confirmPassword)) {result in
                             switch (result) {
                                 case .failure(_):
-                                    message = "Somthing went wrong. Please try again!"
+                                    message = Localization.errorOccurred
                                     showingAlert.toggle()
                                 case .success(_):
-                                    message = "Password has been reset"
+                                    message = Localization.successfulPasswordReset
                                     showingAlert.toggle()
                                     self.presentationMode.wrappedValue.dismiss()
                             }
                             isTryingToChangePassword.toggle()
                         }
                     }, label: {
-                        Text("Reset my password")
+                        Text(Localization.resetPasswordBtn)
                             .font(.subheadline)
                             .foregroundColor(.white)
                     })
@@ -70,7 +85,7 @@ struct ForgotPasswordView: View {
                     .cornerRadius(10.0)
                     .padding()
                     .alert(isPresented: $showingAlert) {
-                        Alert(title: Text("Reset password"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                        Alert(title: Text(Localization.resetPasswordAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                     }
                     
                     if isTryingToChangePassword {
@@ -83,7 +98,7 @@ struct ForgotPasswordView: View {
                                     .background(Blur(style: .systemUltraThinMaterial))
                                     .edgesIgnoringSafeArea(.all)
                                 
-                                ProgressView("Changing password...")
+                                ProgressView(Localization.resetPasswordProgress)
                             }
                         }
                     }
@@ -93,7 +108,7 @@ struct ForgotPasswordView: View {
                 isSaveDisabled = !validation.isSuccess
             }
         }
-        .navigationBarTitle("Forgot password", displayMode: .inline)
+        .navigationBarTitle(Localization.forgotPasswordTitle, displayMode: .inline)
         
     }
 }
@@ -103,11 +118,11 @@ struct RequestPasswordChangeView: View {
     @ObservedObject var inputValidationViewModel: InputValidationViewModel
     @State var isSaveDisabled = true
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     @State var isTryingToChangePassword: Bool = false
     
     var body: some View {
-        TextField("Email Address", text: $inputValidationViewModel.email)
+        TextField(Localization.emailField, text: $inputValidationViewModel.email)
             .validation(inputValidationViewModel.emailEmptyValidation)
             .validation(inputValidationViewModel.emailValidation)
             .padding()
@@ -117,7 +132,7 @@ struct RequestPasswordChangeView: View {
             .autocapitalization(.none)
             .padding()
         
-        TextField("Username", text: $inputValidationViewModel.username)
+        TextField(Localization.usernameField, text: $inputValidationViewModel.username)
             .validation(inputValidationViewModel.usernameValidation)
             .padding()
             .background(Color.init("color_textfield"))
@@ -128,10 +143,10 @@ struct RequestPasswordChangeView: View {
         
         Button(action: {
             isTryingToChangePassword.toggle()
-            userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: inputValidationViewModel.username, email: inputValidationViewModel.username)) { result in
+            userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: inputValidationViewModel.username, email: inputValidationViewModel.email)) { result in
                 switch (result) {
                     case .failure(_):
-                        message = "An error has occurred. Please check your username and email!"
+                        message = Localization.requestPasswordResetError
                         showingAlert.toggle()
                     case .success(_):
                         break
@@ -139,7 +154,7 @@ struct RequestPasswordChangeView: View {
                 isTryingToChangePassword.toggle()
             }
         }, label: {
-            Text("Request password change")
+            Text(Localization.requestPasswordChangeBtn)
                 .font(.subheadline)
                 .foregroundColor(.white)
         })
@@ -152,7 +167,7 @@ struct RequestPasswordChangeView: View {
             isSaveDisabled = !validation.isSuccess
         }
         .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Reset password"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+            Alert(title: Text(Localization.resetPasswordAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
         }
         
         if isTryingToChangePassword {
@@ -165,7 +180,7 @@ struct RequestPasswordChangeView: View {
                         .background(Blur(style: .systemUltraThinMaterial))
                         .edgesIgnoringSafeArea(.all)
                     
-                    ProgressView("Request password change...")
+                    ProgressView(Localization.requestPasswordProgress)
                 }
             }
         }

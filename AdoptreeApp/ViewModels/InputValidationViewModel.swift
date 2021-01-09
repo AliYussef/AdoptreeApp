@@ -14,6 +14,7 @@ class InputValidationViewModel: ObservableObject {
     @Published var lastName = ""
     @Published var email = ""
     @Published var username = ""
+    @Published var token = ""
     @Published var password = "" {
         didSet {
             passwords[0] = password
@@ -45,6 +46,10 @@ class InputValidationViewModel: ObservableObject {
     
     lazy var usernameValidation: ValidationPublisher = {
         $username.nonEmptyValidator("Username must not be empty")
+    }()
+    
+    lazy var tokenValidation: ValidationPublisher = {
+        $token.nonEmptyValidator("Token must not be empty")
     }()
     
     lazy var passwordValidation: ValidationPublisher = {
@@ -92,11 +97,12 @@ class InputValidationViewModel: ObservableObject {
     }()
     
     lazy var resetPasswordValidation: ValidationPublisher = {
-        Publishers.CombineLatest(
+        Publishers.CombineLatest3(
+            tokenValidation,
             confirmPasswordValidation,
             confirmPasswordMatchingValidation
-        ).map { v1, v2 in
-            return [v1, v2].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
+        ).map { v1, v2, v3 in
+            return [v1, v2, v3].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
         }.eraseToAnyPublisher()
     }()
     

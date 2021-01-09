@@ -13,7 +13,7 @@ typealias ValidationErrorClosure = () -> String
 typealias ValidationPublisher = AnyPublisher<InputValidation, Never>
 
 class ValidationPublishers {
-
+    
     static func nonEmptyValidation(for publisher: Published<String>.Publisher,
                                    errorMessage: @autoclosure @escaping ValidationErrorClosure) -> ValidationPublisher {
         return publisher.map { value in

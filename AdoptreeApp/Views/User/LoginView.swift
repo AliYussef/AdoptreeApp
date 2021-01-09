@@ -12,7 +12,7 @@ struct LoginView: View {
     @ObservedObject var inputValidationViewModel = InputValidationViewModel()
     @State var isLoginDisabled = true
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     @State var isTryingToLogin: Bool = false
     
     var body: some View {
@@ -22,14 +22,14 @@ struct LoginView: View {
                     .edgesIgnoringSafeArea(.all)
                 VStack {
                     Spacer()
-                    Text("Sign In to monitor your adopted tree")
+                    Text(Localization.loginTitle)
                         .font(.title2)
                         .foregroundColor(.init("color_font_primary"))
                         .multilineTextAlignment(.center)
                         .padding()
                     
                     Spacer()
-                    TextField("Username", text: $inputValidationViewModel.username)
+                    TextField(Localization.usernameField, text: $inputValidationViewModel.username)
                         .validation(inputValidationViewModel.usernameValidation)
                         .padding()
                         .background(Color.init("color_textfield"))
@@ -38,7 +38,7 @@ struct LoginView: View {
                         .autocapitalization(.none)
                         .padding()
                     
-                    SecureField("Password", text: $inputValidationViewModel.password)
+                    SecureField(Localization.passwordField, text: $inputValidationViewModel.password)
                         .validation(inputValidationViewModel.passwordValidation)
                         .padding()
                         .background(Color.init("color_textfield"))
@@ -49,12 +49,12 @@ struct LoginView: View {
                     
                     Button(action: {
                         isTryingToLogin.toggle()
-
+                        
                         let user = UserLogin(username:inputValidationViewModel.username, password:inputValidationViewModel.password)
                         userViewModel.login(user: user) { result in
                             switch (result) {
                                 case .failure(_):
-                                    message = "An error occurred. Please check your username and password!"
+                                    message = Localization.loginError
                                     showingAlert.toggle()
                                 case .success(let response):
                                     userViewModel.accessToken = response.accessToken
@@ -68,7 +68,7 @@ struct LoginView: View {
                             isTryingToLogin.toggle()
                         }
                     }, label: {
-                        Text("Log in")
+                        Text(Localization.loginBtn)
                             .font(.subheadline)
                             .foregroundColor(.white)
                     })
@@ -78,16 +78,16 @@ struct LoginView: View {
                     .cornerRadius(10.0)
                     .padding()
                     .alert(isPresented: $showingAlert) {
-                        Alert(title: Text("Login"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                        Alert(title: Text(Localization.loginAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                     }
                     
                     HStack {
-                        Text("Haven’t adopted a tree yet?")
+                        Text(Localization.loginNoAccountYet)
                             .foregroundColor(.init("color_font_primary"))
                         
                         NavigationLink(destination: TreeSelectionView())
                         {
-                            Text("Adopt Now!")
+                            Text(Localization.loginAdoptNow)
                                 .bold()
                                 .foregroundColor(.init("color_font_primary"))
                         }
@@ -97,7 +97,7 @@ struct LoginView: View {
                     
                     NavigationLink(destination: ForgotPasswordView())
                     {
-                        Text("Forgot password?")
+                        Text(Localization.loginForgotPassword)
                             .bold()
                             .foregroundColor(.init("color_font_primary"))
                     }
@@ -111,7 +111,7 @@ struct LoginView: View {
                         }
                         
                     }, label: {
-                        Text("Not now, maybe later")
+                        Text(Localization.loginNotNow)
                             .bold()
                             .foregroundColor(.init("color_font_primary"))
                     })
@@ -130,7 +130,7 @@ struct LoginView: View {
                                 .background(Blur(style: .systemUltraThinMaterial))
                                 .edgesIgnoringSafeArea(.all)
                             
-                            ProgressView("Logging in...")
+                            ProgressView(Localization.loginProgress)
                         }
                     }
                 }

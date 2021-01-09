@@ -18,7 +18,7 @@ struct TreeTypesView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
                     if orderViewModel.availableProducts.isEmpty {
-                        ProgressView("Loading trees...")
+                        ProgressView(Localization.homeLoadingTrees)
                     } else {
                         
                         ForEach(orderViewModel.availableProducts) { treeProduct in
@@ -45,7 +45,7 @@ struct TreeTypesView: View {
                                                 
                                                 NavigationLink(destination: TreeInfoView(tree: treeProduct))
                                                 {
-                                                    Label("Tree info", systemImage: "info")
+                                                    Label(Localization.treeTypesInfo, systemImage: "info")
                                                         .foregroundColor(.white)
                                                 }
                                                 .frame(width: UIScreen.main.bounds.width * 0.30, height: 30, alignment: .center)

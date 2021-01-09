@@ -10,6 +10,7 @@ import SwiftUI
 struct NewsView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var newsViewModel: NewsViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
     
     var body: some View {
         ZStack {
@@ -22,7 +23,7 @@ struct NewsView: View {
                     
                     if userViewModel.isAuthenticated {
                         VStack(alignment: .leading) {
-                            Text("EVENTS")
+                            Text(Localization.newsEvents)
                                 .font(.title2)
                                 .foregroundColor(.init("color_font_primary"))
                                 .padding()
@@ -30,7 +31,7 @@ struct NewsView: View {
                             VStack {
                                 VStack (alignment: .leading) {
                                     HStack {
-                                        Text("Guided Tour")
+                                        Text(Localization.newsGuidedTours)
                                             .foregroundColor(.init("color_font_primary"))
                                             .font(.title3)
                                         
@@ -56,7 +57,7 @@ struct NewsView: View {
                                                 .foregroundColor(.init("color_font_secondary"))
                                                 .padding(.bottom, 3)
                                             
-                                            Text("Book your guided tour through the forest where you have adopted your tree.")
+                                            Text(Localization.newsBookTourBody)
                                                 .font(.body)
                                                 .foregroundColor(.init("color_font_primary"))
                                         }
@@ -70,7 +71,7 @@ struct NewsView: View {
                             .padding(.bottom, 5)
                             
                             if !newsViewModel.bookedTours.isEmpty {
-                                Text("Booked tours")
+                                Text(Localization.newsBookedTours)
                                     .font(.title3)
                                     .foregroundColor(.init("color_font_primary"))
                                     .padding()
@@ -89,7 +90,7 @@ struct NewsView: View {
                                                                 .foregroundColor(.init("color_font_primary"))
                                                                 .padding(.bottom, 5)
                                                             
-                                                            Text("\(getTourTime(date: tour.dateTime)). \(tour.language)")
+                                                            Text("\(getTourTime(date: tour.dateTime)). \(tour.language). \(treeViewModel.getForestName(of: tour.forestId))")
                                                                 .font(.subheadline)
                                                                 .foregroundColor(.init("color_font_secondary"))
                                                         }
@@ -109,42 +110,42 @@ struct NewsView: View {
                     
                     VStack(alignment: .leading) {
                         
-                        Text("GREEN IDEAS")
+                        Text(Localization.newsGreenIdeas)
                             .font(.title2)
                             .foregroundColor(.init("color_font_primary"))
                             .padding()
                         
-                            VStack {
-                                if let greenIdea = newsViewModel.informativeContents.first {
-                                    NavigationLink(
-                                        destination: GreenIdeaDetailView(greenIdea: greenIdea),
-                                        label: {
-                                            HStack {
-                                                Image("green_idea")
-                                                    .resizable()
-                                                    .frame(width: 120, height: 120, alignment: .center)
+                        VStack {
+                            if let greenIdea = newsViewModel.informativeContents.first {
+                                NavigationLink(
+                                    destination: GreenIdeaDetailView(greenIdea: greenIdea),
+                                    label: {
+                                        HStack {
+                                            Image("green_idea")
+                                                .resizable()
+                                                .frame(width: 120, height: 120, alignment: .center)
+                                            
+                                            VStack(alignment: .leading) {
                                                 
-                                                VStack(alignment: .leading) {
-                                                    
-                                                    Text("\(greenIdea.title)")
-                                                        .font(.body)
-                                                        .foregroundColor(.init("color_font_primary"))
-                                                        .padding(.bottom, 5)
-                                                    
-                                                    Text(getHumanReadableDate(date: greenIdea.createdOn))
-                                                        .font(.caption)
-                                                        .foregroundColor(.init("color_font_secondary"))
-                                                }
+                                                Text("\(greenIdea.title)")
+                                                    .font(.body)
+                                                    .foregroundColor(.init("color_font_primary"))
+                                                    .padding(.bottom, 5)
                                                 
+                                                Text(getHumanReadableDate(date: greenIdea.createdOn))
+                                                    .font(.caption)
+                                                    .foregroundColor(.init("color_font_secondary"))
                                             }
-                                        })
-                                }
+                                            
+                                        }
+                                    })
                             }
-                            .padding()
-                            .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
-                            .background(Color.white)
-                            .cornerRadius(12.0)
-                            .padding(.bottom, 5)
+                        }
+                        .padding()
+                        .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
+                        .background(Color.white)
+                        .cornerRadius(12.0)
+                        .padding(.bottom, 5)
                         
                         HStack {
                             
@@ -153,7 +154,7 @@ struct NewsView: View {
                             NavigationLink(
                                 destination: GreenIdeaView(),
                                 label: {
-                                    Label("Explore more", systemImage: "arrow.right")
+                                    Label(Localization.newsExploreMoreBtn, systemImage: "arrow.right")
                                         .foregroundColor(.init("color_font_primary"))
                                         .font(.subheadline)
                                 })
@@ -163,7 +164,7 @@ struct NewsView: View {
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .topLeading)
                     
                     VStack(alignment: .leading) {
-                        Text("ANNOUNCMENTS")
+                        Text(Localization.newsAnnouncments)
                             .font(.title2)
                             .foregroundColor(.init("color_font_primary"))
                             .padding()
@@ -207,7 +208,7 @@ struct NewsView: View {
                             NavigationLink(
                                 destination: AnnouncmentView(),
                                 label: {
-                                    Label("Explore more", systemImage: "arrow.right")
+                                    Label(Localization.newsExploreMoreBtn, systemImage: "arrow.right")
                                         .foregroundColor(.init("color_font_primary"))
                                         .font(.subheadline)
                                 })

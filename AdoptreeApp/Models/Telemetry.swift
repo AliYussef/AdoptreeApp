@@ -21,7 +21,6 @@ struct Report: Codable {
     let treeDiameter: Int8
 }
 
-
 struct Sequestration: Codable {
     let treeId: Int64
     let sequestration: [Double]

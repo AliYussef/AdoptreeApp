@@ -46,7 +46,7 @@ class Authenticator {
             var urlRequest = URLRequest(url: url)
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.httpMethod = RequestMethod.post.rawValue
-
+            
             guard let refreshToken = UserViewModel.shared.refreshToken else {
                 return Fail(error: AuthenticationError.loginRequired)
                     .eraseToAnyPublisher()

@@ -59,7 +59,7 @@ final class NetworkManager {
 extension NetworkManager {
     
     func executeRequestWithResponseBody<ResponseType: Decodable>(using request: URLRequest) -> AnyPublisher<ResponseType, Error> {
-       
+        
         return authenticator.checkTokenValidity()
             .flatMap({ token in
                 self.session.publisher(for: request, token: token.accessToken)
@@ -141,7 +141,7 @@ extension NetworkManager {
     }
     
     func executeRequestWithoutResponseBody(using request: URLRequest) -> AnyPublisher<Data, Error> {
-
+        
         return authenticator.checkTokenValidity()
             .flatMap({ token in
                 self.session.publisher(for: request, token: token.accessToken)

@@ -12,7 +12,7 @@ struct ContentView: View {
     @EnvironmentObject var treeViewModel: TreeViewModel
     @EnvironmentObject var timelineViewModel: TimelineViewModel
     @EnvironmentObject var newsViewModel: NewsViewModel
-
+    
     var body: some View {
         
         ZStack{
@@ -22,78 +22,79 @@ struct ContentView: View {
             TabView {
                 NavigationView {
                     HomeView()
-                        .navigationBarTitle("HOME", displayMode: .inline)
+                        .navigationBarTitle(Localization.homeTitle, displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
-                        
+                    
                 }
                 .tabItem {
                     Image(systemName: "house.fill")
-                    Text("Home")
+                    Text(Localization.homeTitleText)
                 }
                 
                 NavigationView {
                     TimelineView()
-                        .navigationBarTitle("TIMELINE", displayMode: .inline)
+                        .navigationBarTitle(Localization.timelineTitle, displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     
                 }
                 .tabItem {
                     Image(systemName: "timeline.selection")
-                    Text("Timeline")
+                    Text(Localization.timelineTitleText)
                 }
                 
                 NavigationView {
                     NewsView()
-                        .navigationBarTitle("NEWS", displayMode: .inline)
+                        .navigationBarTitle(Localization.newsTitle, displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     
                 }
                 .tabItem {
                     Image(systemName: "newspaper.fill")
-                    Text("News")
+                    Text(Localization.newsTitleText)
                 }
                 
                 NavigationView {
                     ProfileView()
-                        .navigationBarTitle("PROFILE", displayMode: .inline)
+                        .navigationBarTitle(Localization.profileTitle, displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     
                 }
                 .tabItem {
                     Image(systemName: "person.fill")
-                    Text("Profile")
+                    Text(Localization.profileTitleText)
                 }
                 
                 NavigationView {
                     SettingView()
-                        .navigationBarTitle("SETTINGS", displayMode: .inline)
+                        .navigationBarTitle(Localization.settingsTitle, displayMode: .inline)
                         .navigationBarBackButtonHidden(true)
                     
                 }
                 .tabItem {
                     Image(systemName: "gear")
-                    Text("Settings")
+                    Text(Localization.settingsTitleText)
                 }
             }
             .onAppear {
                 if userViewModel.isAuthenticated && treeViewModel.trees.isEmpty {
-                        treeViewModel.getAdoptedTrees() { result in
-                            switch (result) {
-                                case .failure(_):
-                                    break
-                                case .success(_):
-                                    if timelineViewModel.telemetries.isEmpty {
-                                        treeViewModel.trees.forEach({ tree in
-                                            if let treeId = tree.assignedTree?.tree_id {
-                                                timelineViewModel.getTimeLineData(using: treeId)
-                                            }
-                                        })
-                                    }
-                            }
+                    treeViewModel.getAdoptedTrees() { result in
+                        switch (result) {
+                            case .failure(_):
+                                break
+                            case .success(_):
+                                if timelineViewModel.telemetries.isEmpty {
+                                    treeViewModel.trees.forEach({ tree in
+                                        if let treeId = tree.assignedTree?.tree_id {
+                                            timelineViewModel.getTimeLineData(using: treeId)
+                                        }
+                                    })
+                                }
                         }
+                    }
                     
                     if newsViewModel.contents.isEmpty {
                         newsViewModel.getNewsViewData()
+                        treeViewModel.getForestsAndCountries()
                     }
                 }
                 

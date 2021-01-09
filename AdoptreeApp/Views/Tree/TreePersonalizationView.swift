@@ -15,7 +15,7 @@ struct TreePersonalizationView: View {
     @State private var treeName = ""
     @State private var treeColor = Color.init("color_primary_accent")
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     
     var body: some View {
         ZStack {
@@ -25,14 +25,14 @@ struct TreePersonalizationView: View {
             VStack {
                 
                 VStack(alignment: .leading) {
-                    Text("Personalize your tree")
+                    Text(Localization.TreePersonalizationTitle)
                         .font(.title)
                         .foregroundColor(.init("color_font_primary"))
                     
                     Form {
-                        Section(header: Text("Tree details"), content: {
-                            TextField("Tree name", text: $treeName)
-                            ColorPicker("Tree color", selection: $treeColor)
+                        Section(header: Text(Localization.TreePersonalizationTreeDetails), content: {
+                            TextField(Localization.TreePersonalizationTreeName, text: $treeName)
+                            ColorPicker(Localization.TreePersonalizationTreeColor, selection: $treeColor)
                         })
                     }
                 }
@@ -44,7 +44,7 @@ struct TreePersonalizationView: View {
                         treeViewModel.personalizeTree(tree: tree) { result in
                             switch (result) {
                                 case .failure(_):
-                                    self.message = "An error occurred. Please try again!"
+                                    self.message = Localization.errorOccurred
                                     self.showingAlert.toggle()
                                 case .success(let tree):
                                     if let treeColor = tree.tree_color {
@@ -57,14 +57,14 @@ struct TreePersonalizationView: View {
                                             }
                                         }
                                     }
-                                    self.message = "Successfully edited"
+                                    self.message = Localization.successfullyEdited
                                     self.showingAlert.toggle()
                                     presentationMode.wrappedValue.dismiss()
                             }
                         }
                     }
                 }, label: {
-                    Text("Confirm")
+                    Text(Localization.confirmBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
@@ -73,7 +73,7 @@ struct TreePersonalizationView: View {
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Presonalisation"), message: Text("\(message)"), dismissButton: .default(Text("Ok")))
+                    Alert(title: Text(Localization.TreePersonalizationAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
                 
             }

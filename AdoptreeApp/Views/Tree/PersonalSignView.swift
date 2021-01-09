@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import PencilKit
 
 struct PersonalSignView: View {
     @EnvironmentObject var treeViewModel: TreeViewModel
@@ -15,7 +14,7 @@ struct PersonalSignView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var treeSign = ""
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     let tree: Tree
     
     var body: some View {
@@ -24,7 +23,7 @@ struct PersonalSignView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack{
-                Text("Add personal sign")
+                Text(Localization.personalSignTitle)
                     .font(.title)
                     .foregroundColor(.init("color_font_primary"))
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: .none, alignment: .leading)
@@ -32,27 +31,27 @@ struct PersonalSignView: View {
                 Spacer(minLength: 50)
                 
                 VStack {
-                    Text("Personal sign")
+                    Text(Localization.personalSignText)
                         .font(.title3)
                         .foregroundColor(.init("color_font_primary"))
                         .padding(.bottom, 2)
                     
-                    Text("This sign will be placed next to your tree")
+                    Text(Localization.personalSignNote)
                         .font(.subheadline)
                         .foregroundColor(.init("color_font_primary"))
                 }
                 .padding()
                 
                 Form {
-                    Section(header: Text("Tree sign"), content: {
-                        TextField("Personal sign", text: $treeSign)
+                    Section(header: Text(Localization.personalSignTreeSign), content: {
+                        TextField(Localization.personalSignText, text: $treeSign)
                         
                     })
                 }
                 
                 Button(action: {
                     if treeSign.count == 0 {
-                        self.message = "Personal sign cannot be empty!"
+                        self.message = Localization.personalSignEmptyAlert
                         self.showingAlert.toggle()
                         
                     } else {
@@ -73,7 +72,7 @@ struct PersonalSignView: View {
                         }
                     }
                 }, label: {
-                    Text("Confirm & pay")
+                    Text(Localization.confirmPayBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
@@ -82,7 +81,7 @@ struct PersonalSignView: View {
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Personal sign"), message: Text("\(message)"), dismissButton: .default(Text("Ok")))
+                    Alert(title: Text(Localization.personalSignText), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
                 //.disabled(treeViewModel.treeSign != nil)
                 
@@ -120,14 +119,14 @@ struct PersonalSignView: View {
                                             if let treeSignProduct = orderViewModel.treeSign {
                                                 if let orderId = orderViewModel.orderResponse?.id {
                                                     let treeSign = treeViewModel.createTreeSignObject(tree: tree, treeSignProduct: treeSignProduct, signText: self.treeSign, orderId: orderId)
-                                                    //print(treeSign)
+                                                    
                                                     if let treeSign = treeSign {
                                                         treeViewModel.createTreeSign(treeSign: treeSign) {  result in
                                                             switch (result) {
                                                                 case .failure(_):
                                                                     break
                                                                 case .success(_):
-                                                                    self.message = "Successfully purchased a sign"
+                                                                    self.message = Localization.successfulSignPurchase
                                                                     self.showingAlert.toggle()
                                                                     presentationMode.wrappedValue.dismiss()
                                                             }
@@ -136,7 +135,7 @@ struct PersonalSignView: View {
                                                 }
                                             }
                                         } else {
-                                            self.message = "An error occurred. Please try again!"
+                                            self.message = Localization.errorOccurred
                                             self.showingAlert.toggle()
                                         }
                                     }
@@ -146,7 +145,5 @@ struct PersonalSignView: View {
                 }
             }
         })
-        
-        
     }
 }

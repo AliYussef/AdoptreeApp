@@ -9,9 +9,9 @@ import SwiftUI
 
 struct StartingView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-
-    var body: some View {
     
+    var body: some View {
+        
         if userViewModel.isAuthenticated || userViewModel.isGuest {
             ContentView()
                 .transition(.move(edge: .trailing))

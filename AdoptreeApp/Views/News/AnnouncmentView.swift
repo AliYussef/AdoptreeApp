@@ -18,15 +18,15 @@ struct AnnouncmentView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 
                 VStack(alignment: .leading) {
-                    Text("ANNOUNCMENTS")
+                    Text(Localization.newsAnnouncments)
                         .font(.title2)
                         .foregroundColor(.init("color_font_primary"))
                         .padding()
                     ForEach(newsViewModel.anncouncmentContents) { announcment in
-                    NavigationLink(
-                        destination: AnnouncmentDetailView(announcment: announcment),
-                        label: { AnnouncmentCellView(announcment: announcment)})
-               
+                        NavigationLink(
+                            destination: AnnouncmentDetailView(announcment: announcment),
+                            label: { AnnouncmentCellView(announcment: announcment)})
+                        
                     }
                 }
             }

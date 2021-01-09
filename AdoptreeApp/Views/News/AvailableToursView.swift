@@ -19,7 +19,7 @@ struct AvailableToursView: View {
                 
                 VStack(alignment: .leading) {
                     
-                    Text("Book a tour")
+                    Text(Localization.bookTourText)
                         .font(.title3)
                         .foregroundColor(.init("color_font_primary"))
                         .padding()
@@ -42,6 +42,7 @@ struct AvailableToursView: View {
 }
 
 struct TourCellView: View {
+    @EnvironmentObject var treeViewModel: TreeViewModel
     let tour: Tour
     
     var body: some View {
@@ -63,6 +64,10 @@ struct TourCellView: View {
                             .foregroundColor(.init("color_font_secondary"))
                         
                         Text("\(tour.language)")
+                            .font(.caption)
+                            .foregroundColor(.init("color_font_secondary"))
+                        
+                        Text("\(treeViewModel.getForestName(of: tour.forestId))")
                             .font(.caption)
                             .foregroundColor(.init("color_font_secondary"))
                     }

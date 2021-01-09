@@ -30,7 +30,7 @@ struct TreeTypeView: View {
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 2)
                         
-                        Text("\(orderViewModel.categoriesDic[treeProduct.categoryId] ?? "Tree")")
+                        Text("\(orderViewModel.categoriesDic[treeProduct.categoryId] ?? "\(Localization.homeTree)")")
                             .font(.body)
                             .foregroundColor(.init("color_font_secondary"))
                         Text("Price: € \(String(format: "%.2f", treeProduct.price)) EUR")
@@ -42,7 +42,7 @@ struct TreeTypeView: View {
                                 self.orderViewModel.add(product: treeProduct)
                                 self.orderViewModel.calculateTotal()
                             }, label: {
-                                Label("Add", systemImage: "cart.fill.badge.plus")
+                                Label(Localization.adoptionAdd, systemImage: "cart.fill.badge.plus")
                                     .foregroundColor(.white)
                             })
                             .frame(width: 100, height: 30, alignment: .center)
@@ -51,7 +51,7 @@ struct TreeTypeView: View {
                             
                             NavigationLink(destination: TreeInfoView(tree: treeProduct))
                             {
-                                Label("Tree info", systemImage: "info")
+                                Label(Localization.treeTypesInfo, systemImage: "info")
                                     .foregroundColor(.white)
                             }
                             .frame(width: 100, height: 30, alignment: .center)

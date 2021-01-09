@@ -10,6 +10,8 @@ import SwiftUI
 struct ProfileView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var newsViewModel: NewsViewModel
+    @EnvironmentObject var timelineViewModel: TimelineViewModel
     
     var body: some View {
         ZStack {
@@ -28,8 +30,8 @@ struct ProfileView: View {
                                 .frame(width: 150, height: 150, alignment: .center)
                         )
                         .padding()
-                   
-                    Text("\(userViewModel.userShared.firstname ?? "YOUR") \(userViewModel.userShared.lastname ?? "NAME")")
+                    
+                    Text("\(userViewModel.userShared.firstname ?? "\(Localization.profileYour)") \(userViewModel.userShared.lastname ?? "\(Localization.profileName)")")
                         .font(.title2)
                         .foregroundColor(.init("color_font_primary"))
                         .padding(.bottom, 50)
@@ -38,32 +40,35 @@ struct ProfileView: View {
                         NavigationLink(
                             destination: ContractView(),
                             label: {
-                                Text("Your contract")
+                                Text(Localization.profileContractTitle)
                             })
                         
                         NavigationLink(
                             destination: ChangeEmailView(),
                             label: {
-                                Text("Change email address")
+                                Text(Localization.profileChangeEmail)
                             })
                         
                         NavigationLink(
                             destination: ChangePasswordView(),
                             label: {
-                                Text("Chnage password")
+                                Text(Localization.profileChangePassword)
                             })
                         
                         NavigationLink(
                             destination: DeleteAccountView(treeViewModel: treeViewModel),
                             label: {
-                                Text("Delete your account")
+                                Text(Localization.profileDeleteAccount)
                                     .foregroundColor(.red)
                             })
                         
                         Button(action: {
+                            treeViewModel.clearDataForLogout()
+                            timelineViewModel.clearDataForLogout()
+                            newsViewModel.clearDataForLogout()
                             self.userViewModel.logout()
                         }, label: {
-                            Text("Log out")
+                            Text(Localization.logoutBtn)
                         })
                     }
                     .listStyle(PlainListStyle())

@@ -10,6 +10,8 @@ import SwiftUI
 struct TreeSelectionView: View {
     @EnvironmentObject var orderViewModel: OrderViewModel
     @State private var badgeCount: Int = 1
+    @State private var treeSpeciesIndex = 0
+    @State private var treeConditionIndex = 0
     
     var body: some View {
         ZStack{
@@ -18,9 +20,9 @@ struct TreeSelectionView: View {
             
             VStack {
                 HStack {
-                    NavigationLink(destination: TreeFiltersView())
+                    NavigationLink(destination: TreeFiltersView(treeSpeciesIndex: $treeSpeciesIndex, treeConditionIndex: $treeConditionIndex))
                     {
-                        Label("Filters", systemImage: "line.horizontal.3.decrease")
+                        Label(Localization.treeSelectionFilters, systemImage: "line.horizontal.3.decrease")
                             .foregroundColor(.black)
                     }
                     .foregroundColor(.black)
@@ -30,7 +32,7 @@ struct TreeSelectionView: View {
                     ZStack {
                         NavigationLink(destination: AdoptionOverviewView())
                         {
-                            Label("Cart", systemImage: "cart")
+                            Label(Localization.treeSelectionCart, systemImage: "cart")
                                 .foregroundColor(.black)
                         }.disabled(orderViewModel.products.count < 1)
                         
@@ -51,9 +53,17 @@ struct TreeSelectionView: View {
                     VStack {
                         
                         if orderViewModel.availableProducts.isEmpty {
-                            ProgressView("Loading trees...")
+                            ProgressView(Localization.homeLoadingTrees)
                         } else {
-                            ForEach(orderViewModel.availableProducts) { treeProduct in
+                            ForEach(orderViewModel.availableProducts.filter({
+                                if treeSpeciesIndex > 0 {
+                                    return $0.name == orderViewModel.treeSpeciesFilter[treeSpeciesIndex]
+                                }
+                                if treeConditionIndex > 0 {
+                                    return $0.categoryId == orderViewModel.categoriesDic.first(where: {$1 == orderViewModel.treeConditionFilter[treeConditionIndex]})?.key
+                                }
+                                return true
+                            })) { treeProduct in
                                 
                                 if orderViewModel.categoriesDic[treeProduct.categoryId]?.lowercased() == TreeType.tree.rawValue || orderViewModel.categoriesDic[treeProduct.categoryId]?.lowercased() == TreeType.sapling.rawValue{
                                     
@@ -68,7 +78,7 @@ struct TreeSelectionView: View {
                 
             }
         }
-        .navigationBarTitle("ADOPTION", displayMode: .inline)
+        .navigationBarTitle(Localization.adoptionTitle, displayMode: .inline)
         .onAppear {
             if orderViewModel.availableProducts.isEmpty {
                 orderViewModel.getProductsAndCategories()

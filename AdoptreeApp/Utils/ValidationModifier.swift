@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ValidationModifier: ViewModifier {
-
+    
     @State var latestValidation: InputValidation = .success
     
     let validationPublisher: ValidationPublisher
@@ -22,7 +22,7 @@ struct ValidationModifier: ViewModifier {
             self.latestValidation = validation
         }
     }
-
+    
     var validationMessage: some View {
         switch latestValidation {
             case .success:

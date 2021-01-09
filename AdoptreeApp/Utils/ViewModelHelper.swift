@@ -10,7 +10,7 @@ import Foundation
 struct ViewModelHelper {
     
     static func buildUrlRequestWithParam<Params: Encodable>(withEndpoint endpoint: ApiEndPoint,using method: RequestMethod,withParams params: Params?) throws -> URLRequest {
-
+        
         let fullUrl = BaseURL.url + endpoint.description
         let url = URL(string: fullUrl)!
         var urlRequest = URLRequest(url: url)
@@ -38,7 +38,7 @@ struct ViewModelHelper {
     }
     
     static func buildUrlRequestWithoutParam(withEndpoint endpoint: ApiEndPoint,using method: RequestMethod) -> URLRequest {
-
+        
         let fullUrl = BaseURL.url + endpoint.description
         let url = URL(string: fullUrl)!
         var urlRequest = URLRequest(url: url)

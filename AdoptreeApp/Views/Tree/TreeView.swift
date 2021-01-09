@@ -38,14 +38,14 @@ struct TreeHealthSection: View {
             .frame(width: .none, height: 110, alignment: .leading)
             .overlay(
                 VStack(alignment: .center) {
-                    Text("Overall Health")
+                    Text(Localization.treeOverallHealth)
                         .font(.title3)
                         .multilineTextAlignment(.leading)
                         .foregroundColor(.init("color_font_primary"))
                     
                     Spacer(minLength: 10)
                     
-                    Text("Healthy")
+                    Text(healthLabel)
                         .font(.body)
                         .foregroundColor(.init("color_font_primary"))
                     
@@ -83,87 +83,97 @@ extension TreeHealthSection {
             return Color.init("color_primary_accent")
         }
     }
+    
+    var healthLabel: LocalizedStringKey {
+        if self.healthBar < 30 {
+            return Localization.treeUnhealthy
+        } else if self.healthBar > 30 && self.healthBar < 60 {
+            return Localization.treeNotbad
+        } else {
+            return Localization.treeHealthy
+        }
+    }
 }
 
 struct TreeDataSection: View {
     let telemetry: Report?
     let sequestration: [Double]?
-
+    
     var body: some View {
-            HStack() {
-                RoundedRectangle(cornerRadius: 12.0)
-                    .fill(Color.init("color_gray"))
-                    .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
-                    .overlay(
-                        VStack(alignment: .center)  {
-                            Text("CO2 Reduction")
-                                .font(.title3)
-                                .foregroundColor(Color.init("color_font_primary"))
-                                .padding(.bottom, 30)
-                            
-                            Text("\(String(format: "%.4f", getSequestration()))kg")
+        HStack() {
+            RoundedRectangle(cornerRadius: 12.0)
+                .fill(Color.init("color_gray"))
+                .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
+                .overlay(
+                    VStack(alignment: .center)  {
+                        Text(Localization.treeCo2)
+                            .font(.title3)
+                            .foregroundColor(Color.init("color_font_primary"))
+                            .padding(.bottom, 30)
+                        
+                        Text("\(String(format: "%.4f", getSequestration()))kg")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.init("color_font_primary"))
+                            .padding(.bottom, 50)})
+            
+            RoundedRectangle(cornerRadius: 12.0)
+                .fill(Color.init("color_primary_accent"))
+                .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
+                .overlay(
+                    VStack(alignment: .center)  {
+                        Text(Localization.treeGrowth)
+                            .font(.title3)
+                            .foregroundColor(Color.white)
+                            .padding(.bottom, 30)
+                        
+                        Text("\(telemetry?.treeLength ?? 0)cm")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.white)
+                            .padding(.bottom, 50)})
+                .offset(x: 0, y: 0)
+        }
+        HStack() {
+            RoundedRectangle(cornerRadius: 12.0)
+                .fill(Color.init("color_gray"))
+                .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
+                .overlay(
+                    VStack(alignment: .center)  {
+                        Text(Localization.treeTemperature)
+                            .font(.title3)
+                            .foregroundColor(Color.init("color_font_primary"))
+                        
+                        ZStack {
+                            Circle()
+                                .stroke(temperatureColor, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round, miterLimit: .infinity, dash: [20,0], dashPhase: 0))
+                                .frame(width: 100, height: 100, alignment: .center)
+                                .padding(.bottom, 20)
+                            Text("\(telemetry?.temperature ?? 0) °")
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color.init("color_font_primary"))
-                                .padding(.bottom, 50)})
-                
-                RoundedRectangle(cornerRadius: 12.0)
-                    .fill(Color.init("color_primary_accent"))
-                    .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
-                    .overlay(
-                        VStack(alignment: .center)  {
-                            Text("Growth")
-                                .font(.title3)
-                                .foregroundColor(Color.white)
-                                .padding(.bottom, 30)
-                            
-                            Text("\(telemetry?.treeLength ?? 0)cm")
-                                .font(.title)
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color.white)
-                                .padding(.bottom, 50)})
-                    .offset(x: 0, y: 0)
-            }
-            HStack() {
-                RoundedRectangle(cornerRadius: 12.0)
-                    .fill(Color.init("color_gray"))
-                    .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
-                    .overlay(
-                        VStack(alignment: .center)  {
-                            Text("Temperature")
-                                .font(.title3)
-                                .foregroundColor(Color.init("color_font_primary"))
-                            
-                            ZStack {
-                                Circle()
-                                    .stroke(temperatureColor, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round, miterLimit: .infinity, dash: [20,0], dashPhase: 0))
-                                    .frame(width: 100, height: 100, alignment: .center)
-                                    .padding(.bottom, 20)
-                                Text("\(telemetry?.temperature ?? 0) °")
-                                    .font(.title)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(Color.init("color_font_primary"))
-                                    .padding(.bottom, 20)
-                            }
-                        })
-                
-                RoundedRectangle(cornerRadius: 12.0)
-                    .fill(Color.init("color_blue"))
-                    .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
-                    .overlay(
-                        VStack(alignment: .center)  {
-                            Text("Humidity")
-                                .font(.title3)
-                                .foregroundColor(Color.white)
-                                .padding(.bottom, 30)
-                            
-                            Text("\(telemetry?.humidity ?? 0)%")
-                                .font(.title)
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color.white)
-                                .padding(.bottom, 50)})
-                    .offset(x: 0, y: 0)
-            }.padding(.bottom, 5)
+                                .padding(.bottom, 20)
+                        }
+                    })
+            
+            RoundedRectangle(cornerRadius: 12.0)
+                .fill(Color.init("color_blue"))
+                .frame(width: UIScreen.main.bounds.width * 0.43, height: 170, alignment: .center)
+                .overlay(
+                    VStack(alignment: .center)  {
+                        Text(Localization.treeHumidity)
+                            .font(.title3)
+                            .foregroundColor(Color.white)
+                            .padding(.bottom, 30)
+                        
+                        Text("\(telemetry?.humidity ?? 0)%")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.white)
+                            .padding(.bottom, 50)})
+                .offset(x: 0, y: 0)
+        }.padding(.bottom, 5)
     }
 }
 
@@ -199,7 +209,7 @@ struct TreeGallerySection: View {
     let treeImage: TreeImage?
     
     var body: some View {
-
+        
         RoundedRectangle(cornerRadius: 12.0)
             .fill(Color.init("color_gray"))
             .frame(width: .none, height: 300, alignment: .leading)
@@ -209,7 +219,7 @@ struct TreeGallerySection: View {
                         Image(systemName: "photo.fill.on.rectangle.fill")
                             .foregroundColor(.init("color_primary_accent"))
                         
-                        Text("Tree Gallery")
+                        Text(Localization.treeGallery)
                             .foregroundColor(.init("color_font_primary"))
                             .font(.title3)
                     }
@@ -222,18 +232,18 @@ struct TreeGallerySection: View {
                                 .aspectRatio(contentMode: .fill)
                         }
                         // actual implementaion
-//                        if let treeImages = treeImage?.images {
-//                            ForEach (treeImages) { image in
-//                                Image(uiImage: getImage(using: image.image_blobname))
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                            }
-//                        } else {
-//                            Image(uiImage: UIImage(named: "happy_tree")!)
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fill)
-//                                .frame(width: 200, height: 200)
-//                        }
+                        //                        if let treeImages = treeImage?.images {
+                        //                            ForEach (treeImages) { image in
+                        //                                Image(uiImage: getImage(using: image.image_blobname))
+                        //                                    .resizable()
+                        //                                    .aspectRatio(contentMode: .fill)
+                        //                            }
+                        //                        } else {
+                        //                            Image(uiImage: UIImage(named: "happy_tree")!)
+                        //                                .resizable()
+                        //                                .aspectRatio(contentMode: .fill)
+                        //                                .frame(width: 200, height: 200)
+                        //                        }
                     }.tabViewStyle(PageTabViewStyle())
                     .cornerRadius(12.0)
                     
@@ -254,7 +264,7 @@ extension TreeGallerySection {
 
 struct TreeWildlifeSection: View {
     let wildlife: [Wildlife]?
-
+    
     var body: some View {
         
         VStack {
@@ -263,7 +273,7 @@ struct TreeWildlifeSection: View {
                     Image(systemName: "leaf.fill")
                         .foregroundColor(.init("color_primary_accent"))
                     
-                    Text("Wildlife")
+                    Text(Localization.treeWildlife)
                         .foregroundColor(.init("color_font_primary"))
                         .font(.title3)
                 }
@@ -287,7 +297,7 @@ struct TreeWildlifeSection: View {
                         .padding(.bottom, 5.0)
                     }
                 }else{
-                    Text("No wildlife has been detected yet")
+                    Text(Localization.treeNoWildlife)
                         .padding()
                         .background(Color.white)
                         .foregroundColor(.init("color_font_secondary"))
@@ -326,7 +336,7 @@ struct TreeLocationSection: View {
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
     
     var body: some View {
-
+        
         RoundedRectangle(cornerRadius: 12.0)
             .fill(Color.init("color_gray"))
             .frame(width: .none, height: 250, alignment: .leading)
@@ -336,7 +346,7 @@ struct TreeLocationSection: View {
                         Image(systemName: "location.fill")
                             .foregroundColor(.init("color_primary_accent"))
                         
-                        Text("Tree Location")
+                        Text(Localization.treeLocation)
                             .foregroundColor(.init("color_font_primary"))
                             .font(.title3)
                     }
@@ -344,7 +354,7 @@ struct TreeLocationSection: View {
                     Spacer()
                     
                     if tree.coordinate.latitude == 0 && tree.coordinate.longitude == 0 {
-                        Text("Tree location is unknown")
+                        Text(Localization.treeLocationUnknown)
                             .font(.body)
                             .foregroundColor(.init("color_font_secondary"))
                             .offset(x: 50, y: -110)

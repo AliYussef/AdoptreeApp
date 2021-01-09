@@ -16,7 +16,7 @@ struct TourBookingView: View {
     @State private var availableSlotsIndex = 0
     @State private var showingAlert = false
     @State private var showingAlertInput = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     @State var isTryingToBook: Bool = false
     @State var wasBookingSuccessfull: Bool = false
     @State var isConfirmDisabled = true
@@ -29,7 +29,7 @@ struct TourBookingView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    Text("Book your free guided tour")
+                    Text(Localization.bookGuidedTourText)
                         .font(.title)
                         .foregroundColor(.init("color_font_primary"))
                         .padding()
@@ -40,7 +40,7 @@ struct TourBookingView: View {
                             .frame(width: 100, height: 100, alignment: .center)
                             .padding(.leading)
                         
-                        Text("During the tour a guide will walk you through the forest where you have adopted your tree.")
+                        Text(Localization.bookGuidedTourExpl)
                             .font(.body)
                             .foregroundColor(.init("color_font_primary"))
                             .padding()
@@ -54,15 +54,15 @@ struct TourBookingView: View {
                             Section(header: HStack {
                                 Image(systemName: "person.fill")
                                     .foregroundColor(.init("color_primary_accent"))
-                                Text("Fill in your information")
+                                Text(Localization.bookGuidedTourInfromation)
                                     .foregroundColor(.init("color_font_primary"))
                             }, content: {
-                                TextField("Username", text: $inputValidationViewModel.username)
+                                TextField(Localization.usernameField, text: $inputValidationViewModel.username)
                                     .validation(inputValidationViewModel.usernameValidation)
-                                TextField("Email", text: $inputValidationViewModel.email)
+                                TextField(Localization.emailField, text: $inputValidationViewModel.email)
                                     .validation(inputValidationViewModel.emailEmptyValidation)
                                     .validation(inputValidationViewModel.emailValidation)
-                                Picker(selection: $availableSlotsIndex, label: Text("Number of guests (including you)").font(.subheadline)) {
+                                Picker(selection: $availableSlotsIndex, label: Text(Localization.bookGuidedTourGuestsNumber).font(.subheadline)) {
                                     ForEach(1 ..< Int(tour.slots)) { num in
                                         Text("\(num)")
                                     }
@@ -72,7 +72,7 @@ struct TourBookingView: View {
                         .padding(.top, 50)
                     }
                     .alert(isPresented: $showingAlertInput) {
-                        Alert(title: Text("Tour booking"), message: Text("\(message)"), dismissButton: .default(Text("Ok")))
+                        Alert(title: Text(Localization.bookGuidedTourAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                     }
                     .onReceive(inputValidationViewModel.requestResetPasswordValidation) { validation in
                         isConfirmDisabled = !validation.isSuccess
@@ -85,11 +85,11 @@ struct TourBookingView: View {
                             self.newsViewModel.bookTour(using: bookedTour) { result in
                                 switch (result) {
                                     case .failure(_):
-                                        self.message = "An error occurred"
+                                        self.message = Localization.errorOccurred
                                         self.showingAlert.toggle()
                                     case .success(let result):
                                         self.bookedTour = result
-                                        self.message = "Great! Your tour has been booked"
+                                        self.message = Localization.successfulTourBooking
                                         self.showingAlert.toggle()
                                 }
                                 
@@ -97,7 +97,7 @@ struct TourBookingView: View {
                             }
                         }
                     }, label: {
-                        Text("Confirm")
+                        Text(Localization.confirmBtn)
                             .font(.subheadline)
                             .foregroundColor(.white)
                     })
@@ -107,22 +107,22 @@ struct TourBookingView: View {
                     .cornerRadius(10.0)
                     .padding()
                     .alert(isPresented: $showingAlert) {
-                        Alert(title: Text("Tour booking"), message: Text("\(message)"), dismissButton: .default(Text("Ok")) {
+                        Alert(title: Text(Localization.bookGuidedTourAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)) {
                             self.wasBookingSuccessfull.toggle()
                         })
                     }
                 }
                 
                 if isTryingToBook {
-                    ProgressView("Booking is in progress...")
+                    ProgressView(Localization.bookGuidedTourProgress)
                 }
             }
             .onAppear {
                 if let username = userViewModel.userShared.username {
-                        if let email = userViewModel.userShared.email {
-                            inputValidationViewModel.username = username
-                            inputValidationViewModel.email = email
-                        }
+                    if let email = userViewModel.userShared.email {
+                        inputValidationViewModel.username = username
+                        inputValidationViewModel.email = email
+                    }
                 }
             }
             

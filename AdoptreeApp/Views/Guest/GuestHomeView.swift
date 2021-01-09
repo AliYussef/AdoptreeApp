@@ -17,7 +17,7 @@ struct GuestHomeView: View {
                 
                 NavigationLink(destination: TreeSelectionView())
                 {
-                    Text("Adopt now")
+                    Text(Localization.adoptNowBtn)
                         .bold()
                         .foregroundColor(.white)
                 }
@@ -30,7 +30,7 @@ struct GuestHomeView: View {
                     .fill(Color.white)
                     .frame(width: .none, height: 100, alignment: .center)
                     .overlay(
-                        Text("Why adopting a tree, why ADOPTREE?")
+                        Text(Localization.homeGuestTitle)
                             .font(.title3)
                             .bold()
                             .foregroundColor(.init("color_font_primary"))
@@ -60,10 +60,10 @@ struct GuestHomeView: View {
                                         .font(.caption)
                                         .foregroundColor(.init("color_font_secondary"))
                                 }
-                               
+                                
                                 NavigationLink(destination: TreeTypesView())
                                 {
-                                    Text("Available trees")
+                                    Text(Localization.homeGuestTress)
                                         .font(.subheadline)
                                         .bold()
                                         .foregroundColor(.white)
@@ -176,18 +176,18 @@ struct GuestHomeView: View {
                                 .cornerRadius(12.0)
                             
                             VStack(alignment: .leading) {
-                                Text("Adopt now")
+                                Text(Localization.adoptNowBtn)
                                     .font(.subheadline)
                                     .foregroundColor(.init("color_font_primary"))
                                     .padding(.bottom, 2)
                                 
-                                Text("Contribute now by adopting a tree")
+                                Text(Localization.homeGuestAdoptionContribution)
                                     .font(.caption)
                                     .foregroundColor(.init("color_font_secondary"))
                                 
                                 NavigationLink(destination: TreeSelectionView())
                                 {
-                                    Text("Adopt now")
+                                    Text(Localization.adoptNowBtn)
                                         .font(.subheadline)
                                         .bold()
                                         .foregroundColor(.white)

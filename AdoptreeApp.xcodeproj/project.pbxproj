@@ -12,6 +12,7 @@
 		8918D3C7257C113400141DD9 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8918D3C6257C113400141DD9 /* RootView.swift */; };
 		891CFA6825901B2700FA0738 /* InputValidationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891CFA6725901B2700FA0738 /* InputValidationViewModel.swift */; };
 		894513E725850712004ACB28 /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894513E625850712004ACB28 /* Timeline.swift */; };
+		894EC84625A7852800C826A1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 894EC84825A7852800C826A1 /* Localizable.strings */; };
 		895D7A17257FCFA8009FF641 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */; };
 		898074F12591610A00645676 /* AdoptedTreesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898074F02591610A00645676 /* AdoptedTreesView.swift */; };
 		8984833625A1FF9E00443D57 /* AppUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8984833525A1FF9E00443D57 /* AppUrl.swift */; };
@@ -63,7 +64,7 @@
 		898E399C2576699600A17A00 /* TreeTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E399B2576699600A17A00 /* TreeTypeView.swift */; };
 		898E399F257669AB00A17A00 /* AdoptionOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E399E257669AB00A17A00 /* AdoptionOverviewView.swift */; };
 		898E39A2257669B800A17A00 /* TreeFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39A1257669B800A17A00 /* TreeFiltersView.swift */; };
-		898E39A5257669C700A17A00 /* SuccessfullAdoptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39A4257669C700A17A00 /* SuccessfullAdoptionView.swift */; };
+		898E39A5257669C700A17A00 /* SuccessfulAdoptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39A4257669C700A17A00 /* SuccessfulAdoptionView.swift */; };
 		898E39A8257669D600A17A00 /* FailedAdoptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39A7257669D600A17A00 /* FailedAdoptionView.swift */; };
 		898E39AB25766A2600A17A00 /* StartingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39AA25766A2600A17A00 /* StartingView.swift */; };
 		898E39AE25766D7700A17A00 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E39AD25766D7700A17A00 /* AppDelegate.swift */; };
@@ -110,7 +111,6 @@
 		89DE88192575BF45006B9011 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89DE88182575BF45006B9011 /* Launch Screen.storyboard */; };
 		89DE881C2575BF91006B9011 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DE881B2575BF91006B9011 /* Localization.swift */; };
 		89DE881F2575BFAB006B9011 /* ViewModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DE881E2575BFAB006B9011 /* ViewModelHelper.swift */; };
-		89DE88222575BFCC006B9011 /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DE88212575BFCC006B9011 /* ApiClient.swift */; };
 		89DE88252575BFE5006B9011 /* ApiEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DE88242575BFE5006B9011 /* ApiEndPoint.swift */; };
 /* End PBXBuildFile section */
 
@@ -120,6 +120,8 @@
 		8918D3C6257C113400141DD9 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		891CFA6725901B2700FA0738 /* InputValidationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputValidationViewModel.swift; sourceTree = "<group>"; };
 		894513E625850712004ACB28 /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
+		894EC84725A7852800C826A1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		894EC84A25A7852C00C826A1 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		895D7A16257FCFA8009FF641 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		898074F02591610A00645676 /* AdoptedTreesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptedTreesView.swift; sourceTree = "<group>"; };
 		8984833525A1FF9E00443D57 /* AppUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUrl.swift; sourceTree = "<group>"; };
@@ -171,7 +173,7 @@
 		898E399B2576699600A17A00 /* TreeTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeTypeView.swift; sourceTree = "<group>"; };
 		898E399E257669AB00A17A00 /* AdoptionOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptionOverviewView.swift; sourceTree = "<group>"; };
 		898E39A1257669B800A17A00 /* TreeFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeFiltersView.swift; sourceTree = "<group>"; };
-		898E39A4257669C700A17A00 /* SuccessfullAdoptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessfullAdoptionView.swift; sourceTree = "<group>"; };
+		898E39A4257669C700A17A00 /* SuccessfulAdoptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessfulAdoptionView.swift; sourceTree = "<group>"; };
 		898E39A7257669D600A17A00 /* FailedAdoptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailedAdoptionView.swift; sourceTree = "<group>"; };
 		898E39AA25766A2600A17A00 /* StartingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartingView.swift; sourceTree = "<group>"; };
 		898E39AD25766D7700A17A00 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -217,7 +219,6 @@
 		89DE88182575BF45006B9011 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		89DE881B2575BF91006B9011 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		89DE881E2575BFAB006B9011 /* ViewModelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHelper.swift; sourceTree = "<group>"; };
-		89DE88212575BFCC006B9011 /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
 		89DE88242575BFE5006B9011 /* ApiEndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiEndPoint.swift; sourceTree = "<group>"; };
 		A04D19A334AEFED58E6DE6E8 /* Pods-AdoptreeApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdoptreeApp.debug.xcconfig"; path = "Target Support Files/Pods-AdoptreeApp/Pods-AdoptreeApp.debug.xcconfig"; sourceTree = "<group>"; };
 		E762C8BC63776FA036B97BAE /* Pods-AdoptreeApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdoptreeApp.release.xcconfig"; path = "Target Support Files/Pods-AdoptreeApp/Pods-AdoptreeApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -283,7 +284,7 @@
 				898E399B2576699600A17A00 /* TreeTypeView.swift */,
 				898E399E257669AB00A17A00 /* AdoptionOverviewView.swift */,
 				898E39A1257669B800A17A00 /* TreeFiltersView.swift */,
-				898E39A4257669C700A17A00 /* SuccessfullAdoptionView.swift */,
+				898E39A4257669C700A17A00 /* SuccessfulAdoptionView.swift */,
 				898E39A7257669D600A17A00 /* FailedAdoptionView.swift */,
 			);
 			path = Adoption;
@@ -398,6 +399,7 @@
 				89DE87FE2575BCD4006B9011 /* AdoptreeAppApp.swift */,
 				89DE88182575BF45006B9011 /* Launch Screen.storyboard */,
 				898E39AD25766D7700A17A00 /* AppDelegate.swift */,
+				894EC84825A7852800C826A1 /* Localizable.strings */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -405,7 +407,6 @@
 		89DE88112575BD96006B9011 /* Client */ = {
 			isa = PBXGroup;
 			children = (
-				89DE88212575BFCC006B9011 /* ApiClient.swift */,
 				89A04A3625A0AD4E00B1AB66 /* Authenticator.swift */,
 				89A04A3925A0AD9200B1AB66 /* NetworkManager.swift */,
 				89A04A3C25A0AE0400B1AB66 /* NetworkSession.swift */,
@@ -542,6 +543,7 @@
 			knownRegions = (
 				en,
 				Base,
+				nl,
 			);
 			mainGroup = 89DE87F22575BCD4006B9011;
 			packageReferences = (
@@ -563,6 +565,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				894EC84625A7852800C826A1 /* Localizable.strings in Resources */,
 				89DE88192575BF45006B9011 /* Launch Screen.storyboard in Resources */,
 				895D7A17257FCFA8009FF641 /* GoogleService-Info.plist in Resources */,
 				89DE88062575BCD5006B9011 /* Preview Assets.xcassets in Resources */,
@@ -676,7 +679,7 @@
 				898E396C2576668900A17A00 /* TreeInfoView.swift in Sources */,
 				898E39ED2576A14200A17A00 /* AnnouncmentView.swift in Sources */,
 				898E3927257662C000A17A00 /* VatRate.swift in Sources */,
-				898E39A5257669C700A17A00 /* SuccessfullAdoptionView.swift in Sources */,
+				898E39A5257669C700A17A00 /* SuccessfulAdoptionView.swift in Sources */,
 				898E39002576617500A17A00 /* User.swift in Sources */,
 				898E39CD2576891200A17A00 /* ContentRepository.swift in Sources */,
 				898E3924257662AC00A17A00 /* Wildlife.swift in Sources */,
@@ -688,7 +691,6 @@
 				898E39212576629800A17A00 /* NotificationDevice.swift in Sources */,
 				89A04A3025A0ACCD00B1AB66 /* RequestMethod.swift in Sources */,
 				898E39C1257688E700A17A00 /* OrderRepository.swift in Sources */,
-				89DE88222575BFCC006B9011 /* ApiClient.swift in Sources */,
 				898E39F52577048B00A17A00 /* ContractView.swift in Sources */,
 				898E39392576642600A17A00 /* UserViewModel.swift in Sources */,
 				898E3975257666E100A17A00 /* NewsView.swift in Sources */,
@@ -720,6 +722,18 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		894EC84825A7852800C826A1 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				894EC84725A7852800C826A1 /* en */,
+				894EC84A25A7852C00C826A1 /* nl */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		89DE88082575BCD5006B9011 /* Debug */ = {

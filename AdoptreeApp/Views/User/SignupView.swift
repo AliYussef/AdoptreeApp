@@ -13,7 +13,7 @@ struct SignupView: View {
     @ObservedObject var inputValidationViewModel = InputValidationViewModel()
     @State var isSaveDisabled = true
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     @State var isTryingToAdopt: Bool = false
     
     var body: some View {
@@ -25,32 +25,32 @@ struct SignupView: View {
                     Section(header: HStack {
                         Image(systemName: "person.fill")
                             .foregroundColor(.init("color_primary_accent"))
-                        Text("Create an account")
+                        Text(Localization.signupTitle)
                             .foregroundColor(.init("color_font_primary"))
                     }, content: {
-                        TextField("First name", text: $inputValidationViewModel.firstName)
+                        TextField(Localization.firstNameField, text: $inputValidationViewModel.firstName)
                             .validation(inputValidationViewModel.firstNameValidation)
                         
-                        TextField("Last name", text: $inputValidationViewModel.lastName)
+                        TextField(Localization.lastNameField, text: $inputValidationViewModel.lastName)
                             .validation(inputValidationViewModel.lastNameValidation)
                         
-                        TextField("Email", text: $inputValidationViewModel.email)
+                        TextField(Localization.emailField, text: $inputValidationViewModel.email)
                             .validation(inputValidationViewModel.emailValidation)
                             .validation(inputValidationViewModel.emailEmptyValidation)
                             .keyboardType(.default)
                             .autocapitalization(.none)
                         
-                        TextField("Username", text: $inputValidationViewModel.username)
+                        TextField(Localization.usernameField, text: $inputValidationViewModel.username)
                             .validation(inputValidationViewModel.usernameValidation)
                             .keyboardType(.default)
                             .autocapitalization(.none)
                         
-                        SecureField("Password", text: $inputValidationViewModel.password)
+                        SecureField(Localization.passwordField, text: $inputValidationViewModel.password)
                             .validation(inputValidationViewModel.passwordValidation)
                             .keyboardType(.default)
                             .autocapitalization(.none)
                         
-                        SecureField("Confirm password", text: $inputValidationViewModel.confirmPassword)
+                        SecureField(Localization.confirmPasswordField, text: $inputValidationViewModel.confirmPassword)
                             .validation(inputValidationViewModel.confirmPasswordValidation)
                             .validation(inputValidationViewModel.confirmPasswordMatchingValidation)
                             .keyboardType(.default)
@@ -73,7 +73,7 @@ struct SignupView: View {
                         }
                     }
                 }, label: {
-                    Text("Sign up & pay")
+                    Text(Localization.signupPayBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
@@ -83,7 +83,7 @@ struct SignupView: View {
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Signup"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    Alert(title: Text(Localization.signupAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
                 
                 if isTryingToAdopt {
@@ -96,7 +96,7 @@ struct SignupView: View {
                                 .background(Blur(style: .systemUltraThinMaterial))
                                 .edgesIgnoringSafeArea(.all)
                             
-                            ProgressView("Aopting...")
+                            ProgressView(Localization.loginAdoptingProgress)
                         }
                     }
                 }
@@ -113,7 +113,7 @@ extension SignupView {
         userViewModel.registerUser(user: user) { result in
             switch (result) {
                 case .failure(_):
-                    message = "Somthing went wrong. Please try again!"
+                    message = Localization.errorOccurred
                     showingAlert.toggle()
                 case .success(_):
                     login()
@@ -127,7 +127,7 @@ extension SignupView {
         userViewModel.login(user: user) { result in
             switch (result) {
                 case .failure(_):
-                    message = "An error occurred. Please check your username and password!"
+                    message = Localization.loginError
                     showingAlert.toggle()
                 case .success(let response):
                     userViewModel.accessToken = response.accessToken
@@ -141,7 +141,7 @@ extension SignupView {
         userViewModel.getLoggedinUser() { result in
             switch (result) {
                 case .failure(_):
-                    message = "An error occurred. Please check your username and password!"
+                    message = Localization.loginError
                     showingAlert.toggle()
                 case .success(let response):
                     if let userId = response.id {
@@ -156,7 +156,7 @@ extension SignupView {
         self.orderViewModel.createOrder(order: order) { result in
             switch (result) {
                 case .failure(_):
-                    message = "An error occurred. Please click Sign up & pay button again!"
+                    message = Localization.signupPurchaseError
                     showingAlert.toggle()
                 case .success(let success):
                     if let url = URL(string: success.paymentLink) {

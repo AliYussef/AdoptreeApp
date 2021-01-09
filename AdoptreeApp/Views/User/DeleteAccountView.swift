@@ -13,10 +13,10 @@ struct DeleteAccountView: View {
     @ObservedObject var inputValidationViewModel = InputValidationViewModel()
     @State var isConfirmDisabled = true
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     @State var isTryingToDeleteAccount: Bool = false
     @State private var reasonsIndex = 0
-    var reasons = ["Not interested anymore", "Not convinced", "Too expensive", "Others"]
+    var reasons = [Localization.deleteAccountFirstReason, Localization.deleteAccountSecondReason, Localization.deleteAccountThirdReason, Localization.deleteAccountFourthReason]
     
     var body: some View {
         ZStack {
@@ -26,18 +26,18 @@ struct DeleteAccountView: View {
             VStack {
                 VStack {
                     Form {
-                        Picker(selection: $reasonsIndex, label: Text("Reason").font(.subheadline)) {
+                        Picker(selection: $reasonsIndex, label: Text(Localization.deleteAccountReason).font(.subheadline)) {
                             ForEach(0 ..< reasons.count) {
                                 Text(self.reasons[$0])
                             }
                         }
                         
-                        SecureField("Confirm password", text: $inputValidationViewModel.password)
+                        SecureField(Localization.passwordField, text: $inputValidationViewModel.password)
                             .validation(inputValidationViewModel.passwordValidation)
                             .keyboardType(.default)
                             .autocapitalization(.none)
                         
-                        Text("You can only delete your account if you do not have a valid adoption contract")
+                        Text(Localization.deleteAccountNote)
                             .font(.footnote)
                             .foregroundColor(.init("color_font_secondary"))
                         
@@ -53,16 +53,16 @@ struct DeleteAccountView: View {
                     userViewModel.deleteUserAccount { result in
                         switch (result) {
                             case .failure(_):
-                                message = "An error occurred. Please try again!"
+                                message = Localization.errorOccurred
                                 showingAlert.toggle()
                             case .success(_):
-                                message = "Your account has been deleted! Hope to see you again"
+                                message = Localization.successfulAccountDeletion
                                 showingAlert.toggle()
                         }
                         isTryingToDeleteAccount.toggle()
                     }
                 }, label: {
-                    Text("Confirm")
+                    Text(Localization.confirmBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
@@ -72,7 +72,7 @@ struct DeleteAccountView: View {
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Account deletion"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                    Alert(title: Text(Localization.deleteAccountAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
                 
                 if isTryingToDeleteAccount {
@@ -85,7 +85,7 @@ struct DeleteAccountView: View {
                                 .background(Blur(style: .systemUltraThinMaterial))
                                 .edgesIgnoringSafeArea(.all)
                             
-                            ProgressView("Deleting account...")
+                            ProgressView(Localization.deleteAccountProgress)
                         }
                     }
                 }

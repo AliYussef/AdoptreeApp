@@ -39,17 +39,17 @@ struct ThirdInfoView: View {
             
             
             HStack {
-                CellView(iconName: "person.3.fill", iconImage: nil, iconWidth: nil, iconHeight: nil, title: "Adopters", info: "1K")
+                CellView(iconName: "person.3.fill", iconImage: nil, iconWidth: nil, iconHeight: nil, title: Localization.thirdInfoAdopters, info: "1K")
                     .padding(.trailing)
-                CellView(iconName: nil, iconImage: Image("pine"), iconWidth: 30.0, iconHeight: 28.0, title: "Forests", info: "2")
+                CellView(iconName: nil, iconImage: Image("pine"), iconWidth: 30.0, iconHeight: 28.0, title: Localization.thirdInfoForests, info: "2")
             }
             .padding()
             
             
             HStack {
-                CellView(iconName: nil, iconImage: Image("icon_tree"), iconWidth: 23.0, iconHeight: 28.0, title: "Trees", info: "2K")
+                CellView(iconName: nil, iconImage: Image("icon_tree"), iconWidth: 23.0, iconHeight: 28.0, title: Localization.thirdInfoTrees, info: "2K")
                     .padding(.trailing)
-                CellView(iconName: nil, iconImage: Image("icon_tree"), iconWidth: 23.0, iconHeight: 28.0, title: "Tree types", info: "2")
+                CellView(iconName: nil, iconImage: Image("icon_tree"), iconWidth: 23.0, iconHeight: 28.0, title: Localization.thirdInfoTreeSpecies, info: "2")
             }
             .padding()
             
@@ -59,7 +59,7 @@ struct ThirdInfoView: View {
             HStack {
                 Button(action: {
                     withAnimation(.linear){
-                    self.currentIndex -= 1
+                        self.currentIndex -= 1
                     }
                 }, label: {
                     Image(systemName: "arrow.backward.circle.fill")
@@ -67,7 +67,7 @@ struct ThirdInfoView: View {
                         .frame(width: 28, height: 28, alignment: .trailing)
                         .foregroundColor(.white)
                     
-                    Text("Previous")
+                    Text(Localization.prevBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
@@ -84,7 +84,7 @@ struct ThirdInfoView: View {
                     }
                     
                 }, label: {
-                    Text("Start now")
+                    Text(Localization.startNowBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                     
@@ -111,7 +111,7 @@ struct CellView: View {
     let iconImage: Image?
     let iconWidth: CGFloat?
     let iconHeight: CGFloat?
-    let title: String
+    let title: LocalizedStringKey
     let info: String
     
     var body: some View {

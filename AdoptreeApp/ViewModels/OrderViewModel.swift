@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import os
 
 class OrderViewModel: ObservableObject {
     @Published var products: [OrderProduct] = []
@@ -17,6 +18,8 @@ class OrderViewModel: ObservableObject {
     @Published var totalPrice: Double = 0.0
     @Published var orderResponse: OrderResponse?
     @Published var order: Order?
+    @Published var treeSpeciesFilter: [String] = []
+    @Published var treeConditionFilter: [String] = []
     private let initialTreeSignPrice = 5.0
     private let orderRepository: OrderRepositoryProtocol
     private let productRepository: ProductRepositoryProtocol
@@ -42,26 +45,27 @@ extension OrderViewModel {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let products):
                         self.availableProducts = products
+                        self.createTreeSpeciesFilter()
                 }
                 
                 switch(categories) {
                     case .failure(let error):
                         switch error {
                             case .decodingError(let decodingError):
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                             case .urlError(let urlError):
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                         }
                         
                     case .success(let categories):
@@ -88,10 +92,13 @@ extension OrderViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    os_log("Url error", type: .error, urlError.localizedDescription)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    os_log("Error", type: .error, error.localizedDescription)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -103,8 +110,10 @@ extension OrderViewModel {
                 .store(in: &cancellables)
             
         }catch let encodingError as EncodingError{
+            os_log("Encoding error", type: .error, encodingError.localizedDescription)
             completion(.failure(.encodingError(encodingError)))
         }catch let error{
+            os_log("Error", type: .error, error.localizedDescription)
             completion(.failure(.genericError(error)))
         }
     }
@@ -121,10 +130,13 @@ extension OrderViewModel {
                     case .failure(let error):
                         switch error {
                             case let urlError as URLError:
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                                 completion(.failure(.urlError(urlError)))
                             case let decodingError as DecodingError:
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                 completion(.failure(.decodingError(decodingError)))
                             default:
+                                os_log("Error", type: .error, error.localizedDescription)
                                 completion(.failure(.genericError(error)))
                         }
                 }
@@ -197,9 +209,15 @@ extension OrderViewModel {
 extension OrderViewModel {
     
     func createCategoriesDictionary() {
+        treeConditionFilter.append("All")
         categories.forEach({ cat in
             categoriesDic[cat.id] = cat.name
+            
+            if !treeConditionFilter.contains(cat.name) && cat.name.lowercased() != "tree sign" {
+                treeConditionFilter.append(cat.name)
+            }
         })
+        
         getTreeSignProduct()
     }
 }
@@ -230,3 +248,16 @@ extension OrderViewModel {
         return Order(id: nil, paymentRedirectLink: PaymentURL.url, paymentStatus: nil, orderStatus: nil, userId: userID, createdAt: nil, orderLines: orderLines)
     }
 }
+
+extension OrderViewModel {
+    
+    func createTreeSpeciesFilter() {
+        treeSpeciesFilter.append("All")
+        availableProducts.forEach({ product in
+            if !treeSpeciesFilter.contains(product.name) && product.name.lowercased() != "tree sign" {
+                treeSpeciesFilter.append(product.name)
+            }
+        })
+    }
+}
+

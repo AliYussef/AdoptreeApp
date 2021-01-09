@@ -29,7 +29,7 @@ struct AdoptedTreesCell: View {
     @EnvironmentObject var treeViewModel: TreeViewModel
     @State private var showingAlert = false
     @State private var showingAlertConfirm = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     let tree: Tree
     
     var body: some View {
@@ -38,7 +38,7 @@ struct AdoptedTreesCell: View {
             HStack {
                 Label(
                     title: {
-                        Text("\((tree.assignedTree?.tree_name?.isEmpty ?? false ? "Tree" : tree.assignedTree?.tree_name) ?? "Tree")")
+                        Text("\((tree.assignedTree?.tree_name?.isEmpty ?? false ? "\(Localization.homeTree)" : tree.assignedTree?.tree_name) ?? "\(Localization.homeTree)")")
                             .font(.title2)
                     },
                     icon: {
@@ -49,32 +49,32 @@ struct AdoptedTreesCell: View {
                             .foregroundColor(.init("color_primary_accent"))
                     })
                     .alert(isPresented: $showingAlertConfirm) {
-                        Alert(title: Text("Contract renewal"), message: Text("\(message)"), primaryButton: .default(Text("Yes")){
+                        Alert(title: Text(Localization.adoptedTreesAlertTitle), message: Text(message), primaryButton: .default(Text(Localization.yesBtn)){
                             //might add payment as well
                             if let tree = tree.assignedTree {
                                 treeViewModel.renewTreeContract(for: tree) { result in
                                     switch (result) {
                                         case .failure(_):
-                                            message = "An Error has occurred. Please try again!"
+                                            message = Localization.errorOccurred
                                             showingAlert.toggle()
                                         case .success(_):
-                                            message = "Congratulations􀎸 your adoption has been extended by 1 year"
+                                            message = Localization.successfulContractRenewal
                                             showingAlert.toggle()
                                     }
                                 }
                             }
-                        },secondaryButton: .cancel(Text("No")))
+                        },secondaryButton: .cancel(Text(Localization.noBtn)))
                     }
                 
                 Spacer()
                 
                 if isTreeUpForRenewal(expiredDate: calculateTreeExpiredDate()) {
                     Button(action: {
-                        message = "Are you sure you want to extend your adoption?"
+                        message = Localization.contractRenewalConfirm
                         showingAlertConfirm.toggle()
                     }, label: {
                         HStack {
-                            Text("Renew")
+                            Text(Localization.adoptedTreesRenewBtn)
                                 .font(.footnote)
                                 .foregroundColor(.white)
                             
@@ -86,7 +86,7 @@ struct AdoptedTreesCell: View {
                     .background(Color.init("color_primary_accent"))
                     .cornerRadius(10.0)
                     .alert(isPresented: $showingAlert) {
-                        Alert(title: Text("Contract renewal"), message: Text("\(message)"), dismissButton: .default(Text("OK")))
+                        Alert(title: Text(Localization.adoptedTreesAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                     }
                 }
             }
@@ -98,39 +98,39 @@ struct AdoptedTreesCell: View {
                 .overlay(
                     List {
                         HStack {
-                            Text("Tree Type")
+                            Text(Localization.adoptedTreesTreeType)
                             Spacer()
-                            Text("\(orderViewModel.availableProducts.first(where: {$0.id == tree.productId})?.name ?? "Tree")")
+                            Text("\(orderViewModel.availableProducts.first(where: {$0.id == tree.productId})?.name ?? "\(Localization.homeTree)")")
                                 .foregroundColor(.init("color_font_secondary"))
                         }
                         
                         HStack {
-                            Text("Country")
+                            Text(Localization.adoptedTreesCountry)
                             Spacer()
                             if let treeId = tree.assignedTree?.tree_id {
-                                Text("\(treeViewModel.treeLocationDic[treeId]?.country ?? "Unknown")")
+                                Text("\(treeViewModel.treeLocationDic[treeId]?.country ?? "\(Localization.adoptedTreesUnknown)")")
                                     .foregroundColor(.init("color_font_secondary"))
                             }
                         }
                         
                         HStack {
-                            Text("Forest")
+                            Text(Localization.adoptedTreesForest)
                             Spacer()
                             if let treeId = tree.assignedTree?.tree_id {
-                                Text("\(treeViewModel.treeLocationDic[treeId]?.forest ?? "Unknown")")
+                                Text("\(treeViewModel.treeLocationDic[treeId]?.forest ?? "\(Localization.adoptedTreesUnknown)")")
                                     .foregroundColor(.init("color_font_secondary"))
                             }
                         }
                         
                         HStack {
-                            Text("Start date")
+                            Text(Localization.adoptedTreesStartDate)
                             Spacer()
                             Text(getHumanReadableDate(date: tree.assignedTree?.created_at ?? Date()))
                                 .foregroundColor(.init("color_font_secondary"))
                         }
                         
                         HStack {
-                            Text("End date")
+                            Text(Localization.adoptedTreesEndDate)
                             Spacer()
                             Text(getHumanReadableDate(date: calculateTreeExpiredDate()))
                                 .foregroundColor(.init("color_font_secondary"))

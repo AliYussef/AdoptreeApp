@@ -9,12 +9,13 @@ import SwiftUI
 
 struct BookedTourOverviewView: View {
     @EnvironmentObject var newsViewModel: NewsViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
     let bookedTour: BookedTour
     let tour: Tour
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var showingAlert = false
     @State private var showingAlertConfirm = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     @State var isTryingToCancel: Bool = false
     
     var body: some View {
@@ -23,7 +24,7 @@ struct BookedTourOverviewView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-                Text("Tour overview")
+                Text(Localization.tourOverviewTitle)
                     .font(.title)
                     .foregroundColor(.init("color_font_primary"))
                     .padding()
@@ -35,17 +36,17 @@ struct BookedTourOverviewView: View {
                         .padding(.trailing)
                     
                     VStack(alignment: .leading) {
-                        Text("Your guide")
+                        Text(Localization.tourOverviewGuide)
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_secondary"))
                             .padding(.bottom, 3)
                         
-                        Text("Name: \(tour.guideName)")
+                        Text(Localization.tourOverviewGuideName(name: tour.guideName))
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 0.5)
                         
-                        Text("Specialities: \(tour.guideSpecialty)")
+                        Text(Localization.tourOverviewGuideSpecialities(specialities: tour.guideSpecialty))
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                     }
@@ -66,27 +67,27 @@ struct BookedTourOverviewView: View {
                         .padding(.trailing)
                     
                     VStack(alignment: .leading) {
-                        Text("Tour info")
+                        Text(Localization.tourOverviewTourInfo)
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_secondary"))
                             .padding(.bottom, 3)
                         
-                        Text("Name: \(bookedTour.userName)")
+                        Text(Localization.tourOverviewGuideUsername(username: bookedTour.userName))
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 0.5)
                         
-                        Text("Email: \(bookedTour.userEmail)")
+                        Text(Localization.tourOverviewGuideEmail(email: bookedTour.userEmail))
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 0.5)
                         
-                        Text("Date: \(getTourDateTime(date: tour.dateTime))")
+                        Text(Localization.tourOverviewGuideDate(date: getTourDateTime(date: tour.dateTime)))
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 0.5)
                         
-                        Text("Location: Haarlem")
+                        Text(Localization.tourOverviewGuideLocation(location: treeViewModel.getForestName(of: tour.forestId)))
                             .font(.subheadline)
                             .foregroundColor(.init("color_font_primary"))
                     }
@@ -98,7 +99,7 @@ struct BookedTourOverviewView: View {
                 .background(Color.white)
                 .cornerRadius(12.0)
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Tour canceling"), message: Text("\(message)"), dismissButton: .default(Text("Ok")) {
+                    Alert(title: Text(Localization.tourOverviewTourAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)) {
                         self.presentationMode.wrappedValue.dismiss()
                     })
                 }
@@ -106,10 +107,10 @@ struct BookedTourOverviewView: View {
                 Spacer()
                 
                 Button(action: {
-                    message = "Are you sure about canceling your tour?"
+                    message = Localization.tourCancelingConfirmation
                     showingAlertConfirm.toggle()
                 }, label: {
-                    Text("Cancel")
+                    Text(Localization.cancelBtn)
                         .font(.subheadline)
                         .foregroundColor(.white)
                 })
@@ -118,27 +119,27 @@ struct BookedTourOverviewView: View {
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlertConfirm) {
-                    Alert(title: Text("Tour canceling"), message: Text("\(message)"), primaryButton: .default(Text("Yes")){
+                    Alert(title: Text(Localization.tourOverviewTourAlertTitle), message: Text(message), primaryButton: .default(Text(Localization.yesBtn)){
                         if let bookedTourId = bookedTour.id {
                             isTryingToCancel.toggle()
                             newsViewModel.cancelBookedTour(using: bookedTourId) { result in
                                 switch (result) {
                                     case .failure(_):
-                                        self.message = "An error occurred"
+                                        self.message = Localization.errorOccurred
                                         self.showingAlert.toggle()
                                     case .success(_):
-                                        self.message = "Your tour has been canceled"
+                                        self.message = Localization.successfulCanceledTour
                                         self.showingAlert.toggle()
                                 }
                                 isTryingToCancel.toggle()
                             }
                         }
-                    },secondaryButton: .cancel(Text("No")))
+                    },secondaryButton: .cancel(Text(Localization.noBtn)))
                 }
             }
             
             if isTryingToCancel {
-                ProgressView("Canceling is in progress...")
+                ProgressView(Localization.tourOverviewTourCancelingProgress)
             }
         }
     }

@@ -11,7 +11,7 @@ protocol UserRepositoryProtocol {
     func login(using urlRequest: URLRequest) -> AnyPublisher<LoginResponse, Error>
     func getAdoptedTrees(using urlRequest: URLRequest) -> AnyPublisher<[Tree], Error>
     func registerUser(using urlRequest: URLRequest) -> AnyPublisher<User, Error>
-    func forgetPassword(using urlRequest: URLRequest) -> AnyPublisher<String, Error>
+    func forgetPassword(using urlRequest: URLRequest) -> AnyPublisher<Data, Error>
     func resetPassword(using urlRequest: URLRequest) -> AnyPublisher<User, Error>
     func updateUserAccount(using urlRequest: URLRequest) -> AnyPublisher<User, Error>
     func deleteUserAccount(using urlRequest: URLRequest) -> AnyPublisher<Data, Error>
@@ -33,8 +33,8 @@ class UserRepository : UserRepositoryProtocol {
         return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
     }
     
-    func forgetPassword(using urlRequest: URLRequest) -> AnyPublisher<String, Error> {
-        return NetworkManager.sharedNetworkManager.executeRequestWithResponseBody(using: urlRequest)
+    func forgetPassword(using urlRequest: URLRequest) -> AnyPublisher<Data, Error> {
+        return NetworkManager.sharedNetworkManager.executeRequestWithoutResponseBody(using: urlRequest)
     }
     
     func resetPassword(using urlRequest: URLRequest) -> AnyPublisher<User, Error> {

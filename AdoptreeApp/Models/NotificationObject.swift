@@ -14,6 +14,7 @@ struct NotificationObject: Codable {
     var co2Reduction: Bool = true
     var co2ReductionTip: Bool = true
     var event: Bool = false
+    var language: String
 }
 
 protocol ObjectSavable {

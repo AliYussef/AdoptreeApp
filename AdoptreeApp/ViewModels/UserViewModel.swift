@@ -8,13 +8,14 @@
 import Foundation
 import Combine
 import KeychainAccess
+import os
 
 class UserViewModel: ObservableObject {
     static let shared = UserViewModel(userRepository: UserRepository())
     @Published var isAuthenticated: Bool = false
     @Published var tempAccessToken: String = ""
     @Published var isGuest: Bool = false
-    @Published var forgetPasswordToken: String = ""
+    @Published var isforgetPasswordTokenSent: Bool = false
     @Published var userShared: UserShared
     @Published var authRequired: Bool = false
     private let keyChain = Keychain()
@@ -26,13 +27,12 @@ class UserViewModel: ObservableObject {
     private var userKey = "userObject"
     private let refreshTokenExpTime = 9
     private var cancellables = Set<AnyCancellable>()
-
+    
     private init(userRepository: UserRepositoryProtocol) {
         self.userRepository = userRepository
         userDefaults = UserDefaults.standard
         userShared = UserShared(id: nil, firstname: nil, lastname: nil, username: nil, email: nil)
         getUserSharedObject()
-        // when starting the app to check if accessToken not equal to nil then set authenticated to true
         isAuthenticated = accessToken != nil
     }
 }
@@ -44,16 +44,11 @@ extension UserViewModel {
             try? keyChain.get(accessTokenKey)
         }
         set(newValue) {
-            //here check the value of newValue
-            // if it is string or int or hold something then the else will be skipped
-            // but if newValue does not hold any value or if nil then else will be executed and user will be logged out
             guard let accessToken = newValue else {
                 try? keyChain.remove(accessTokenKey)
-                //isAuthenticated = false
                 return
             }
             try? keyChain.set(accessToken, key: accessTokenKey)
-            //isAuthenticated = true
         }
     }
     
@@ -135,10 +130,13 @@ extension UserViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    os_log("Url error", type: .error, urlError.localizedDescription)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    os_log("Error", type: .error, error.localizedDescription)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -168,10 +166,13 @@ extension UserViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    os_log("Url error", type: .error, urlError.localizedDescription)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    os_log("Error", type: .error, error.localizedDescription)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -182,8 +183,10 @@ extension UserViewModel {
                 .store(in: &cancellables)
             
         }catch let encodingError as EncodingError{
+            os_log("Encoding error", type: .error, encodingError.localizedDescription)
             completion(.failure(.encodingError(encodingError)))
         }catch let error{
+            os_log("Error", type: .error, error.localizedDescription)
             completion(.failure(.genericError(error)))
         }
     }
@@ -211,13 +214,13 @@ extension UserViewModel {
                     case .failure(let error):
                         switch error {
                             case let urlError as URLError:
-                                print(urlError)
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                                 completion(.failure(.urlError(urlError)))
                             case let decodingError as DecodingError:
-                                print(decodingError)
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                 completion(.failure(.decodingError(decodingError)))
                             default:
-                                print(error)
+                                os_log("Error", type: .error, error.localizedDescription)
                                 completion(.failure(.genericError(error)))
                         }
                 }
@@ -232,7 +235,7 @@ extension UserViewModel {
 
 extension UserViewModel {
     
-    func forgetPassword(forgetPasswordBody: ForgetPasswordBody, completion: @escaping (Result<String, RequestError>) -> Void) {
+    func forgetPassword(forgetPasswordBody: ForgetPasswordBody, completion: @escaping (Result<Data, RequestError>) -> Void) {
         
         do {
             
@@ -246,22 +249,27 @@ extension UserViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    os_log("Url error", type: .error, urlError.localizedDescription)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    os_log("Error", type: .error, error.localizedDescription)
                                     completion(.failure(.genericError(error)))
                             }
                     }
                 }, receiveValue: {result in
-                    self.forgetPasswordToken = result
+                    self.isforgetPasswordTokenSent = true
                     completion(.success(result))
                 })
                 .store(in: &cancellables)
             
         }catch let encodingError as EncodingError{
+            os_log("Encoding error", type: .error, encodingError.localizedDescription)
             completion(.failure(.encodingError(encodingError)))
         }catch let error{
+            os_log("Error", type: .error, error.localizedDescription)
             completion(.failure(.genericError(error)))
         }
     }
@@ -280,21 +288,27 @@ extension UserViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    os_log("Url error", type: .error, urlError.localizedDescription)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    os_log("Error", type: .error, error.localizedDescription)
                                     completion(.failure(.genericError(error)))
                             }
                     }
                 }, receiveValue: {result in
                     completion(.success(result))
+                    self.isforgetPasswordTokenSent = false
                 })
                 .store(in: &cancellables)
             
         }catch let encodingError as EncodingError{
+            os_log("Encoding error", type: .error, encodingError.localizedDescription)
             completion(.failure(.encodingError(encodingError)))
         }catch let error{
+            os_log("Error", type: .error, error.localizedDescription)
             completion(.failure(.genericError(error)))
         }
     }
@@ -314,10 +328,13 @@ extension UserViewModel {
                         case .failure(let error):
                             switch error {
                                 case let urlError as URLError:
+                                    os_log("Url error", type: .error, urlError.localizedDescription)
                                     completion(.failure(.urlError(urlError)))
                                 case let decodingError as DecodingError:
+                                    os_log("Decoding error", type: .error, decodingError.localizedDescription)
                                     completion(.failure(.decodingError(decodingError)))
                                 default:
+                                    os_log("Error", type: .error, error.localizedDescription)
                                     completion(.failure(.genericError(error)))
                             }
                     }
@@ -329,8 +346,10 @@ extension UserViewModel {
                 .store(in: &cancellables)
             
         } catch let encodingError as EncodingError{
+            os_log("Encoding error", type: .error, encodingError.localizedDescription)
             completion(.failure(.encodingError(encodingError)))
         } catch let error{
+            os_log("Error", type: .error, error.localizedDescription)
             completion(.failure(.genericError(error)))
         }
     }
@@ -347,16 +366,16 @@ extension UserViewModel {
                     case .failure(let error):
                         switch error {
                             case let urlError as URLError:
+                                os_log("Url error", type: .error, urlError.localizedDescription)
                                 completion(.failure(.urlError(urlError)))
                             default:
+                                os_log("Error", type: .error, error.localizedDescription)
                                 completion(.failure(.genericError(error)))
                         }
                 }
             }, receiveValue: { result in
                 completion(.success(result))
-                //self.userShared = UserShared(id: nil, firstname: nil, lastname: nil, username: nil, email: nil)
-                //self.saveUserSharedObject()
-                //self.logout()
+                self.logout()
             })
             .store(in: &cancellables)
     }
