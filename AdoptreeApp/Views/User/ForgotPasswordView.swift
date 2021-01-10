@@ -62,18 +62,7 @@ struct ForgotPasswordView: View {
                     
                     Button(action: {
                         isTryingToChangePassword.toggle()
-                        userViewModel.resetPassword(resetPasswordBody: ResetPasswordBody(user_id: nil, token: inputValidationViewModel.token, created_at: nil, valid_until: nil, password: inputValidationViewModel.password, validate_password: inputValidationViewModel.confirmPassword)) {result in
-                            switch (result) {
-                                case .failure(_):
-                                    message = Localization.errorOccurred
-                                    showingAlert.toggle()
-                                case .success(_):
-                                    message = Localization.successfulPasswordReset
-                                    showingAlert.toggle()
-                                    self.presentationMode.wrappedValue.dismiss()
-                            }
-                            isTryingToChangePassword.toggle()
-                        }
+                        resetPassword()
                     }, label: {
                         Text(Localization.resetPasswordBtn)
                             .font(.subheadline)
@@ -113,6 +102,23 @@ struct ForgotPasswordView: View {
     }
 }
 
+extension ForgotPasswordView {
+    func resetPassword() {
+        userViewModel.resetPassword(resetPasswordBody: ResetPasswordBody(user_id: nil, token: inputValidationViewModel.token, created_at: nil, valid_until: nil, password: inputValidationViewModel.password, validate_password: inputValidationViewModel.confirmPassword)) {result in
+            switch (result) {
+                case .failure(_):
+                    message = Localization.errorOccurred
+                    showingAlert.toggle()
+                case .success(_):
+                    message = Localization.successfulPasswordReset
+                    showingAlert.toggle()
+                    self.presentationMode.wrappedValue.dismiss()
+            }
+            isTryingToChangePassword.toggle()
+        }
+    }
+}
+
 struct RequestPasswordChangeView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @ObservedObject var inputValidationViewModel: InputValidationViewModel
@@ -143,16 +149,7 @@ struct RequestPasswordChangeView: View {
         
         Button(action: {
             isTryingToChangePassword.toggle()
-            userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: inputValidationViewModel.username, email: inputValidationViewModel.email)) { result in
-                switch (result) {
-                    case .failure(_):
-                        message = Localization.requestPasswordResetError
-                        showingAlert.toggle()
-                    case .success(_):
-                        break
-                }
-                isTryingToChangePassword.toggle()
-            }
+            requestPasswordChange()
         }, label: {
             Text(Localization.requestPasswordChangeBtn)
                 .font(.subheadline)
@@ -187,3 +184,17 @@ struct RequestPasswordChangeView: View {
     }
 }
 
+extension RequestPasswordChangeView {
+    func requestPasswordChange() {
+        userViewModel.forgetPassword(forgetPasswordBody: ForgetPasswordBody(username: inputValidationViewModel.username, email: inputValidationViewModel.email)) { result in
+            switch (result) {
+                case .failure(_):
+                    message = Localization.requestPasswordResetError
+                    showingAlert.toggle()
+                case .success(_):
+                    break
+            }
+            isTryingToChangePassword.toggle()
+        }
+    }
+}

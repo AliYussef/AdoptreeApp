@@ -50,17 +50,7 @@ struct DeleteAccountView: View {
                 
                 Button(action: {
                     isTryingToDeleteAccount.toggle()
-                    userViewModel.deleteUserAccount { result in
-                        switch (result) {
-                            case .failure(_):
-                                message = Localization.errorOccurred
-                                showingAlert.toggle()
-                            case .success(_):
-                                message = Localization.successfulAccountDeletion
-                                showingAlert.toggle()
-                        }
-                        isTryingToDeleteAccount.toggle()
-                    }
+                    deleteUserAccount()
                 }, label: {
                     Text(Localization.confirmBtn)
                         .font(.subheadline)
@@ -94,6 +84,23 @@ struct DeleteAccountView: View {
             .onReceive(inputValidationViewModel.passwordValidation) { validation in
                 isConfirmDisabled = !validation.isSuccess || !treeViewModel.trees.isEmpty
             }
+        }
+    }
+}
+
+extension DeleteAccountView {
+    
+    func deleteUserAccount() {
+        userViewModel.deleteUserAccount { result in
+            switch (result) {
+                case .failure(_):
+                    message = Localization.errorOccurred
+                    showingAlert.toggle()
+                case .success(_):
+                    message = Localization.successfulAccountDeletion
+                    showingAlert.toggle()
+            }
+            isTryingToDeleteAccount.toggle()
         }
     }
 }

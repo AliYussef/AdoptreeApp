@@ -80,22 +80,7 @@ struct TourBookingView: View {
                     
                     Button(action: {
                         isTryingToBook.toggle()
-                        if let userId = userViewModel.userShared.id {
-                            let bookedTour = BookedTour(id: nil, tourId: tour.id, userId: userId, userName: inputValidationViewModel.username, userEmail: inputValidationViewModel.email, bookedDateTime: nil)
-                            self.newsViewModel.bookTour(using: bookedTour) { result in
-                                switch (result) {
-                                    case .failure(_):
-                                        self.message = Localization.errorOccurred
-                                        self.showingAlert.toggle()
-                                    case .success(let result):
-                                        self.bookedTour = result
-                                        self.message = Localization.successfulTourBooking
-                                        self.showingAlert.toggle()
-                                }
-                                
-                                isTryingToBook.toggle()
-                            }
-                        }
+                        bookTour()
                     }, label: {
                         Text(Localization.confirmBtn)
                             .font(.subheadline)
@@ -132,5 +117,28 @@ struct TourBookingView: View {
             }
         }
     }
+}
+
+extension TourBookingView {
+    
+    func bookTour() {
+        if let userId = userViewModel.userShared.id {
+            let bookedTour = BookedTour(id: nil, tourId: tour.id, userId: userId, userName: inputValidationViewModel.username, userEmail: inputValidationViewModel.email, bookedDateTime: nil)
+            self.newsViewModel.bookTour(using: bookedTour) { result in
+                switch (result) {
+                    case .failure(_):
+                        self.message = Localization.errorOccurred
+                        self.showingAlert.toggle()
+                    case .success(let result):
+                        self.bookedTour = result
+                        self.message = Localization.successfulTourBooking
+                        self.showingAlert.toggle()
+                }
+                
+                isTryingToBook.toggle()
+            }
+        }
+    }
+    
 }
 

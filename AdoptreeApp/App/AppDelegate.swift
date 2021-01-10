@@ -109,6 +109,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     
 }
 
+/* the commented out code if for push notififcation.
+ Since I have not a paid Apple developer account
+ I could not tested it, but I assume it is working.*/
+
 extension AppDelegate : MessagingDelegate {
     //    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
     //

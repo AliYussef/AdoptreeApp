@@ -49,24 +49,7 @@ struct LoginView: View {
                     
                     Button(action: {
                         isTryingToLogin.toggle()
-                        
-                        let user = UserLogin(username:inputValidationViewModel.username, password:inputValidationViewModel.password)
-                        userViewModel.login(user: user) { result in
-                            switch (result) {
-                                case .failure(_):
-                                    message = Localization.loginError
-                                    showingAlert.toggle()
-                                case .success(let response):
-                                    userViewModel.accessToken = response.accessToken
-                                    userViewModel.refreshToken = response.refreshToken
-                                    if userViewModel.accessToken != nil {
-                                        userViewModel.isAuthenticated = true
-                                    }
-                                    userViewModel.getLoggedinUser() {_ in}
-                            }
-                            
-                            isTryingToLogin.toggle()
-                        }
+                        login()
                     }, label: {
                         Text(Localization.loginBtn)
                             .font(.subheadline)
@@ -145,3 +128,24 @@ struct LoginView: View {
     }
 }
 
+extension LoginView {
+    func login() {
+        let user = UserLogin(username:inputValidationViewModel.username, password:inputValidationViewModel.password)
+        userViewModel.login(user: user) { result in
+            switch (result) {
+                case .failure(_):
+                    message = Localization.loginError
+                    showingAlert.toggle()
+                case .success(let response):
+                    userViewModel.accessToken = response.accessToken
+                    userViewModel.refreshToken = response.refreshToken
+                    if userViewModel.accessToken != nil {
+                        userViewModel.isAuthenticated = true
+                    }
+                    userViewModel.getLoggedinUser() {_ in}
+            }
+            
+            isTryingToLogin.toggle()
+        }
+    }
+}

@@ -57,27 +57,7 @@ struct PersonalSignView: View {
                 }
                 
                 Button(action: {
-                    if treeSign.count == 0 {
-                        self.message = Localization.personalSignEmptyAlert
-                        self.showingAlert.toggle()
-                        
-                    } else {
-                        if let userId = userViewModel.userShared.id {
-                            let order = orderViewModel.createTreeSignOrder(for: userId)
-                            orderViewModel.createOrder(order: order) { result in
-                                switch (result) {
-                                    case .failure(_):
-                                        break
-                                    case .success(let success):
-                                        if let url = URL(string: success.paymentLink) {
-                                            if UIApplication.shared.canOpenURL(url) {
-                                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                                            }
-                                        }
-                                }
-                            }
-                        }
-                    }
+                    orderTreeSign()
                 }, label: {
                     Text(Localization.confirmPayBtn)
                         .font(.subheadline)
@@ -117,44 +97,82 @@ struct PersonalSignView: View {
             
         }.onOpenURL(perform: { url in
             if url.host == "payment-return" {
-                if let orderId = orderViewModel.orderResponse?.id {
-                    orderViewModel.getOrderById(using: orderId) { result in
+                checkOrderStatus()
+            }
+        })
+    }
+}
+
+extension PersonalSignView {
+    func orderTreeSign() {
+        if checkInputValidity() {
+            if let userId = userViewModel.userShared.id {
+                let order = orderViewModel.createTreeSignOrder(for: userId)
+                orderViewModel.createOrder(order: order) { result in
+                    switch (result) {
+                        case .failure(_):
+                            break
+                        case .success(let success):
+                            if let url = URL(string: success.paymentLink) {
+                                if UIApplication.shared.canOpenURL(url) {
+                                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                }
+                            }
+                    }
+                }
+            }
+        } else {
+            self.message = Localization.personalSignEmptyAlert
+            self.showingAlert.toggle()
+        }
+    }
+    
+    func checkInputValidity() -> Bool{
+        return treeSign.count > 0
+    }
+    
+    func checkOrderStatus() {
+        if let orderId = orderViewModel.orderResponse?.id {
+            orderViewModel.getOrderById(using: orderId) { result in
+                switch (result) {
+                    case .failure(_):
+                        break
+                    case .success(_):
+                        if orderViewModel.order?.orderLines[0].productId == orderViewModel.treeSign?.id {
+                            if let paymentStatus = orderViewModel.order?.paymentStatus {
+                                if paymentStatus == PaymentStatus.paid.rawValue || paymentStatus == PaymentStatus.open.rawValue {
+                                    createTreeSign()
+                                } else {
+                                    self.message = Localization.errorOccurred
+                                    self.showingAlert.toggle()
+                                }
+                            }
+                        }
+                }
+            }
+        }
+    }
+    
+    func createTreeSign() {
+        if let treeSignProduct = orderViewModel.treeSign {
+            if let orderId = orderViewModel.orderResponse?.id {
+                let treeSign = treeViewModel.createTreeSignObject(tree: tree, treeSignProduct: treeSignProduct, signText: self.treeSign, orderId: orderId)
+                
+                if let treeSign = treeSign {
+                    treeViewModel.createTreeSign(treeSign: treeSign) {  result in
                         switch (result) {
                             case .failure(_):
                                 break
                             case .success(_):
-                                if orderViewModel.order?.orderLines[0].productId == orderViewModel.treeSign?.id {
-                                    if let paymentStatus = orderViewModel.order?.paymentStatus {
-                                        if paymentStatus == PaymentStatus.paid.rawValue || paymentStatus == PaymentStatus.open.rawValue {
-                                            
-                                            if let treeSignProduct = orderViewModel.treeSign {
-                                                if let orderId = orderViewModel.orderResponse?.id {
-                                                    let treeSign = treeViewModel.createTreeSignObject(tree: tree, treeSignProduct: treeSignProduct, signText: self.treeSign, orderId: orderId)
-                                                    
-                                                    if let treeSign = treeSign {
-                                                        treeViewModel.createTreeSign(treeSign: treeSign) {  result in
-                                                            switch (result) {
-                                                                case .failure(_):
-                                                                    break
-                                                                case .success(_):
-                                                                    self.message = Localization.successfulSignPurchase
-                                                                    self.showingAlert.toggle()
-                                                                    presentationMode.wrappedValue.dismiss()
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            self.message = Localization.errorOccurred
-                                            self.showingAlert.toggle()
-                                        }
-                                    }
-                                }
+                                self.message = Localization.successfulSignPurchase
+                                self.showingAlert.toggle()
+                                presentationMode.wrappedValue.dismiss()
                         }
                     }
                 }
             }
-        })
+        }
     }
+    
+    
 }

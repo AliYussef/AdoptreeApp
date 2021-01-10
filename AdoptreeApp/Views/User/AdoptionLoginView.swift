@@ -63,7 +63,7 @@ struct AdoptionLoginView: View {
                 
                 Button(action: {
                     isTryingToAdopt.toggle()
-                    loginAnyPay()
+                    loginAndPay()
                     
                 }, label: {
                     Text(Localization.loginPayBtn)
@@ -103,7 +103,7 @@ struct AdoptionLoginView: View {
 
 extension AdoptionLoginView {
     
-    func loginAnyPay() {
+    func loginAndPay() {
         let user = UserLogin(username: inputValidationViewModel.username, password: inputValidationViewModel.password)
         
         userViewModel.login(user: user) { result in

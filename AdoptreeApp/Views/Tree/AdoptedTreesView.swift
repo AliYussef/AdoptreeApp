@@ -50,19 +50,9 @@ struct AdoptedTreesCell: View {
                     })
                     .alert(isPresented: $showingAlertConfirm) {
                         Alert(title: Text(Localization.adoptedTreesAlertTitle), message: Text(message), primaryButton: .default(Text(Localization.yesBtn)){
-                            //might add payment as well
-                            if let tree = tree.assignedTree {
-                                treeViewModel.renewTreeContract(for: tree) { result in
-                                    switch (result) {
-                                        case .failure(_):
-                                            message = Localization.errorOccurred
-                                            showingAlert.toggle()
-                                        case .success(_):
-                                            message = Localization.successfulContractRenewal
-                                            showingAlert.toggle()
-                                    }
-                                }
-                            }
+                            
+                            renewContract()
+                            
                         },secondaryButton: .cancel(Text(Localization.noBtn)))
                     }
                 
@@ -171,5 +161,20 @@ extension AdoptedTreesCell {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy"
         return dateFormatter.string(from: date)
+    }
+    
+    func renewContract()  {
+        if let tree = tree.assignedTree {
+            treeViewModel.renewTreeContract(for: tree) { result in
+                switch (result) {
+                    case .failure(_):
+                        message = Localization.errorOccurred
+                        showingAlert.toggle()
+                    case .success(_):
+                        message = Localization.successfulContractRenewal
+                        showingAlert.toggle()
+                }
+            }
+        }
     }
 }

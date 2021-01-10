@@ -120,20 +120,7 @@ struct BookedTourOverviewView: View {
                 .padding()
                 .alert(isPresented: $showingAlertConfirm) {
                     Alert(title: Text(Localization.tourOverviewTourAlertTitle), message: Text(message), primaryButton: .default(Text(Localization.yesBtn)){
-                        if let bookedTourId = bookedTour.id {
-                            isTryingToCancel.toggle()
-                            newsViewModel.cancelBookedTour(using: bookedTourId) { result in
-                                switch (result) {
-                                    case .failure(_):
-                                        self.message = Localization.errorOccurred
-                                        self.showingAlert.toggle()
-                                    case .success(_):
-                                        self.message = Localization.successfulCanceledTour
-                                        self.showingAlert.toggle()
-                                }
-                                isTryingToCancel.toggle()
-                            }
-                        }
+                        cancelTour()
                     },secondaryButton: .cancel(Text(Localization.noBtn)))
                 }
             }
@@ -146,6 +133,23 @@ struct BookedTourOverviewView: View {
 }
 
 extension BookedTourOverviewView {
+    
+    func cancelTour() {
+        if let bookedTourId = bookedTour.id {
+            isTryingToCancel.toggle()
+            newsViewModel.cancelBookedTour(using: bookedTourId) { result in
+                switch (result) {
+                    case .failure(_):
+                        self.message = Localization.errorOccurred
+                        self.showingAlert.toggle()
+                    case .success(_):
+                        self.message = Localization.successfulCanceledTour
+                        self.showingAlert.toggle()
+                }
+                isTryingToCancel.toggle()
+            }
+        }
+    }
     
     func getTourDateTime(date: Date) -> String {
         let date = date

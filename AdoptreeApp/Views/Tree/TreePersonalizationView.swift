@@ -38,31 +38,7 @@ struct TreePersonalizationView: View {
                 }
                 
                 Button(action: {
-                    tree.assignedTree?.tree_name = treeName
-                    tree.assignedTree?.tree_color = UIColor(treeColor).toHex()
-                    if let tree = tree.assignedTree {
-                        treeViewModel.personalizeTree(tree: tree) { result in
-                            switch (result) {
-                                case .failure(_):
-                                    self.message = Localization.errorOccurred
-                                    self.showingAlert.toggle()
-                                case .success(let tree):
-                                    if let treeColor = tree.tree_color {
-                                        if let treeName = tree.tree_name {
-                                            timelineViewModel.timelineTreeDic[tree.tree_id]?.treeName = treeName
-                                            timelineViewModel.timelineTreeDic[tree.tree_id]?.treeColor = treeColor
-                                            
-                                            if let index = timelineViewModel.treeTypeFilter.firstIndex(where: {$0.treeId == tree.tree_id}) {
-                                                timelineViewModel.treeTypeFilter[index].treeName = treeName
-                                            }
-                                        }
-                                    }
-                                    self.message = Localization.successfullyEdited
-                                    self.showingAlert.toggle()
-                                    presentationMode.wrappedValue.dismiss()
-                            }
-                        }
-                    }
+                    personalizeTree()
                 }, label: {
                     Text(Localization.confirmBtn)
                         .font(.subheadline)
@@ -91,3 +67,40 @@ struct TreePersonalizationView: View {
     }
 }
 
+extension TreePersonalizationView {
+    func personalizeTree() {
+        
+        if var tree = tree.assignedTree {
+            tree.tree_name = treeName
+            tree.tree_color = UIColor(treeColor).toHex()
+            treeViewModel.personalizeTree(tree: tree) { result in
+                switch (result) {
+                    case .failure(_):
+                        self.message = Localization.errorOccurred
+                        self.showingAlert.toggle()
+                        
+                    case .success(let tree):
+                        updateTimelineView(tree: tree)
+                        self.message = Localization.successfullyEdited
+                        self.showingAlert.toggle()
+                        presentationMode.wrappedValue.dismiss()
+                }
+            }
+        }
+        
+    }
+    
+    func updateTimelineView(tree: AssignedTree) {
+        if let treeColor = tree.tree_color {
+            if let treeName = tree.tree_name {
+                timelineViewModel.timelineTreeDic[tree.tree_id]?.treeName = treeName
+                timelineViewModel.timelineTreeDic[tree.tree_id]?.treeColor = treeColor
+                
+                if let index = timelineViewModel.treeTypeFilter.firstIndex(where: {$0.treeId == tree.tree_id}) {
+                    timelineViewModel.treeTypeFilter[index].treeName = treeName
+                }
+            }
+        }
+    }
+    
+}

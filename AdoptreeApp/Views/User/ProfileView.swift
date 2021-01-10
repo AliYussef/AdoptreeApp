@@ -63,9 +63,7 @@ struct ProfileView: View {
                             })
                         
                         Button(action: {
-                            treeViewModel.clearDataForLogout()
-                            timelineViewModel.clearDataForLogout()
-                            newsViewModel.clearDataForLogout()
+                            clearUserTreeData()
                             self.userViewModel.logout()
                         }, label: {
                             Text(Localization.logoutBtn)
@@ -77,5 +75,13 @@ struct ProfileView: View {
                 }
             }
         }
+    }
+}
+
+extension ProfileView {
+    func clearUserTreeData() {
+        treeViewModel.clearDataForLogout()
+        timelineViewModel.clearDataForLogout()
+        newsViewModel.clearDataForLogout()
     }
 }

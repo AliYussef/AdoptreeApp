@@ -26,8 +26,8 @@ struct FirstInfoView: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
-            // this extra empty text to preserve the alignment
-            // between the both floating ground
+            /* this extra empty text to preserve the alignment
+             between the both floating ground */
             Text("")
                 .padding()
             

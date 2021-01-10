@@ -228,14 +228,11 @@ extension TreeHeader {
     func calculateRemainingAdoptionPeriod() -> DateComponents {
         
         if let tree = tree.assignedTree {
-            //if tree.created_at == tree.expire_date {
             let timeInterval = DateComponents(year: 1)
             let expiredDate = Calendar.current.date(byAdding: timeInterval, to: tree.created_at)
             if let expiredDate = expiredDate {
                 return Calendar.current.dateComponents([.day], from: Date(), to: expiredDate)
             }
-            // }
-            //return Calendar.current.dateComponents([.day], from: tree.created_at, to: tree.expire_date)
         }
         return DateComponents()
     }

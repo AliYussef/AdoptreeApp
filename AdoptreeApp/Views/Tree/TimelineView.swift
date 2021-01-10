@@ -27,6 +27,7 @@ struct TimelineView: View {
                         Spacer()
                         
                         if timelineViewModel.areFiltersDataReady {
+                            
                             Picker(selection: $selectedTree, label: Label(
                                 title: { Text("\(selectedTreeLabel.isEmpty ? "Tree" : selectedTreeLabel)").foregroundColor(.black) },
                                 icon: { Image(systemName: "arrowtriangle.down.fill") }
