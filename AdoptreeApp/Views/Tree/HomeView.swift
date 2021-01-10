@@ -152,7 +152,7 @@ struct TreeHeader: View {
             VStack (alignment: .leading) {
                 if let tree = tree.assignedTree {
                     if let treeName = tree.tree_name {
-                        Text(treeName.isEmpty ? "\(Localization.homeTree)" : treeName)
+                        Text(treeName.isEmpty ? "Tree" : treeName)
                             .font(.title2)
                             .foregroundColor(.init("color_font_primary"))
                     }

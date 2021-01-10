@@ -13,6 +13,7 @@ struct PersonalSignView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var treeSign = ""
+    @State private var hasTreeSign: Bool = false
     @State private var showingAlert = false
     @State private var message = LocalizedStringKey("")
     let tree: Tree
@@ -45,7 +46,13 @@ struct PersonalSignView: View {
                 Form {
                     Section(header: Text(Localization.personalSignTreeSign), content: {
                         TextField(Localization.personalSignText, text: $treeSign)
-                        
+                        if hasTreeSign {
+                            Text(Localization.personalSignHasTreeSignNote)
+                                .font(.footnote)
+                                
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(.init("color_font_secondary"))
+                        }
                     })
                 }
                 
@@ -77,26 +84,30 @@ struct PersonalSignView: View {
                         .foregroundColor(.white)
                 })
                 .frame(width: 180, height: 40, alignment: .center)
-                .background(Color.init("color_primary_accent"))
+                .background(hasTreeSign ? Color.gray : Color.init("color_primary_accent"))
                 .cornerRadius(10.0)
                 .padding()
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text(Localization.personalSignText), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
-                //.disabled(treeViewModel.treeSign != nil)
+                .disabled(hasTreeSign)
                 
             }
             .padding()
         }
         .onAppear {
             
-            if treeViewModel.treeSign == nil {
+            if treeViewModel.treeSign.isEmpty {
                 if let treeId = tree.assignedTree?.tree_id {
-                    treeViewModel.getTreeSignByTree(for: treeId) {_ in}
-                }
-                
-                if let signText = treeViewModel.treeSign?.sign_text {
-                    treeSign = signText
+                    treeViewModel.getTreeSignByTree(for: treeId) { result in
+                        switch result {
+                            case .failure(_):
+                                break
+                            case .success(let sign):
+                                self.treeSign = sign.sign_text
+                                self.hasTreeSign = true
+                        }
+                    }
                 }
             }
             

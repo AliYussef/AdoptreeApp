@@ -102,7 +102,7 @@ struct TimelineView: View {
                                     if report.type == TimelineEntryType.report {
                                         TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Weekly result", icon: Image(systemName: "eye.fill"), treeColor: getTreeColor(treeId: report.treeId))
                                     } else if report.type == TimelineEntryType.tree {
-                                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "Tree \(timelineViewModel.timelineTreeDic[report.treeId]?.treeName ?? "Tree")", icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: report.treeId))
+                                        TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: createTreeAdoptedTitle(treeId: report.treeId), icon: Image(systemName: "heart.fill"), treeColor: getTreeColor(treeId: report.treeId))
                                     } else if report.type == TimelineEntryType.image {
                                         TimelineCell(item: report, date: "\(getDay(date: report.reportedOn))", title: "New tree image", icon: Image(systemName: "photo"), treeColor: getTreeColor(treeId: report.treeId))
                                     }
@@ -195,6 +195,13 @@ extension TimelineView {
         return Color.init("color_primary_accent")
     }
     
+    func createTreeAdoptedTitle(treeId: Int64) -> String {
+        var title = ""
+        if let treeName = timelineViewModel.timelineTreeDic[treeId]?.treeName {
+            title =  "Adopted \(treeName.isEmpty ? "Tree" : treeName)"
+        }
+       return title
+    }
 }
 
 struct TimelineCell: View {

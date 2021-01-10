@@ -13,7 +13,7 @@ class TreeViewModel: ObservableObject {
     @Published var trees:[Tree] = []
     @Published var treeImages: [TreeImage] = []
     @Published var wildlifes: [WildlifeOutput] = []
-    @Published var treeSign: TreeSign?
+    @Published var treeSign: [TreeSign] = []
     @Published var countries: [Country] = []
     @Published var forests: [Forest] = []
     @Published var isExpanded: [Bool] = [true]
@@ -197,7 +197,7 @@ extension TreeViewModel {
                     }
                     
                 }, receiveValue: {result in
-                    self.treeSign = result
+                    self.treeSign.append(result)
                     completion(.success(result))
                 })
                 .store(in: &cancellables)
@@ -234,7 +234,7 @@ extension TreeViewModel {
                 }
                 
             }, receiveValue: {result in
-                self.treeSign = result
+                self.treeSign.append(result)
                 completion(.success(result))
             })
             .store(in: &cancellables)
@@ -362,7 +362,7 @@ extension TreeViewModel {
         trees.removeAll()
         treeImages.removeAll()
         wildlifes.removeAll()
-        treeSign = nil
+        treeSign.removeAll()
         countries.removeAll()
         forests.removeAll()
         treeLocationDic.removeAll()

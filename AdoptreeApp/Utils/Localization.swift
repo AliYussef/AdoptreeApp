@@ -15,7 +15,7 @@ enum Localization {
     }
     
     static var firstInfoText: LocalizedStringKey {
-        return "Reduce you CO2 footprint by adopting a tree"
+        return "Reduce your CO2 footprint by adopting a tree"
     }
     
     static var secondInfoText: LocalizedStringKey {
@@ -200,7 +200,7 @@ extension Localization {
     }
     
     static var timelineTreeNotPlanted: LocalizedStringKey {
-        return "Your adopted trees have not been planted yet. Once they are planted you will be able to follow their storis."
+        return "Your adopted trees have not been planted yet. Once they are planted you will be able to follow their stories."
     }
 }
 
@@ -223,7 +223,7 @@ extension Localization {
     }
     
     static var TreePersonalizationAlertTitle: LocalizedStringKey {
-        return "Presonalisation"
+        return "Personalisation"
     }
 }
 
@@ -244,6 +244,11 @@ extension Localization {
     static var personalSignTreeSign: LocalizedStringKey {
         return "Tree sign"
     }
+    
+    static var personalSignHasTreeSignNote: LocalizedStringKey {
+        return "You already has a tree sign and you cannot order a new one at the moment"
+    }
+    
 }
 
 /* AdoptedTreesView */
@@ -323,7 +328,7 @@ extension Localization {
     }
     
     static var bookGuidedTourExpl: LocalizedStringKey {
-        return "During the tour a guide will walk you through the forest where you have adopted your tree."
+        return "During the tour, a guide will walk you through the forest where you have adopted your tree."
     }
     
     static var bookGuidedTourInfromation: LocalizedStringKey {
@@ -379,11 +384,11 @@ extension Localization {
     }
     
     static var tourOverviewTourAlertTitle: LocalizedStringKey {
-        return "Tour canceling"
+        return "Tour cancelling"
     }
     
     static var tourOverviewTourCancelingProgress: LocalizedStringKey {
-        return "Canceling is in progress..."
+        return "cancelling is in progress..."
     }
 }
 
@@ -422,7 +427,7 @@ extension Localization {
     }
     
     static var loginAdoptingProgress: LocalizedStringKey {
-        return "Aopting..."
+        return "Adopting..."
     }
     
     static var signupTitle: LocalizedStringKey {
@@ -446,7 +451,7 @@ extension Localization {
     }
     
     static var forgotPasswordNote: LocalizedStringKey {
-        return "Please check your email and fill in the reset token you recieved with a new password"
+        return "Please check your email and fill in the reset token you received with a new password"
     }
     
     static var requestPasswordProgress: LocalizedStringKey {
@@ -664,7 +669,7 @@ extension Localization {
     }
     
     static var timelineGuestText: LocalizedStringKey {
-        return "Login or adopt a tree to stay up to date with all your tree's achievments and milestones"
+        return "Login or adopt a tree to stay up to date with all your tree's achievements and milestones"
     }
     
     static var profileGuestName: LocalizedStringKey {
@@ -746,11 +751,11 @@ extension Localization {
     }
     
     static var tourCancelingConfirmation: LocalizedStringKey {
-        return "Are you sure about canceling your tour?"
+        return "Are you sure about cancelling your tour?"
     }
     
     static var successfulCanceledTour: LocalizedStringKey {
-        return "Your tour has been canceled"
+        return "Your tour has been cancelled"
     }
     
     static var loginError: LocalizedStringKey {

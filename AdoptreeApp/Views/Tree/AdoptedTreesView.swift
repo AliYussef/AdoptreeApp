@@ -38,7 +38,7 @@ struct AdoptedTreesCell: View {
             HStack {
                 Label(
                     title: {
-                        Text("\((tree.assignedTree?.tree_name?.isEmpty ?? false ? "\(Localization.homeTree)" : tree.assignedTree?.tree_name) ?? "\(Localization.homeTree)")")
+                        Text("\((tree.assignedTree?.tree_name?.isEmpty ?? false ? "Tree" : tree.assignedTree?.tree_name) ?? "Tree")")
                             .font(.title2)
                     },
                     icon: {
@@ -100,7 +100,7 @@ struct AdoptedTreesCell: View {
                         HStack {
                             Text(Localization.adoptedTreesTreeType)
                             Spacer()
-                            Text("\(orderViewModel.availableProducts.first(where: {$0.id == tree.productId})?.name ?? "\(Localization.homeTree)")")
+                            Text("\(orderViewModel.availableProducts.first(where: {$0.id == tree.productId})?.name ?? "Tree")")
                                 .foregroundColor(.init("color_font_secondary"))
                         }
                         

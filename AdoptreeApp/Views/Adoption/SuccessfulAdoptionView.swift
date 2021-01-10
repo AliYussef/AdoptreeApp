@@ -39,7 +39,9 @@ struct SuccessfulAdoptionView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: ContentView()
+                NavigationLink(destination: HomeView()
+                                .navigationBarTitle(Localization.homeTitle, displayMode: .inline)
+                                .navigationBarBackButtonHidden(true)
                                 .onAppear {
                                     if userViewModel.isAuthenticated && treeViewModel.trees.isEmpty {
                                         treeViewModel.getAdoptedTrees() { result in

@@ -30,7 +30,7 @@ struct TreeTypeView: View {
                             .foregroundColor(.init("color_font_primary"))
                             .padding(.bottom, 2)
                         
-                        Text("\(orderViewModel.categoriesDic[treeProduct.categoryId] ?? "\(Localization.homeTree)")")
+                        Text("\(orderViewModel.categoriesDic[treeProduct.categoryId] ?? "Tree")")
                             .font(.body)
                             .foregroundColor(.init("color_font_secondary"))
                         Text("Price: € \(String(format: "%.2f", treeProduct.price)) EUR")

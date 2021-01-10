@@ -214,4 +214,5 @@
 "Username" = "Gebruikersnaam";
 "Email" = "Email";
 "New password" = "Nieuw paswoord";
-"Please check your email and fill in the reset token you recieved with a new password" = "Please check your email and fill in the reset token you recieved with a new password";
+"Please check your email and fill in the reset token you received with a new password" = "Controleer uw e-mail en vul de reset-token in die u heeft ontvangen met een nieuw wachtwoord";
+"You already has a tree sign and you cannot order a new one at the moment" = "Je hebt al een boombordje en je kunt op dit moment geen nieuwe bestellen";

@@ -14,7 +14,7 @@ struct AdoptionOverviewView: View {
     @State private var isAdoptionFailed = false
     @State private var actionState: Int? = 0
     @State private var showingAlert = false
-    @State private var message = ""
+    @State private var message = LocalizedStringKey("")
     
     var body: some View {
         if !isAdoptionFailed {
@@ -115,7 +115,7 @@ struct AdoptionOverviewView: View {
                     }
                 }
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text(Localization.loginAlertTitle), message: Text("\(message)"), dismissButton: .default(Text(Localization.okBtn)))
+                    Alert(title: Text(Localization.loginAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
                 .onOpenURL(perform: { url in
                     if url.host == "payment-return" {
@@ -139,7 +139,7 @@ extension AdoptionOverviewView {
             orderViewModel.createOrder(order: order) { result in
                 switch (result) {
                     case .failure(_):
-                        message = "\(Localization.errorOccurred)"
+                        message = Localization.errorOccurred
                         showingAlert.toggle()
                     case .success(let success):
                         if let url = URL(string: success.paymentLink) {

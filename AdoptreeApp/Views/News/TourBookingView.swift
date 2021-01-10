@@ -134,15 +134,3 @@ struct TourBookingView: View {
     }
 }
 
-//extension TourBookingView {
-//
-//    func validateInput() -> Bool {
-//        if fullName.count < 3 || email.count < 3 {
-//            message = "Please fill in all fields!"
-//            showingAlertInput.toggle()
-//            return false
-//        }
-//
-//        return true
-//    }
-//}
