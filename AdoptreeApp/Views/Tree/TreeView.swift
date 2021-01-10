@@ -206,6 +206,7 @@ extension TreeDataSection {
 }
 
 struct TreeGallerySection: View {
+    @EnvironmentObject var treeViewModel: TreeViewModel
     let treeImage: TreeImage?
     
     var body: some View {
@@ -226,24 +227,27 @@ struct TreeGallerySection: View {
                     
                     TabView {
                         // for now use mock images as API does not have any images
-                        ForEach((0...1), id: \.self) {
-                            Image("\($0)")
+//                        ForEach((0...1), id: \.self) {
+//                            Image("\($0)")
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fill)
+//                        }
+                        
+                        // actual implementaion
+                        if let treeImages = treeImage?.images {
+                            ForEach (treeImages) { image in
+                                if let actualImage = image.image {
+                                    Image(uiImage: getImage(using: actualImage))
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                }
+                            }
+                        } else {
+                            Image(uiImage: UIImage(named: "happy_tree")!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
+                                .frame(width: 200, height: 200)
                         }
-                        // actual implementaion
-                        //                        if let treeImages = treeImage?.images {
-                        //                            ForEach (treeImages) { image in
-                        //                                Image(uiImage: getImage(using: image.image_blobname))
-                        //                                    .resizable()
-                        //                                    .aspectRatio(contentMode: .fill)
-                        //                            }
-                        //                        } else {
-                        //                            Image(uiImage: UIImage(named: "happy_tree")!)
-                        //                                .resizable()
-                        //                                .aspectRatio(contentMode: .fill)
-                        //                                .frame(width: 200, height: 200)
-                        //                        }
                     }.tabViewStyle(PageTabViewStyle())
                     .cornerRadius(12.0)
                     
@@ -254,11 +258,8 @@ struct TreeGallerySection: View {
 
 extension TreeGallerySection {
     
-    func getImage(using name: String) -> UIImage {
-        if let data = Data(base64Encoded: name) {
-            return UIImage(data: data) ?? UIImage(named: "happy_tree")!
-        }
-        return UIImage(named: "happy_tree")!
+    func getImage(using data: Data) -> UIImage {
+        return UIImage(data: data) ?? UIImage(named: "happy_tree")!
     }
 }
 

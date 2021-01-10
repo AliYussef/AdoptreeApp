@@ -99,6 +99,9 @@ extension TreeViewModel {
                         
                     case .success(let images):
                         self.treeImages.append(images)
+                        images.images.forEach({ image in
+                            self.getActualImage(for: image)
+                        })
                 }
                 
                 switch(wildlife) {
@@ -119,6 +122,40 @@ extension TreeViewModel {
                 }
             })
             .store(in: &cancellables)
+    }
+    
+    func getActualImage(for treeImage: ImageDetail) {
+        let url = URL(string: treeImage.image_blobname)!
+        let urlRequest = URLRequest(url: url)
+        
+        treeRepository.getActualImage(using: urlRequest)
+            .sink(receiveCompletion: { result in
+                switch result {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        switch error {
+                            case let urlError as URLError:
+                                os_log("Url error", type: .error, urlError.localizedDescription)
+                            case let decodingError as DecodingError:
+                                os_log("Decoding error", type: .error, decodingError.localizedDescription)
+                            default:
+                                os_log("Error", type: .error, error.localizedDescription)
+                        }
+                }
+                
+            }, receiveValue: { result in
+                self.updateImage(using: result, for: treeImage)
+            })
+            .store(in: &cancellables)
+    }
+    
+    func updateImage(using data: Data, for treeImage: ImageDetail) {
+        if let parentIndex = treeImages.firstIndex(where: {$0.tree_id ==  treeImage.tree_id}) {
+            if let childIndex = treeImages[parentIndex].images.firstIndex(where: {$0.id == treeImage.id}) {
+                treeImages[parentIndex].images[childIndex].image = data
+            }
+        }
     }
     
 }

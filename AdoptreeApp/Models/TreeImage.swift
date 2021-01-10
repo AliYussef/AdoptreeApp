@@ -9,7 +9,7 @@ import Foundation
 
 struct TreeImage: Codable {
     let tree_id: Int64
-    let images: [ImageDetail]
+    var images: [ImageDetail]
 }
 
 struct ImageDetail: Codable, Identifiable {
@@ -18,4 +18,5 @@ struct ImageDetail: Codable, Identifiable {
     let image_blobname: String
     let alt: String
     let createdAt: Date
+    var image: Data?
 }

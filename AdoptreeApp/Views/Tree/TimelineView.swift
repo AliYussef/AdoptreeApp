@@ -149,7 +149,7 @@ extension TimelineView {
         }
         
         if !timelineViewModel.telemetries.isEmpty && !timelineViewModel.sequestrations.isEmpty {
-            timelineViewModel.generateTimelineData(images: nil)
+            timelineViewModel.generateTimelineData(images: treeViewModel.treeImages)
         }
         
         return AnyView(EmptyView())
@@ -270,8 +270,8 @@ struct TimelineDetailView: View {
                 if item.type == TimelineEntryType.report {
                     TreeDataSectionTimeline(item: item)
                 } else if item.type == TimelineEntryType.image  {
-                    if let imageName = item.image_blobname {
-                        Image("\(imageName)")
+                    if let imageName = item.image {
+                        Image(uiImage: UIImage(data: imageName) ?? UIImage(named: "happy_tree")!)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: UIScreen.main.bounds.width, height: .none)

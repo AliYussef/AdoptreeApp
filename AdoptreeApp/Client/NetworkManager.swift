@@ -173,4 +173,10 @@ extension NetworkManager {
             .eraseToAnyPublisher()
     }
     
+    func executeRequestWithoutAuthenticator(using request: URLRequest) -> AnyPublisher<Data, Error> {
+        
+        return session.publisher(for: request, token: nil)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
 }

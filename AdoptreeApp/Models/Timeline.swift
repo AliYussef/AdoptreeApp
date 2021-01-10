@@ -17,7 +17,7 @@ struct Timeline: Codable, Identifiable {
     let treeLength: Int8?
     let treeDiameter: Int8?
     let sequestration: Double?
-    let image_blobname: String?
+    let image: Data?
 }
 
 struct TimelineTree {

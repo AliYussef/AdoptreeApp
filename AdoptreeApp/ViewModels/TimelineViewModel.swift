@@ -75,10 +75,10 @@ extension TimelineViewModel {
 extension TimelineViewModel {
     
     func generateTimelineData(images: [TreeImage]?) {
-        let images = [
-            TreeImage(tree_id: 30, images: [ImageDetail(id: 1, tree_id: 30, image_blobname: "0", alt: "", createdAt: Date(timeIntervalSince1970: 1612444545))]),
-            TreeImage(tree_id: 32, images: [ImageDetail(id: 2, tree_id: 32, image_blobname: "1", alt: "", createdAt: Date(timeIntervalSince1970: 1612530945))])
-        ]
+//        let images = [
+//            TreeImage(tree_id: 30, images: [ImageDetail(id: 1, tree_id: 30, image_blobname: "0", alt: "", createdAt: Date(timeIntervalSince1970: 1612444545))]),
+//            TreeImage(tree_id: 32, images: [ImageDetail(id: 2, tree_id: 32, image_blobname: "1", alt: "", createdAt: Date(timeIntervalSince1970: 1612530945))])
+//        ]
         
         var reports:[Timeline] = []
         telemetries.forEach({ telemetry in
@@ -86,10 +86,10 @@ extension TimelineViewModel {
             telemetry.reports.forEach({ report in
                 if index < (sequestrations.filter({$0.treeId == Int64(telemetry.treeId)}).first?.sequestration.count)! {
                     
-                    reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: TimelineEntryType.report, reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: sequestrations.filter({$0.treeId == Int64(telemetry.treeId)}).first?.sequestration[index], image_blobname: nil))
+                    reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: TimelineEntryType.report, reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: sequestrations.filter({$0.treeId == Int64(telemetry.treeId)}).first?.sequestration[index], image: nil))
                     
                 } else {
-                    reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: TimelineEntryType.report, reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: nil, image_blobname: nil))
+                    reports.append(Timeline(treeId: Int64(telemetry.treeId)!, type: TimelineEntryType.report, reportedOn: report.reportedOn, temperature: report.temperature, humidity: report.humidity, treeLength: report.treeLength, treeDiameter: report.treeDiameter, sequestration: nil, image: nil))
                 }
                 
                 index += 1
@@ -97,13 +97,13 @@ extension TimelineViewModel {
         })
         
         timelineTreeDic.forEach({ tree in
-            reports.append(Timeline(treeId: tree.key, type: TimelineEntryType.tree, reportedOn: tree.value.adoptedDate, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: nil))
+            reports.append(Timeline(treeId: tree.key, type: TimelineEntryType.tree, reportedOn: tree.value.adoptedDate, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image: nil))
         })
         
         
-        images.forEach({ image in
+        images?.forEach({ image in
             image.images.forEach({ imageDetail in
-                reports.append(Timeline(treeId: imageDetail.tree_id, type: TimelineEntryType.image, reportedOn: imageDetail.createdAt, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image_blobname: imageDetail.image_blobname))
+                reports.append(Timeline(treeId: imageDetail.tree_id, type: TimelineEntryType.image, reportedOn: imageDetail.createdAt, temperature: nil, humidity: nil, treeLength: nil, treeDiameter: nil, sequestration: nil, image: imageDetail.image))
             })
         })
         
