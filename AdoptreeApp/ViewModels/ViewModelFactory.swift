@@ -8,7 +8,6 @@
 import Foundation
 
 class ViewModelFactory {
-    
     private let userRepository = UserRepository()
     private let treeRepository = TreeRepository()
     private let telemetryRepository = TelemetryRepository()

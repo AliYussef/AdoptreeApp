@@ -74,11 +74,23 @@ extension NetworkManager {
                         if UserViewModel.shared.accessToken != nil {
                             UserViewModel.shared.accessToken = nil
                             UserViewModel.shared.refreshToken = nil
-                            UserViewModel.shared.isAuthenticated = false
-                            throw error
+                            DispatchQueue.main.async {
+                                UserViewModel.shared.isAuthenticated = false
+                            }
+                        } else {
+                            return self.session.publisher(for: request, token: nil)
+                                .eraseToAnyPublisher()
                         }
-                        return self.session.publisher(for: request, token: nil).eraseToAnyPublisher()
                     }
+                    
+                    if let serverError = error as? RequestError,
+                       serverError.description == RequestError.serverError.description {
+                        
+                        return self.session.publisher(for: request, token: UserViewModel.shared.accessToken)
+                            .delay(for: 2, scheduler: DispatchQueue.main)
+                            .eraseToAnyPublisher()
+                    }
+                    
                     throw error
                 }
                 
@@ -88,6 +100,7 @@ extension NetworkManager {
                     })
                     .eraseToAnyPublisher()
             })
+            .retry(2)
             .decode(type: ResponseType.self, decoder: self.decoder)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
@@ -108,11 +121,24 @@ extension NetworkManager {
                         
                         if UserViewModel.shared.accessToken != nil {
                             UserViewModel.shared.accessToken = nil
-                            throw error
+                            UserViewModel.shared.refreshToken = nil
+                            DispatchQueue.main.async {
+                                UserViewModel.shared.isAuthenticated = false
+                            }
+                        } else {
+                            return self.session.publisher(for: request, token: nil)
+                                .eraseToAnyPublisher()
                         }
-                        
-                        return self.session.publisher(for: request, token: nil).eraseToAnyPublisher()
                     }
+                    
+                    if let serverError = error as? RequestError,
+                       serverError.description == RequestError.serverError.description {
+                        
+                        return self.session.publisher(for: request, token: UserViewModel.shared.accessToken)
+                            .delay(for: 2, scheduler: DispatchQueue.main)
+                            .eraseToAnyPublisher()
+                    }
+                    
                     throw error
                 }
                 
@@ -122,6 +148,7 @@ extension NetworkManager {
                     })
                     .eraseToAnyPublisher()
             })
+            .retry(2)
             .decode(type: ResponseType.self, decoder: self.decoder)
             .map {
                 .success($0)
@@ -155,13 +182,27 @@ extension NetworkManager {
                         
                         if UserViewModel.shared.accessToken != nil {
                             UserViewModel.shared.accessToken = nil
-                            throw error
+                            UserViewModel.shared.refreshToken = nil
+                            DispatchQueue.main.async {
+                                UserViewModel.shared.isAuthenticated = false
+                            }
+                        } else {
+                            return self.session.publisher(for: request, token: nil)
+                                .eraseToAnyPublisher()
                         }
-                        
-                        return self.session.publisher(for: request, token: nil).eraseToAnyPublisher()
                     }
+                    
+                    if let serverError = error as? RequestError,
+                       serverError.description == RequestError.serverError.description {
+                        
+                        return self.session.publisher(for: request, token: UserViewModel.shared.accessToken)
+                            .delay(for: 2, scheduler: DispatchQueue.main)
+                            .eraseToAnyPublisher()
+                    }
+                    
                     throw error
                 }
+                
                 
                 return self.authenticator.checkTokenValidity(forceRefresh: true)
                     .flatMap({ token in
@@ -169,6 +210,7 @@ extension NetworkManager {
                     })
                     .eraseToAnyPublisher()
             })
+            .retry(2)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
@@ -176,6 +218,7 @@ extension NetworkManager {
     func executeRequestWithoutAuthenticator(using request: URLRequest) -> AnyPublisher<Data, Error> {
         
         return session.publisher(for: request, token: nil)
+            .retry(2)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

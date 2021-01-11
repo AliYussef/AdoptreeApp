@@ -60,7 +60,7 @@ class Authenticator {
                     UserViewModel.shared.authenDate = String(Date().timeIntervalSince1970)
                     UserViewModel.shared.accessToken = refreshTokenResponse.accessToken
                     UserViewModel.shared.refreshToken = refreshTokenResponse.refreshToken
-                }, receiveCompletion: { _ in
+                }, receiveCompletion: { result in
                     self?.queue.sync {
                         self?.refreshPublisher = nil
                     }

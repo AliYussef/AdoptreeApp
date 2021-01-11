@@ -31,14 +31,14 @@ struct ChangeEmailView: View {
                     .autocapitalization(.none)
                     .padding()
                 
-                SecureField(Localization.passwordField, text: $inputValidationViewModel.password)
-                    .validation(inputValidationViewModel.passwordValidation)
-                    .padding()
-                    .background(Color.init("color_textfield"))
-                    .cornerRadius(8.0)
-                    .keyboardType(.default)
-                    .autocapitalization(.none)
-                    .padding()
+//                SecureField(Localization.passwordField, text: $inputValidationViewModel.password)
+//                    .validation(inputValidationViewModel.passwordValidation)
+//                    .padding()
+//                    .background(Color.init("color_textfield"))
+//                    .cornerRadius(8.0)
+//                    .keyboardType(.default)
+//                    .autocapitalization(.none)
+//                    .padding()
                 
                 Button(action: {
                     isTryingToChangeEmail.toggle()
@@ -82,23 +82,21 @@ struct ChangeEmailView: View {
 extension ChangeEmailView {
     
     func changeUserEmail() {
-        if let userId = userViewModel.userShared.id {
-            if let firstName = userViewModel.userShared.firstname {
-                if let lastName = userViewModel.userShared.lastname {
-                    if let username = userViewModel.userShared.username {
-                        let user = User(id: userId, firstname: firstName, lastname: lastName, username: username, email: inputValidationViewModel.email, password: inputValidationViewModel.password, salt: nil, forgetToken: nil, role: nil, createdAt: nil)
-                        
-                        userViewModel.updateUserAccount(user: user) { result in
-                            switch (result) {
-                                case .failure(_):
-                                    message = Localization.errorOccurred
-                                    showingAlert.toggle()
-                                case .success(_):
-                                    message = Localization.successfulEmailChange
-                                    showingAlert.toggle()
-                            }
-                            isTryingToChangeEmail.toggle()
+        if let firstName = userViewModel.userShared.firstname {
+            if let lastName = userViewModel.userShared.lastname {
+                if let username = userViewModel.userShared.username {
+                    let user = UserUpdateBody(firstname: firstName, lastname: lastName, username: username, email: inputValidationViewModel.email, role: UserRoles.adoptee.rawValue)
+                    
+                    userViewModel.updateUserAccount(user: user) { result in
+                        switch (result) {
+                            case .failure(_):
+                                message = Localization.errorOccurred
+                                showingAlert.toggle()
+                            case .success(_):
+                                message = Localization.successfulEmailChange
+                                showingAlert.toggle()
                         }
+                        isTryingToChangeEmail.toggle()
                     }
                 }
             }

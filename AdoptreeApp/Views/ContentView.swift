@@ -89,12 +89,13 @@ struct ContentView: View {
                                         }
                                     })
                                 }
+                                treeViewModel.getForestsAndCountries()
                         }
                     }
                     
-                    if newsViewModel.contents.isEmpty {
+                    if newsViewModel.contents.isEmpty || newsViewModel.tours.isEmpty {
                         newsViewModel.getNewsViewData()
-                        treeViewModel.getForestsAndCountries()
+                       
                     }
                 }
                 

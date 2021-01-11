@@ -57,3 +57,15 @@ struct UserShared: Codable {
     let username: String?
     let email: String?
 }
+
+struct UserUpdateBody: Codable {
+    let firstname: String?
+    let lastname: String?
+    let username: String?
+    let email: String?
+    let role: Int?
+}
+
+enum UserRoles: Int {
+    case admin = 0, adoptee = 1
+}

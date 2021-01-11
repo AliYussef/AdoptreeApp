@@ -10,7 +10,7 @@ import SwiftUI
 struct TreePersonalizationView: View {
     @EnvironmentObject var treeViewModel: TreeViewModel
     @EnvironmentObject var timelineViewModel: TimelineViewModel
-    @State var tree: Tree
+    let tree: Tree
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var treeName = ""
     @State private var treeColor = Color.init("color_primary_accent")

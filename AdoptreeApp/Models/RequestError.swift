@@ -14,6 +14,7 @@ enum RequestError: Error, CustomStringConvertible {
     case encodingError(EncodingError)
     case genericError(Error)
     case invalidToken
+    case serverError
     
     var description: String {
         switch self {
@@ -29,6 +30,8 @@ enum RequestError: Error, CustomStringConvertible {
                 return "\(error)"
             case .invalidToken:
                 return "Invalid token"
+            case .serverError:
+                return "Server error"
         }
     }
 }

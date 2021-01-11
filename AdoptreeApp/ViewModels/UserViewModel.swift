@@ -13,11 +13,9 @@ import os
 class UserViewModel: ObservableObject {
     static let shared = UserViewModel(userRepository: UserRepository())
     @Published var isAuthenticated: Bool = false
-    @Published var tempAccessToken: String = ""
     @Published var isGuest: Bool = false
     @Published var isforgetPasswordTokenSent: Bool = false
     @Published var userShared: UserShared
-    @Published var authRequired: Bool = false
     private let keyChain = Keychain()
     private let userDefaults: UserDefaults
     private let userRepository: UserRepositoryProtocol
@@ -316,7 +314,7 @@ extension UserViewModel {
 
 extension UserViewModel {
     
-    func updateUserAccount(user: User, completion: @escaping (Result<User, RequestError>) -> Void) {
+    func updateUserAccount(user: UserUpdateBody, completion: @escaping (Result<User, RequestError>) -> Void) {
         do {
             let urlRequest = try ViewModelHelper.buildUrlRequestWithParam(withEndpoint: .user, using: .put, withParams: user)
             

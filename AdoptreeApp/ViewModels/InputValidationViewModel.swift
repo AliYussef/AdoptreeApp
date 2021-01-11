@@ -117,12 +117,11 @@ class InputValidationViewModel: ObservableObject {
     }()
     
     lazy var changeEmailValidation: ValidationPublisher = {
-        Publishers.CombineLatest3(
+        Publishers.CombineLatest(
             emailEmptyValidation,
-            emailValidation,
-            passwordValidation
-        ).map { v1, v2, v3 in
-            return [v1, v2, v3].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
+            emailValidation
+        ).map { v1, v2 in
+            return [v1, v2].allSatisfy { $0.isSuccess } ? .success : .failure(message: "")
         }.eraseToAnyPublisher()
     }()
     

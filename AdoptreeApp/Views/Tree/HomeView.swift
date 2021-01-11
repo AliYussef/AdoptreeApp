@@ -53,7 +53,7 @@ struct HomeView: View {
                                         },
                                         label: {
                                             
-                                            TreeHeader(treeViewModel: treeViewModel, tree: tree)
+                                            TreeHeader(tree: tree)
                                                 .frame(width: .none, height: .none)
                                         })
                                         .padding()
@@ -134,7 +134,7 @@ extension TotalCo2Redcution {
 }
 
 struct TreeHeader: View {
-    @ObservedObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
     @State private var isActive = false
     @State private var navigateTo: AnyView = AnyView(EmptyView())
     let tree: Tree
