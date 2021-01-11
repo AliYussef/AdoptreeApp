@@ -83,14 +83,6 @@ extension NetworkManager {
                         }
                     }
                     
-                    if let serverError = error as? RequestError,
-                       serverError.description == RequestError.serverError.description {
-                        
-                        return self.session.publisher(for: request, token: UserViewModel.shared.accessToken)
-                            .delay(for: 2, scheduler: DispatchQueue.main)
-                            .eraseToAnyPublisher()
-                    }
-                    
                     throw error
                 }
                 
@@ -100,7 +92,6 @@ extension NetworkManager {
                     })
                     .eraseToAnyPublisher()
             })
-            .retry(2)
             .decode(type: ResponseType.self, decoder: self.decoder)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
@@ -131,14 +122,6 @@ extension NetworkManager {
                         }
                     }
                     
-                    if let serverError = error as? RequestError,
-                       serverError.description == RequestError.serverError.description {
-                        
-                        return self.session.publisher(for: request, token: UserViewModel.shared.accessToken)
-                            .delay(for: 2, scheduler: DispatchQueue.main)
-                            .eraseToAnyPublisher()
-                    }
-                    
                     throw error
                 }
                 
@@ -148,7 +131,6 @@ extension NetworkManager {
                     })
                     .eraseToAnyPublisher()
             })
-            .retry(2)
             .decode(type: ResponseType.self, decoder: self.decoder)
             .map {
                 .success($0)
@@ -192,14 +174,6 @@ extension NetworkManager {
                         }
                     }
                     
-                    if let serverError = error as? RequestError,
-                       serverError.description == RequestError.serverError.description {
-                        
-                        return self.session.publisher(for: request, token: UserViewModel.shared.accessToken)
-                            .delay(for: 2, scheduler: DispatchQueue.main)
-                            .eraseToAnyPublisher()
-                    }
-                    
                     throw error
                 }
                 
@@ -210,7 +184,6 @@ extension NetworkManager {
                     })
                     .eraseToAnyPublisher()
             })
-            .retry(2)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
@@ -218,7 +191,6 @@ extension NetworkManager {
     func executeRequestWithoutAuthenticator(using request: URLRequest) -> AnyPublisher<Data, Error> {
         
         return session.publisher(for: request, token: nil)
-            .retry(2)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

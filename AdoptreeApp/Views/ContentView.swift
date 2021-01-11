@@ -12,6 +12,7 @@ struct ContentView: View {
     @EnvironmentObject var treeViewModel: TreeViewModel
     @EnvironmentObject var timelineViewModel: TimelineViewModel
     @EnvironmentObject var newsViewModel: NewsViewModel
+    @State private var showingAlertConfirm = false
     
     var body: some View {
         
@@ -75,35 +76,46 @@ struct ContentView: View {
                     Text(Localization.settingsTitleText)
                 }
             }
+            .alert(isPresented: $showingAlertConfirm) {
+                Alert(title: Text(Localization.contentAlertTitle), message: Text(Localization.contentAlertMessage), primaryButton: .default(Text(Localization.tryAgianBtn)){
+                    fetchViewsData()
+                },secondaryButton: .cancel(Text(Localization.noBtn)))
+            }
             .onAppear {
-                if userViewModel.isAuthenticated && treeViewModel.trees.isEmpty {
-                    treeViewModel.getAdoptedTrees() { result in
-                        switch (result) {
-                            case .failure(_):
-                                break
-                            case .success(_):
-                                if timelineViewModel.telemetries.isEmpty {
-                                    treeViewModel.trees.forEach({ tree in
-                                        if let treeId = tree.assignedTree?.tree_id {
-                                            timelineViewModel.getTimeLineData(using: treeId)
-                                        }
-                                    })
-                                }
-                                treeViewModel.getForestsAndCountries()
-                        }
-                    }
-                    
-                    if newsViewModel.contents.isEmpty || newsViewModel.tours.isEmpty {
-                        newsViewModel.getNewsViewData()
-                       
-                    }
-                }
-                
-                if !userViewModel.isAuthenticated {
-                    newsViewModel.getContent() {_ in}
-                }
+                fetchViewsData()
             }
         }
     }
 }
 
+extension ContentView {
+    func fetchViewsData() {
+        if userViewModel.isAuthenticated && treeViewModel.trees.isEmpty {
+            treeViewModel.getAdoptedTrees() { result in
+                switch (result) {
+                    case .failure(_):
+                        self.showingAlertConfirm.toggle()
+                        break
+                    case .success(_):
+                        if timelineViewModel.telemetries.isEmpty {
+                            treeViewModel.trees.forEach({ tree in
+                                if let treeId = tree.assignedTree?.tree_id {
+                                    timelineViewModel.getTimeLineData(using: treeId)
+                                }
+                            })
+                        }
+                        treeViewModel.getForestsAndCountries()
+                }
+            }
+            
+            if newsViewModel.contents.isEmpty || newsViewModel.tours.isEmpty {
+                newsViewModel.getNewsViewData()
+                
+            }
+        }
+        
+        if !userViewModel.isAuthenticated {
+            newsViewModel.getContent() {_ in}
+        }
+    }
+}

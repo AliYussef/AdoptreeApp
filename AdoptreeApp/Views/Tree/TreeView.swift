@@ -38,6 +38,7 @@ struct TreeHealthSection: View {
             .frame(width: .none, height: 110, alignment: .leading)
             .overlay(
                 VStack(alignment: .center) {
+                    
                     Text(Localization.treeOverallHealth)
                         .font(.title3)
                         .multilineTextAlignment(.leading)
@@ -226,14 +227,7 @@ struct TreeGallerySection: View {
                     }
                     
                     TabView {
-                        // for now use mock images as API does not have any images
-//                        ForEach((0...1), id: \.self) {
-//                            Image("\($0)")
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fill)
-//                        }
                         
-                        // actual implementaion
                         if let treeImages = treeImage?.images {
                             ForEach (treeImages) { image in
                                 if let actualImage = image.image {

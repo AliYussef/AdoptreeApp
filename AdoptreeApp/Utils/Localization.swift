@@ -789,6 +789,14 @@ extension Localization {
     static var successfulAccountDeletion: LocalizedStringKey {
         return "Your account has been deleted! Hope to see you again"
     }
+    
+    static var contentAlertTitle: LocalizedStringKey {
+        return "Network error"
+    }
+    
+    static var contentAlertMessage: LocalizedStringKey {
+        return "Could not load the data due to a network error"
+    }
 }
 
 /* Buttons */
@@ -869,6 +877,9 @@ extension Localization {
         return "Adopt now"
     }
     
+    static var tryAgianBtn: LocalizedStringKey {
+        return "Try again"
+    }
 }
 
 /* Textfields */

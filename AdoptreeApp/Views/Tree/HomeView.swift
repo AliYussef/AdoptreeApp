@@ -137,8 +137,8 @@ struct TreeHeader: View {
     @EnvironmentObject var treeViewModel: TreeViewModel
     @State private var isActive = false
     @State private var navigateTo: AnyView = AnyView(EmptyView())
-    let tree: Tree
-    
+    @State var tree: Tree
+    @State var showingDetail = false
     var body: some View {
         
         HStack {

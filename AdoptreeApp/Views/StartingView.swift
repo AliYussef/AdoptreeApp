@@ -9,6 +9,9 @@ import SwiftUI
 
 struct StartingView: View {
     @EnvironmentObject var userViewModel: UserViewModel
+    @EnvironmentObject var treeViewModel: TreeViewModel
+    @EnvironmentObject var timelineViewModel: TimelineViewModel
+    @EnvironmentObject var newsViewModel: NewsViewModel
     
     var body: some View {
         
@@ -17,7 +20,13 @@ struct StartingView: View {
                 .transition(.move(edge: .trailing))
         } 
         else {
+            
             LoginView()
+                .onAppear {
+                    treeViewModel.clearDataForLogout()
+                    timelineViewModel.clearDataForLogout()
+                    newsViewModel.clearDataForLogout()
+                }
         }
     }
 }
