@@ -31,15 +31,6 @@ struct ChangeEmailView: View {
                     .autocapitalization(.none)
                     .padding()
                 
-//                SecureField(Localization.passwordField, text: $inputValidationViewModel.password)
-//                    .validation(inputValidationViewModel.passwordValidation)
-//                    .padding()
-//                    .background(Color.init("color_textfield"))
-//                    .cornerRadius(8.0)
-//                    .keyboardType(.default)
-//                    .autocapitalization(.none)
-//                    .padding()
-                
                 Button(action: {
                     isTryingToChangeEmail.toggle()
                     changeUserEmail()
