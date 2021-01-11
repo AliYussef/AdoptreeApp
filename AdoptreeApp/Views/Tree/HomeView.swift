@@ -79,7 +79,6 @@ struct HomeView: View {
                     }
                     .padding()
                 }
-                
             } else {
                 GuestHomeView()
             }

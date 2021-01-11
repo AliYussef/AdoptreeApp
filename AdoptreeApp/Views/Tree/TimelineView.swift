@@ -113,7 +113,6 @@ struct TimelineView: View {
                             } else {
                                 if treeViewModel.isThereAgoptedTrees {
                                     ProgressView(Localization.timelineLoading)
-                                    generateTimelineCellViews()
                                 } else {
                                     VStack {
                                         Text(Localization.timelineTreeNotPlanted)
@@ -131,6 +130,16 @@ struct TimelineView: View {
                     }
                 }
                 .padding()
+                .onAppear {
+                    if !timelineViewModel.telemetries.isEmpty {
+                        timelineViewModel.createTimelineTreeObject(trees: treeViewModel.trees)
+                        timelineViewModel.createTimelineDateFilter(trees: treeViewModel.trees)
+                    }
+                    
+                    if !timelineViewModel.telemetries.isEmpty && !timelineViewModel.sequestrations.isEmpty {
+                        timelineViewModel.generateTimelineData(images: treeViewModel.treeImages)
+                    }
+                }
             } else {
                 GuestTimelineView()
             }
@@ -140,20 +149,6 @@ struct TimelineView: View {
 }
 
 extension TimelineView {
-    
-    func generateTimelineCellViews() -> AnyView {
-        
-        if !timelineViewModel.telemetries.isEmpty {
-            timelineViewModel.createTimelineTreeObject(trees: treeViewModel.trees)
-            timelineViewModel.createTimelineDateFilter(trees: treeViewModel.trees)
-        }
-        
-        if !timelineViewModel.telemetries.isEmpty && !timelineViewModel.sequestrations.isEmpty {
-            timelineViewModel.generateTimelineData(images: treeViewModel.treeImages)
-        }
-        
-        return AnyView(EmptyView())
-    }
     
     func getHumanReadableDate(date: Date) -> String {
         let dateComponents = Calendar.current.dateComponents([.year, .month], from: date)
