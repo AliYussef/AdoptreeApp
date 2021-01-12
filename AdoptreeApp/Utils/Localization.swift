@@ -762,6 +762,10 @@ extension Localization {
         return "An error occurred. Please check your username and password!"
     }
     
+    static var signupError: LocalizedStringKey {
+        return "An error occurred. Username already exists!"
+    }
+    
     static var adoptionLoginPurchaseError: LocalizedStringKey {
         return "An error occurred. Please click Log in & pay button again!"
     }

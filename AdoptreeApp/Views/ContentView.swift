@@ -93,8 +93,10 @@ extension ContentView {
         if userViewModel.isAuthenticated && treeViewModel.trees.isEmpty {
             treeViewModel.getAdoptedTrees() { result in
                 switch (result) {
-                    case .failure(_):
-                        self.showingAlertConfirm.toggle()
+                    case .failure(let error):
+                        if error.localizedDescription == RequestError.serverError.localizedDescription {
+                            self.showingAlertConfirm.toggle()
+                        }
                         break
                     case .success(_):
                         if timelineViewModel.telemetries.isEmpty {

@@ -113,7 +113,7 @@ extension SignupView {
         userViewModel.registerUser(user: user) { result in
             switch (result) {
                 case .failure(_):
-                    message = Localization.errorOccurred
+                    message = Localization.signupError
                     showingAlert.toggle()
                 case .success(_):
                     login()
