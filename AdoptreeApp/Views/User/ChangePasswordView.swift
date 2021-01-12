@@ -22,7 +22,7 @@ struct ChangePasswordView: View {
             VStack {
                 
                 if !userViewModel.isforgetPasswordTokenSent {
-                    RequestPasswordChangeView(inputValidationViewModel: inputValidationViewModel)
+                    RequestPasswordChangeView(inputValidationViewModel: inputValidationViewModel, isTryingToChangePassword: $isTryingToChangePassword)
                 } else {
                     
                     Text(Localization.forgotPasswordNote)
@@ -76,24 +76,25 @@ struct ChangePasswordView: View {
                         Alert(title: Text(Localization.resetPasswordAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                     }
                     
-                    if isTryingToChangePassword {
-                        withAnimation(.linear) {
-                            ZStack {
-                                Image("tree")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .opacity(0.0)
-                                    .background(Blur(style: .systemUltraThinMaterial))
-                                    .edgesIgnoringSafeArea(.all)
-                                
-                                ProgressView(Localization.resetPasswordProgress)
-                            }
-                        }
-                    }
                 }
             }
             .onReceive(inputValidationViewModel.resetPasswordValidation) { validation in
                 isSaveDisabled = !validation.isSuccess
+            }
+            
+            if isTryingToChangePassword {
+                withAnimation(.linear) {
+                    ZStack {
+                        Image("tree")
+                            .resizable()
+                            .scaledToFill()
+                            .opacity(0.0)
+                            .background(Blur(style: .systemUltraThinMaterial))
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView(Localization.resetPasswordProgress)
+                    }
+                }
             }
         }
     }

@@ -65,24 +65,24 @@ struct DeleteAccountView: View {
                     Alert(title: Text(Localization.deleteAccountAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
                 
-                if isTryingToDeleteAccount {
-                    withAnimation(.linear) {
-                        ZStack {
-                            Image("tree")
-                                .resizable()
-                                .scaledToFill()
-                                .opacity(0.0)
-                                .background(Blur(style: .systemUltraThinMaterial))
-                                .edgesIgnoringSafeArea(.all)
-                            
-                            ProgressView(Localization.deleteAccountProgress)
-                        }
-                    }
-                }
-                
             }
             .onReceive(inputValidationViewModel.passwordValidation) { validation in
                 isConfirmDisabled = !validation.isSuccess || !treeViewModel.trees.isEmpty
+            }
+            
+            if isTryingToDeleteAccount {
+                withAnimation(.linear) {
+                    ZStack {
+                        Image("tree")
+                            .resizable()
+                            .scaledToFill()
+                            .opacity(0.0)
+                            .background(Blur(style: .systemUltraThinMaterial))
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView(Localization.deleteAccountProgress)
+                    }
+                }
             }
         }
     }

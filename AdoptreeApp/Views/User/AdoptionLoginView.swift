@@ -78,19 +78,19 @@ struct AdoptionLoginView: View {
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text(Localization.loginAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
-                
-                if isTryingToAdopt {
-                    withAnimation(.linear) {
-                        ZStack {
-                            Image("tree")
-                                .resizable()
-                                .scaledToFill()
-                                .opacity(0.0)
-                                .background(Blur(style: .systemUltraThinMaterial))
-                                .edgesIgnoringSafeArea(.all)
-                            
-                            ProgressView(Localization.loginAdoptingProgress)
-                        }
+            }
+            
+            if isTryingToAdopt {
+                withAnimation(.linear) {
+                    ZStack {
+                        Image("tree")
+                            .resizable()
+                            .scaledToFill()
+                            .opacity(0.0)
+                            .background(Blur(style: .systemUltraThinMaterial))
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView(Localization.loginAdoptingProgress)
                     }
                 }
             }
@@ -111,6 +111,7 @@ extension AdoptionLoginView {
                 case .failure(_):
                     message = Localization.loginError
                     showingAlert.toggle()
+                    isTryingToAdopt.toggle()
                 case .success(let response):
                     userViewModel.accessToken = response.accessToken
                     userViewModel.refreshToken = response.refreshToken
@@ -125,6 +126,7 @@ extension AdoptionLoginView {
                 case .failure(_):
                     message = Localization.loginError
                     showingAlert.toggle()
+                    isTryingToAdopt.toggle()
                 case .success(let response):
                     if let userId = response.id {
                         createOrders(for: userId)

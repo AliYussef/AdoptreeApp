@@ -23,7 +23,7 @@ struct ForgotPasswordView: View {
             VStack {
                 
                 if !userViewModel.isforgetPasswordTokenSent {
-                    RequestPasswordChangeView(inputValidationViewModel: inputValidationViewModel)
+                    RequestPasswordChangeView(inputValidationViewModel: inputValidationViewModel, isTryingToChangePassword: $isTryingToChangePassword)
                 } else {
                     
                     Text(Localization.forgotPasswordNote)
@@ -77,24 +77,26 @@ struct ForgotPasswordView: View {
                         Alert(title: Text(Localization.resetPasswordAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                     }
                     
-                    if isTryingToChangePassword {
-                        withAnimation(.linear) {
-                            ZStack {
-                                Image("tree")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .opacity(0.0)
-                                    .background(Blur(style: .systemUltraThinMaterial))
-                                    .edgesIgnoringSafeArea(.all)
-                                
-                                ProgressView(Localization.resetPasswordProgress)
-                            }
-                        }
-                    }
+               
                 }
             }
             .onReceive(inputValidationViewModel.resetPasswordValidation) { validation in
                 isSaveDisabled = !validation.isSuccess
+            }
+            
+            if isTryingToChangePassword {
+                withAnimation(.linear) {
+                    ZStack {
+                        Image("tree")
+                            .resizable()
+                            .scaledToFill()
+                            .opacity(0.0)
+                            .background(Blur(style: .systemUltraThinMaterial))
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView(Localization.resetPasswordProgress)
+                    }
+                }
             }
         }
         .navigationBarTitle(Localization.forgotPasswordTitle, displayMode: .inline)
@@ -125,7 +127,7 @@ struct RequestPasswordChangeView: View {
     @State var isSaveDisabled = true
     @State private var showingAlert = false
     @State private var message = LocalizedStringKey("")
-    @State var isTryingToChangePassword: Bool = false
+    @Binding var isTryingToChangePassword: Bool
     
     var body: some View {
         TextField(Localization.emailField, text: $inputValidationViewModel.email)
@@ -165,21 +167,6 @@ struct RequestPasswordChangeView: View {
         }
         .alert(isPresented: $showingAlert) {
             Alert(title: Text(Localization.resetPasswordAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
-        }
-        
-        if isTryingToChangePassword {
-            withAnimation(.linear) {
-                ZStack {
-                    Image("tree")
-                        .resizable()
-                        .scaledToFill()
-                        .opacity(0.0)
-                        .background(Blur(style: .systemUltraThinMaterial))
-                        .edgesIgnoringSafeArea(.all)
-                    
-                    ProgressView(Localization.requestPasswordProgress)
-                }
-            }
         }
     }
 }

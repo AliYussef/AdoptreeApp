@@ -20,6 +20,7 @@ struct SignupView: View {
         ZStack {
             Color.init("color_background")
                 .edgesIgnoringSafeArea(.all)
+            
             VStack {
                 Form {
                     Section(header: HStack {
@@ -86,18 +87,20 @@ struct SignupView: View {
                     Alert(title: Text(Localization.signupAlertTitle), message: Text(message), dismissButton: .default(Text(Localization.okBtn)))
                 }
                 
-                if isTryingToAdopt {
-                    withAnimation(.linear) {
-                        ZStack {
-                            Image("tree")
-                                .resizable()
-                                .scaledToFill()
-                                .opacity(0.0)
-                                .background(Blur(style: .systemUltraThinMaterial))
-                                .edgesIgnoringSafeArea(.all)
-                            
-                            ProgressView(Localization.loginAdoptingProgress)
-                        }
+             
+            }
+            
+            if isTryingToAdopt {
+                withAnimation(.linear) {
+                    ZStack {
+                        Image("tree")
+                            .resizable()
+                            .scaledToFill()
+                            .opacity(0.0)
+                            .background(Blur(style: .systemUltraThinMaterial))
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView(Localization.loginAdoptingProgress)
                     }
                 }
             }
@@ -115,6 +118,7 @@ extension SignupView {
                 case .failure(_):
                     message = Localization.signupError
                     showingAlert.toggle()
+                    isTryingToAdopt.toggle()
                 case .success(_):
                     login()
             }
@@ -129,6 +133,7 @@ extension SignupView {
                 case .failure(_):
                     message = Localization.loginError
                     showingAlert.toggle()
+                    isTryingToAdopt.toggle()
                 case .success(let response):
                     userViewModel.accessToken = response.accessToken
                     userViewModel.refreshToken = response.refreshToken
@@ -143,6 +148,7 @@ extension SignupView {
                 case .failure(_):
                     message = Localization.loginError
                     showingAlert.toggle()
+                    isTryingToAdopt.toggle()
                 case .success(let response):
                     if let userId = response.id {
                         createOrders(for: userId)
